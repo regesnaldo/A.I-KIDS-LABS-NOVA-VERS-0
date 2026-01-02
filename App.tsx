@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import ContentRow from './components/ContentRow';
+import { MissionRow } from './components/MissionRow';
 import AITutor from './components/AITutor';
 import ParentDashboard from './components/ParentDashboard';
 import { MOCK_CONTENT, CATEGORIES } from './constants';
@@ -62,6 +63,16 @@ const App: React.FC = () => {
             onSelect={(item) => setSelectedContent(item)}
           />
         ))}
+
+        {/* Mission Row */}
+        <MissionRow
+          title="Missões Especiais"
+          missions={[
+            { id: 101, title: 'Missão Marte', thumbnail: 'https://picsum.photos/seed/mars/600/400' },
+            { id: 102, title: 'Código Secreto', thumbnail: 'https://picsum.photos/seed/code/600/400' },
+            { id: 103, title: 'Robô Amigo', thumbnail: 'https://picsum.photos/seed/robot/600/400' }
+          ]}
+        />
 
         {/* Call to Action Footer */}
         <div className="mt-20 px-12 text-center py-20 bg-neon-cyan/5 rounded-[4rem] mx-6">
