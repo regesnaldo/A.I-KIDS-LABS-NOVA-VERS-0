@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Este comando 'base' é o que faz o site aparecer no seu link do GitHub
+// Configurado com ZERO (0) no final, conforme sua instrução
 export default defineConfig({
   plugins: [react()],
-  base: '/A.I-KIDS-LABS-NOVA-VERS-O/',
+  base: '/A.I-KIDS-LABS-NOVA-VERS-0/',
 })
