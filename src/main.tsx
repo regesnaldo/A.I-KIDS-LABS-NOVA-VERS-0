@@ -1,7 +1,8 @@
 import './App.css';
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 
+// Gerador das 50 Temporadas do A.I. KIDS LABS
 const temas = ["A.I.", "Robótica", "Código", "Espaço", "Futuro", "Cibernética", "Dados", "Hologramas", "Redes", "Bio-Tech"];
 
 const temporadasData = Array.from({ length: 50 }, (_, tIndex) => {
@@ -23,23 +24,30 @@ const temporadasData = Array.from({ length: 50 }, (_, tIndex) => {
 const AIStudioPortal = () => {
   return (
     <div style={{ backgroundColor: '#0a0a0a', color: '#e3e3e3', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+      {/* Menu Superior Estilo Studio */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 40px', borderBottom: '1px solid #333', backgroundColor: '#131314', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ color: '#00ffff', fontWeight: 'bold', fontSize: '20px' }}>A.I. KIDS LABS</div>
-        <div style={{ display: 'flex', gap: '25px', fontSize: '13px' }}><span>INÍCIO</span><span>LABORATÓRIO</span><span>FAMÍLIA</span></div>
+        <div style={{ display: 'flex', gap: '25px', fontSize: '13px', alignItems: 'center' }}>
+          <span>INÍCIO</span><span>LABORATÓRIO</span><span>FAMÍLIA</span>
+          <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#333', border: '1px solid #00ffff' }}></div>
+        </div>
       </nav>
 
-      <div style={{ padding: '40px' }}>
+      {/* Banner de Destaque */}
+      <div style={{ padding: '60px 40px', background: 'linear-gradient(to bottom, #131314, #0a0a0a)' }}>
         <h1 style={{ fontSize: '48px', color: 'white', marginBottom: '10px' }}>DOMINE A INTELIGÊNCIA</h1>
-        <p style={{ color: '#9aa0a6', maxWidth: '600px' }}>A primeira plataforma de IA para crianças e adultos leigos.</p>
+        <p style={{ color: '#9aa0a6', maxWidth: '600px' }}>Explore o futuro agora com o laboratório imersivo para todas as idades.</p>
       </div>
 
+      {/* Grid de Temporadas */}
       <div style={{ padding: '0 40px 50px' }}>
         {temporadasData.map(temp => (
           <div key={temp.id} style={{ marginBottom: '50px' }}>
             <h3 style={{ fontSize: '18px', color: 'white', marginBottom: '20px', borderLeft: '4px solid #00ffff', paddingLeft: '15px' }}>{temp.titulo}</h3>
-            <div style={{ display: 'flex', overflowX: 'auto', gap: '25px', padding: '15px 5px' }}>
+            <div style={{ display: 'flex', overflowX: 'auto', gap: '25px', padding: '15px 5px', scrollbarWidth: 'none' }}>
               {temp.modulos.map(mod => (
                 <div key={mod.id} className="module-card" style={{ minWidth: '300px', backgroundColor: '#1e1f20', borderRadius: '12px', overflow: 'hidden' }}>
+                  {/* Local da Imagem gerada por IA */}
                   <div style={{ height: '170px', backgroundColor: '#131314', backgroundImage: `url(/${mod.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                   <div style={{ padding: '15px' }}>
                     <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'white' }}>{mod.nome}</div>
