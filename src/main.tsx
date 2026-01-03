@@ -118,6 +118,12 @@ const AIStudioPortal = () => {
   const [mostrarPlanos, setMostrarPlanos] = useState(false);
   const [mostrarConvidar, setMostrarConvidar] = useState(false);
   const [mostrarLaboratorio, setMostrarLaboratorio] = useState(false);
+  const [mostrarSobre, setMostrarSobre] = useState(false);
+  const [mostrarContato, setMostrarContato] = useState(false);
+  const [mostrarLaboratorioMissoes, setMostrarLaboratorioMissoes] = useState(false);
+  const [mostrarSalaTrofeus, setMostrarSalaTrofeus] = useState(false);
+  const [mostrarAdminLogin, setMostrarAdminLogin] = useState(false);
+  const [mostrarAdminDashboard, setMostrarAdminDashboard] = useState(false);
   const [codigoIndicacao] = useState(`AIKIDS${Math.random().toString(36).substring(2, 8).toUpperCase()}`);
   const [creditosPremium] = useState(150.00);
   const [amigosConvidados] = useState(2);
@@ -193,6 +199,15 @@ const AIStudioPortal = () => {
   const copiarCodigo = () => {
     navigator.clipboard.writeText(codigoIndicacao);
     alert(modo === 'kids' ? '✨ Código copiado! Agora você pode compartilhar!' : 'Código copiado para a área de transferência!');
+  };
+
+  // Função para alternar tela cheia
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
   };
 
   return (
@@ -1755,8 +1770,982 @@ const AIStudioPortal = () => {
             </div>
           )}
 
+          {/* Página Sobre */}
+          {mostrarSobre && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '60px 40px', minHeight: '100vh', position: 'relative' }}>
+              <button
+                onClick={() => setMostrarSobre(false)}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => setMostrarSobre(false)}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 30px ${cores.primariaRgba}0.6), 0 0 60px ${cores.primariaRgba}0.3)`,
+                  marginBottom: '20px'
+                }}>
+                  SOBRE O A.I. KIDS LABS
+                </h1>
+                <div style={{
+                  backgroundColor: '#1e1f20',
+                  border: `2px solid ${cores.primaria}`,
+                  borderRadius: '20px',
+                  padding: '40px',
+                  marginTop: '40px',
+                  boxShadow: `0 0 30px ${cores.primariaRgba}0.4)`
+                }}>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '16px',
+                    color: '#E3E3E3',
+                    lineHeight: '1.8',
+                    marginBottom: '20px'
+                  }}>
+                    O A.I. KIDS LABS é uma plataforma educacional inovadora que combina inteligência artificial, 
+                    tecnologia de ponta e metodologias de ensino adaptadas para crianças e adultos.
+                  </p>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '16px',
+                    color: '#E3E3E3',
+                    lineHeight: '1.8',
+                    marginBottom: '20px'
+                  }}>
+                    Nossa missão é democratizar o acesso à educação tecnológica de alta qualidade, 
+                    criando uma experiência imersiva e envolvente que desperta a curiosidade e o 
+                    aprendizado contínuo.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página Contato */}
+          {mostrarContato && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '60px 40px', minHeight: '100vh', position: 'relative' }}>
+              <button
+                onClick={() => setMostrarContato(false)}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => setMostrarContato(false)}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+              <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 30px ${cores.primariaRgba}0.6), 0 0 60px ${cores.primariaRgba}0.3)`,
+                  marginBottom: '40px'
+                }}>
+                  ENTRE EM CONTATO
+                </h1>
+                <div style={{
+                  backgroundColor: '#1e1f20',
+                  border: `2px solid ${cores.primaria}`,
+                  borderRadius: '20px',
+                  padding: '40px',
+                  boxShadow: `0 0 30px ${cores.primariaRgba}0.4)`
+                }}>
+                  <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <input
+                      type="text"
+                      placeholder="Seu nome"
+                      style={{
+                        padding: '15px',
+                        backgroundColor: '#0a0a0a',
+                        border: `2px solid ${cores.primariaRgba}0.3)`,
+                        borderRadius: '12px',
+                        color: '#FFFFFF',
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '14px',
+                        outline: 'none',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = cores.primaria;
+                        e.currentTarget.style.boxShadow = `0 0 15px ${cores.primariaRgba}0.4)`;
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = `${cores.primariaRgba}0.3)`;
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                    <input
+                      type="email"
+                      placeholder="Seu e-mail"
+                      style={{
+                        padding: '15px',
+                        backgroundColor: '#0a0a0a',
+                        border: `2px solid ${cores.primariaRgba}0.3)`,
+                        borderRadius: '12px',
+                        color: '#FFFFFF',
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '14px',
+                        outline: 'none',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = cores.primaria;
+                        e.currentTarget.style.boxShadow = `0 0 15px ${cores.primariaRgba}0.4)`;
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = `${cores.primariaRgba}0.3)`;
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                    <textarea
+                      placeholder="Sua mensagem"
+                      rows={6}
+                      style={{
+                        padding: '15px',
+                        backgroundColor: '#0a0a0a',
+                        border: `2px solid ${cores.primariaRgba}0.3)`,
+                        borderRadius: '12px',
+                        color: '#FFFFFF',
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '14px',
+                        outline: 'none',
+                        resize: 'vertical',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = cores.primaria;
+                        e.currentTarget.style.boxShadow = `0 0 15px ${cores.primariaRgba}0.4)`;
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = `${cores.primariaRgba}0.3)`;
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontWeight: 700,
+                        fontSize: '16px',
+                        color: '#000000',
+                        backgroundColor: cores.primaria,
+                        border: 'none',
+                        padding: '16px 32px',
+                        borderRadius: '24px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        boxShadow: `0 0 25px ${cores.primariaRgba}0.5)`
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                        e.currentTarget.style.boxShadow = `0 0 35px ${cores.primariaRgba}0.7)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.boxShadow = `0 0 25px ${cores.primariaRgba}0.5)`;
+                      }}
+                    >
+                      ENVIAR MENSAGEM
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página Laboratório de Missões */}
+          {mostrarLaboratorioMissoes && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '60px 40px', minHeight: '100vh', position: 'relative' }}>
+              <button
+                onClick={() => setMostrarLaboratorioMissoes(false)}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => setMostrarLaboratorioMissoes(false)}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 30px ${cores.primariaRgba}0.6), 0 0 60px ${cores.primariaRgba}0.3)`,
+                  marginBottom: '40px'
+                }}>
+                  LABORATÓRIO DE MISSÕES
+                </h1>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  gap: '24px'
+                }}>
+                  {Array.from({ length: 10 }, (_, i) => ({
+                    id: i + 1,
+                    titulo: modo === 'kids' ? `🎯 Missão ${i + 1}: Desafio Divertido` : `Missão ${i + 1}: Desafio Técnico`,
+                    descricao: modo === 'kids' 
+                      ? 'Complete esta missão e ganhe estrelas brilhantes!'
+                      : 'Complete esta missão para avançar no seu aprendizado.',
+                    concluida: i < 3
+                  })).map(missao => (
+                    <div
+                      key={missao.id}
+                      style={{
+                        backgroundColor: '#1e1f20',
+                        border: `2px solid ${missao.concluida ? '#00FF88' : cores.primaria}`,
+                        borderRadius: '16px',
+                        padding: '30px',
+                        transition: 'all 0.3s ease',
+                        boxShadow: missao.concluida 
+                          ? `0 0 20px rgba(0, 255, 136, 0.4)`
+                          : `0 0 20px ${cores.primariaRgba}0.3)`
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-5px)';
+                        e.currentTarget.style.boxShadow = missao.concluida
+                          ? `0 0 30px rgba(0, 255, 136, 0.6)`
+                          : `0 0 30px ${cores.primariaRgba}0.5)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = missao.concluida
+                          ? `0 0 20px rgba(0, 255, 136, 0.4)`
+                          : `0 0 20px ${cores.primariaRgba}0.3)`;
+                      }}
+                    >
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '20px',
+                        fontWeight: 700,
+                        color: missao.concluida ? '#00FF88' : cores.primaria,
+                        marginBottom: '15px',
+                        textShadow: missao.concluida
+                          ? `0 0 15px rgba(0, 255, 136, 0.6)`
+                          : `0 0 15px ${cores.primariaRgba}0.5)`,
+                        letterSpacing: '0.05em'
+                      }}>
+                        {missao.titulo}
+                      </div>
+                      <p style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '14px',
+                        color: '#9AA0A6',
+                        lineHeight: '1.6',
+                        marginBottom: '20px'
+                      }}>
+                        {missao.descricao}
+                      </p>
+                      {missao.concluida && (
+                        <div style={{
+                          fontFamily: 'Orbitron, sans-serif',
+                          fontSize: '12px',
+                          color: '#00FF88',
+                          fontWeight: 700,
+                          textShadow: `0 0 10px rgba(0, 255, 136, 0.6)`,
+                          letterSpacing: '0.1em'
+                        }}>
+                          ✓ CONCLUÍDA
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página Sala de Troféus */}
+          {mostrarSalaTrofeus && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '60px 40px', minHeight: '100vh', position: 'relative' }}>
+              <button
+                onClick={() => setMostrarSalaTrofeus(false)}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => setMostrarSalaTrofeus(false)}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 30px ${cores.primariaRgba}0.6), 0 0 60px ${cores.primariaRgba}0.3)`,
+                  marginBottom: '40px'
+                }}>
+                  SALA DE TROFÉUS
+                </h1>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                  gap: '30px'
+                }}>
+                  {[
+                    { id: 1, nome: modo === 'kids' ? '🏆 Primeiro Passo' : 'Troféu Iniciante', desbloqueado: true },
+                    { id: 2, nome: modo === 'kids' ? '⭐ Explorador' : 'Troféu Explorador', desbloqueado: true },
+                    { id: 3, nome: modo === 'kids' ? '🎯 Mestre' : 'Troféu Mestre', desbloqueado: false },
+                    { id: 4, nome: modo === 'kids' ? '💎 Lendário' : 'Troféu Lendário', desbloqueado: false },
+                  ].map(trofeu => (
+                    <div
+                      key={trofeu.id}
+                      style={{
+                        backgroundColor: '#1e1f20',
+                        border: `3px solid ${trofeu.desbloqueado ? '#FFD700' : cores.primariaRgba}0.3)`,
+                        borderRadius: '20px',
+                        padding: '40px',
+                        textAlign: 'center',
+                        transition: 'all 0.3s ease',
+                        boxShadow: trofeu.desbloqueado
+                          ? `0 0 30px rgba(255, 215, 0, 0.5)`
+                          : `0 0 20px ${cores.primariaRgba}0.2)`,
+                        opacity: trofeu.desbloqueado ? 1 : 0.5
+                      }}
+                      onMouseEnter={(e) => {
+                        if (trofeu.desbloqueado) {
+                          e.currentTarget.style.transform = 'scale(1.1)';
+                          e.currentTarget.style.boxShadow = `0 0 40px rgba(255, 215, 0, 0.7)`;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (trofeu.desbloqueado) {
+                          e.currentTarget.style.transform = 'scale(1)';
+                          e.currentTarget.style.boxShadow = `0 0 30px rgba(255, 215, 0, 0.5)`;
+                        }
+                      }}
+                    >
+                      <div style={{
+                        fontSize: '64px',
+                        marginBottom: '20px',
+                        filter: trofeu.desbloqueado ? `drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))` : 'grayscale(100%)'
+                      }}>
+                        {trofeu.desbloqueado ? '🏆' : '🔒'}
+                      </div>
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '18px',
+                        fontWeight: 700,
+                        color: trofeu.desbloqueado ? '#FFD700' : '#9AA0A6',
+                        textShadow: trofeu.desbloqueado
+                          ? `0 0 15px rgba(255, 215, 0, 0.6)`
+                          : 'none',
+                        letterSpacing: '0.05em'
+                      }}>
+                        {trofeu.nome}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página Admin Login */}
+          {mostrarAdminLogin && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '60px 40px', minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button
+                onClick={() => setMostrarAdminLogin(false)}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => setMostrarAdminLogin(false)}
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  left: '20px',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+              <div style={{
+                backgroundColor: '#1e1f20',
+                border: `2px solid ${cores.primaria}`,
+                borderRadius: '20px',
+                padding: '50px',
+                maxWidth: '500px',
+                width: '100%',
+                boxShadow: `0 0 40px ${cores.primariaRgba}0.4)`
+              }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '36px',
+                  color: cores.primaria,
+                  textAlign: 'center',
+                  marginBottom: '40px',
+                  textShadow: `0 0 20px ${cores.primariaRgba}0.6)`,
+                  letterSpacing: '0.05em'
+                }}>
+                  ADMIN LOGIN
+                </h1>
+                <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  <input
+                    type="email"
+                    placeholder="E-mail"
+                    style={{
+                      padding: '15px',
+                      backgroundColor: '#0a0a0a',
+                      border: `2px solid ${cores.primariaRgba}0.3)`,
+                      borderRadius: '12px',
+                      color: '#FFFFFF',
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      outline: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = cores.primaria;
+                      e.currentTarget.style.boxShadow = `0 0 15px ${cores.primariaRgba}0.4)`;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = `${cores.primariaRgba}0.3)`;
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                  <input
+                    type="password"
+                    placeholder="Senha"
+                    style={{
+                      padding: '15px',
+                      backgroundColor: '#0a0a0a',
+                      border: `2px solid ${cores.primariaRgba}0.3)`,
+                      borderRadius: '12px',
+                      color: '#FFFFFF',
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      outline: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = cores.primaria;
+                      e.currentTarget.style.boxShadow = `0 0 15px ${cores.primariaRgba}0.4)`;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = `${cores.primariaRgba}0.3)`;
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMostrarAdminDashboard(true);
+                      setMostrarAdminLogin(false);
+                    }}
+                    style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontWeight: 700,
+                      fontSize: '16px',
+                      color: '#000000',
+                      backgroundColor: cores.primaria,
+                      border: 'none',
+                      padding: '16px 32px',
+                      borderRadius: '24px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: `0 0 25px ${cores.primariaRgba}0.5)`,
+                      marginTop: '10px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                      e.currentTarget.style.boxShadow = `0 0 35px ${cores.primariaRgba}0.7)`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.boxShadow = `0 0 25px ${cores.primariaRgba}0.5)`;
+                    }}
+                  >
+                    ENTRAR
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Página Admin Dashboard */}
+          {mostrarAdminDashboard && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '40px', minHeight: '100vh', position: 'relative' }}>
+              <button
+                onClick={() => { setMostrarAdminDashboard(false); setMostrarAdminLogin(true); }}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => { setMostrarAdminDashboard(false); setMostrarAdminLogin(true); }}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← SAIR
+              </button>
+              <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: cores.primaria,
+                  marginBottom: '40px',
+                  textShadow: `0 0 30px ${cores.primariaRgba}0.6)`,
+                  letterSpacing: '0.05em'
+                }}>
+                  DASHBOARD ADMINISTRATIVO
+                </h1>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                  gap: '24px',
+                  marginBottom: '40px'
+                }}>
+                  {[
+                    { label: 'Usuários Ativos', valor: '1.234', cor: cores.primaria },
+                    { label: 'Temporadas Completas', valor: '456', cor: '#00FF88' },
+                    { label: 'Episódios Assistidos', valor: '12.345', cor: '#FFD700' },
+                    { label: 'Receita Mensal', valor: 'R$ 45.678', cor: cores.primaria },
+                  ].map((stat, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        backgroundColor: '#1e1f20',
+                        border: `2px solid ${stat.cor}`,
+                        borderRadius: '16px',
+                        padding: '30px',
+                        boxShadow: `0 0 20px ${stat.cor === cores.primaria ? cores.primariaRgba + '0.3)' : stat.cor === '#00FF88' ? 'rgba(0, 255, 136, 0.3)' : 'rgba(255, 215, 0, 0.3)'}`,
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-5px)';
+                        e.currentTarget.style.boxShadow = `0 0 30px ${stat.cor === cores.primaria ? cores.primariaRgba + '0.5)' : stat.cor === '#00FF88' ? 'rgba(0, 255, 136, 0.5)' : 'rgba(255, 215, 0, 0.5)'}`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = `0 0 20px ${stat.cor === cores.primaria ? cores.primariaRgba + '0.3)' : stat.cor === '#00FF88' ? 'rgba(0, 255, 136, 0.3)' : 'rgba(255, 215, 0, 0.3)'}`;
+                      }}
+                    >
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '14px',
+                        color: '#9AA0A6',
+                        marginBottom: '10px',
+                        letterSpacing: '0.1em'
+                      }}>
+                        {stat.label}
+                      </div>
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '32px',
+                        fontWeight: 900,
+                        color: stat.cor,
+                        textShadow: `0 0 20px ${stat.cor === cores.primaria ? cores.primariaRgba + '0.6)' : stat.cor === '#00FF88' ? 'rgba(0, 255, 136, 0.6)' : 'rgba(255, 215, 0, 0.6)'}`
+                      }}>
+                        {stat.valor}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{
+                  backgroundColor: '#1e1f20',
+                  border: `2px solid ${cores.primaria}`,
+                  borderRadius: '20px',
+                  padding: '40px',
+                  boxShadow: `0 0 30px ${cores.primariaRgba}0.4)`
+                }}>
+                  <h2 style={{
+                    fontFamily: 'Orbitron, sans-serif',
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    color: cores.primaria,
+                    marginBottom: '30px',
+                    textShadow: `0 0 15px ${cores.primariaRgba}0.5)`,
+                    letterSpacing: '0.05em'
+                  }}>
+                    GERENCIAMENTO DE CONTEÚDO
+                  </h2>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '20px'
+                  }}>
+                    <button style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      color: '#000000',
+                      backgroundColor: cores.primaria,
+                      border: 'none',
+                      padding: '20px',
+                      borderRadius: '12px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: `0 0 20px ${cores.primariaRgba}0.5)`
+                    }}>
+                      Gerenciar Temporadas
+                    </button>
+                    <button style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      color: '#000000',
+                      backgroundColor: cores.primaria,
+                      border: 'none',
+                      padding: '20px',
+                      borderRadius: '12px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: `0 0 20px ${cores.primariaRgba}0.5)`
+                    }}>
+                      Gerenciar Usuários
+                    </button>
+                    <button style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      color: '#000000',
+                      backgroundColor: cores.primaria,
+                      border: 'none',
+                      padding: '20px',
+                      borderRadius: '12px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: `0 0 20px ${cores.primariaRgba}0.5)`
+                    }}>
+                      Relatórios
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Página Principal (Grid de Temporadas) */}
-          {!temporadaSelecionada && !episodioSelecionado && !mostrarPlanos && !mostrarConvidar && !mostrarLaboratorio && (
+          {!temporadaSelecionada && !episodioSelecionado && !mostrarPlanos && !mostrarConvidar && !mostrarLaboratorio && !mostrarSobre && !mostrarContato && !mostrarLaboratorioMissoes && !mostrarSalaTrofeus && !mostrarAdminLogin && !mostrarAdminDashboard && (
             <div>
       {/* Menu Superior Estilo Studio */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 40px', borderBottom: `1px solid ${cores.primariaRgba}0.2)`, backgroundColor: 'rgba(19, 19, 20, 0.9)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 100 }}>
@@ -1800,7 +2789,13 @@ const AIStudioPortal = () => {
               setTemporadaSelecionada(null); 
               setEpisodioSelecionado(null); 
               setMostrarPlanos(false); 
-              setMostrarConvidar(false); 
+              setMostrarConvidar(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+              setMostrarAdminLogin(false);
+              setMostrarAdminDashboard(false);
             }}
             style={{ 
               color: '#9AA0A6', 
@@ -1841,7 +2836,19 @@ const AIStudioPortal = () => {
           </span>
           <span 
             className="nav-link" 
-            onClick={() => { setMostrarPlanos(true); setTemporadaSelecionada(null); setEpisodioSelecionado(null); setMostrarConvidar(false); setMostrarLaboratorio(false); }}
+            onClick={() => { 
+              setMostrarPlanos(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+              setMostrarAdminLogin(false);
+              setMostrarAdminDashboard(false);
+            }}
             style={{ 
               color: '#9AA0A6', 
               textTransform: 'uppercase',
@@ -1862,7 +2869,19 @@ const AIStudioPortal = () => {
           </span>
           <span 
             className="nav-link" 
-            onClick={() => { setMostrarConvidar(true); setTemporadaSelecionada(null); setEpisodioSelecionado(null); setMostrarPlanos(false); setMostrarLaboratorio(false); }}
+            onClick={() => { 
+              setMostrarConvidar(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+              setMostrarAdminLogin(false);
+              setMostrarAdminDashboard(false);
+            }}
             style={{ 
               color: '#9AA0A6', 
               textTransform: 'uppercase',
@@ -1880,6 +2899,163 @@ const AIStudioPortal = () => {
             }}
           >
             {modo === 'kids' ? 'CHAMAR PARCEIRO' : 'INDICAR EXPLORADOR'}
+          </span>
+          <span 
+            className="nav-link" 
+            onClick={() => { 
+              setMostrarSobre(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+            }}
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            SOBRE
+          </span>
+          <span 
+            className="nav-link" 
+            onClick={() => { 
+              setMostrarContato(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+            }}
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            CONTATO
+          </span>
+          <span 
+            className="nav-link" 
+            onClick={() => { 
+              setMostrarLaboratorioMissoes(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarSalaTrofeus(false);
+            }}
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            MISSÕES
+          </span>
+          <span 
+            className="nav-link" 
+            onClick={() => { 
+              setMostrarSalaTrofeus(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+            }}
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            TROFÉUS
+          </span>
+          <span 
+            className="nav-link" 
+            onClick={() => { 
+              setMostrarAdminLogin(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+              setMostrarAdminDashboard(false);
+            }}
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            ADMIN
           </span>
           <span 
             className="nav-link" 
