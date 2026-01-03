@@ -121,6 +121,24 @@ const AIStudioPortal = () => {
     return tema;
   };
 
+  // Função para obter as cores baseadas no modo
+  const obterCoresNeon = () => {
+    if (modo === 'kids') {
+      return {
+        primaria: '#FF00FF', // Magenta/Roxo
+        primariaRgba: 'rgba(255, 0, 255,',
+        primariaRgbaNum: [255, 0, 255],
+      };
+    }
+    return {
+      primaria: '#00F7FF', // Ciano
+      primariaRgba: 'rgba(0, 247, 255,',
+      primariaRgbaNum: [0, 247, 255],
+    };
+  };
+
+  const cores = obterCoresNeon();
+
   return (
     <div style={{ backgroundColor: '#0a0a0a', color: '#e3e3e3', minHeight: '100vh', fontFamily: 'Inter, sans-serif', position: 'relative' }}>
       {/* Tela de Seleção Inicial (Kids vs Adulto) */}
@@ -269,27 +287,99 @@ const AIStudioPortal = () => {
       {modo !== null && (
         <div>
       {/* Menu Superior Estilo Studio */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 40px', borderBottom: '1px solid rgba(0, 255, 255, 0.2)', backgroundColor: 'rgba(19, 19, 20, 0.9)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 100 }}>
-        <div className="logo-neon" style={{ fontFamily: 'Orbitron, sans-serif', color: '#00FFFF', fontWeight: 900, fontSize: '20px', letterSpacing: '-0.02em' }}>A.I. KIDS LABS</div>
+      <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 40px', borderBottom: `1px solid ${cores.primariaRgba}0.2)`, backgroundColor: 'rgba(19, 19, 20, 0.9)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div 
+          className="logo-neon" 
+          style={{ 
+            fontFamily: 'Orbitron, sans-serif', 
+            color: cores.primaria, 
+            fontWeight: 900, 
+            fontSize: '20px', 
+            letterSpacing: '-0.02em',
+            animation: modo === 'kids' ? 'pulse-neon-magenta 2s ease-in-out infinite' : 'pulse-neon-cyan 2s ease-in-out infinite'
+          }}
+        >
+          A.I. KIDS LABS
+        </div>
         <div style={{ display: 'flex', gap: '25px', fontSize: '13px', alignItems: 'center', fontFamily: 'Orbitron, sans-serif', fontWeight: 600, letterSpacing: '0.1em' }}>
-          <span className="nav-link" style={{ color: '#9AA0A6', textTransform: 'uppercase' }}>INÍCIO</span>
-          <span className="nav-link" style={{ color: '#9AA0A6', textTransform: 'uppercase' }}>LABORATÓRIO</span>
-          <span className="nav-link" style={{ color: '#9AA0A6', textTransform: 'uppercase' }}>FAMÍLIA</span>
-          <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#333', border: '2px solid #00FFFF', boxShadow: '0 0 10px rgba(0, 255, 255, 0.5)', cursor: 'pointer', transition: 'all 0.3s ease' }}></div>
+          <span 
+            className="nav-link" 
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            INÍCIO
+          </span>
+          <span 
+            className="nav-link" 
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            LABORATÓRIO
+          </span>
+          <span 
+            className="nav-link" 
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            FAMÍLIA
+          </span>
+          <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#333', border: `2px solid ${cores.primaria}`, boxShadow: `0 0 10px ${cores.primariaRgba}0.5)`, cursor: 'pointer', transition: 'all 0.3s ease' }}></div>
         </div>
       </nav>
 
       {/* Banner de Destaque */}
       <div style={{ padding: '60px 40px', background: 'linear-gradient(to bottom, #131314, #0a0a0a)' }}>
-        <h1 className="title-glow" style={{ 
-          fontFamily: 'Orbitron, sans-serif',
-          fontWeight: 900,
-          fontSize: '48px', 
-          color: '#FFFFFF',
-          letterSpacing: '-0.03em',
-          textShadow: '0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3)',
-          marginBottom: '10px' 
-        }}>DOMINE A INTELIGÊNCIA</h1>
+        <h1 
+          className="title-glow" 
+          style={{ 
+            fontFamily: 'Orbitron, sans-serif',
+            fontWeight: 900,
+            fontSize: '48px', 
+            color: '#FFFFFF',
+            letterSpacing: '-0.03em',
+            textShadow: `0 0 20px ${cores.primariaRgba}0.5), 0 0 40px ${cores.primariaRgba}0.3)`,
+            marginBottom: '10px',
+            animation: modo === 'kids' ? 'glow-magenta 3s ease-in-out infinite' : 'glow-cyan 3s ease-in-out infinite'
+          }}
+        >
+          DOMINE A INTELIGÊNCIA
+        </h1>
         <p style={{ color: '#9aa0a6', maxWidth: '600px', fontSize: '16px', lineHeight: '1.6' }}>Explore o futuro agora com o laboratório imersivo para todas as idades.</p>
       </div>
 
@@ -307,8 +397,18 @@ const AIStudioPortal = () => {
                 backgroundColor: '#1e1f20', 
                 borderRadius: '12px', 
                 overflow: 'hidden', 
-                border: '1px solid rgba(0, 255, 255, 0.1)',
-                transition: 'all 0.3s ease'
+                border: `1px solid ${cores.primariaRgba}0.1)`,
+                transition: 'all 0.3s ease',
+                '--neon-color': cores.primaria,
+                '--neon-rgba': cores.primariaRgba
+              } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = cores.primaria;
+                e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.3)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = `${cores.primariaRgba}0.1)`;
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
               {/* Fundo Escuro com Brilho Neon */}
@@ -318,8 +418,8 @@ const AIStudioPortal = () => {
                 aspectRatio: '16/9', 
                 overflow: 'hidden',
                 backgroundColor: '#0a0a0a',
-                background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%)',
-                boxShadow: 'inset 0 0 50px rgba(0, 255, 255, 0.1)'
+                background: `linear-gradient(135deg, ${cores.primariaRgba}0.1) 0%, rgba(0, 0, 0, 0.9) 100%)`,
+                boxShadow: `inset 0 0 50px ${cores.primariaRgba}0.1)`
               }}>
                 {/* Efeito de Brilho Neon Sutil */}
                 <div style={{ 
@@ -329,7 +429,7 @@ const AIStudioPortal = () => {
                   transform: 'translate(-50%, -50%)',
                   width: '200px',
                   height: '200px',
-                  background: 'radial-gradient(circle, rgba(0, 255, 255, 0.2) 0%, transparent 70%)',
+                  background: `radial-gradient(circle, ${cores.primariaRgba}0.2) 0%, transparent 70%)`,
                   borderRadius: '50%',
                   filter: 'blur(40px)'
                 }}></div>
@@ -345,17 +445,17 @@ const AIStudioPortal = () => {
                   letterSpacing: '0.05em', 
                   textTransform: 'uppercase',
                   marginBottom: '16px',
-                  textShadow: '0 0 10px rgba(0, 255, 255, 0.3)'
+                  textShadow: `0 0 10px ${cores.primariaRgba}0.3)`
                 }}>
                   {obterTitulo(temporada.tema).toUpperCase()}
                 </div>
                 <div style={{ 
                   fontFamily: 'Orbitron, sans-serif', 
                   fontSize: '11px', 
-                  color: '#00FFFF', 
+                  color: cores.primaria, 
                   fontWeight: 600, 
                   letterSpacing: '0.1em', 
-                  textShadow: '0 0 5px rgba(0, 255, 255, 0.5)' 
+                  textShadow: `0 0 5px ${cores.primariaRgba}0.5)` 
                 }}>
                   TEMPORADA {temporada.id} • PREMIUM HD
                 </div>
