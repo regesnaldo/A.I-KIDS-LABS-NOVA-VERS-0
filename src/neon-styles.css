@@ -1,0 +1,103 @@
+/* Animações de Brilho Neon */
+@keyframes pulse-neon {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  }
+  50% {
+    opacity: 0.9;
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(0, 255, 255, 1), 0 0 30px rgba(0, 255, 255, 0.6);
+  }
+}
+
+@keyframes border-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    border-color: rgba(0, 255, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.3);
+    border-color: rgba(0, 255, 255, 0.8);
+  }
+}
+
+/* Estilos para Cards com Efeito Neon */
+.module-card {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.module-card:hover {
+  transform: scale(1.05);
+  border-color: #00FFFF;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+/* Links de Navegação com Efeito Neon */
+.nav-link {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #00FFFF !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #00FFFF;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Logo com Brilho Pulsante */
+.logo-neon {
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+/* Título Principal com Glow */
+.title-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Scrollbar Neon */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00FFFF;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00F0FF;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
