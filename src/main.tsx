@@ -112,6 +112,17 @@ const apelidosKids: Record<string, string> = {
 
 const AIStudioPortal = () => {
   const [modo, setModo] = useState<'kids' | 'adulto' | null>(null);
+  const [temporadaSelecionada, setTemporadaSelecionada] = useState<number | null>(null);
+  const [episodioSelecionado, setEpisodioSelecionado] = useState<{ temporadaId: number; episodioId: number } | null>(null);
+
+  // Função para gerar episódios dinamicamente
+  const gerarEpisodios = (temporadaId: number) => {
+    return Array.from({ length: 10 }, (_, index) => ({
+      id: index + 1,
+      numero: index + 1,
+      temporadaId: temporadaId,
+    }));
+  };
 
   // Função para obter o título baseado no modo
   const obterTitulo = (tema: string) => {
@@ -138,6 +149,15 @@ const AIStudioPortal = () => {
   };
 
   const cores = obterCoresNeon();
+
+  // Função para voltar
+  const voltar = () => {
+    if (episodioSelecionado) {
+      setEpisodioSelecionado(null);
+    } else if (temporadaSelecionada) {
+      setTemporadaSelecionada(null);
+    }
+  };
 
   return (
     <div style={{ backgroundColor: '#0a0a0a', color: '#e3e3e3', minHeight: '100vh', fontFamily: 'Inter, sans-serif', position: 'relative' }}>
@@ -286,6 +306,222 @@ const AIStudioPortal = () => {
       {/* Conteúdo Principal (apenas quando modo estiver selecionado) */}
       {modo !== null && (
         <div>
+          {/* Página do Episódio */}
+          {episodioSelecionado && (
+            <div style={{ padding: '40px', minHeight: '100vh' }}>
+              <button
+                onClick={voltar}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h2 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '36px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 20px ${cores.primariaRgba}0.5)`,
+                  marginBottom: '10px'
+                }}>
+                  {obterTitulo(dadosTemporadas[episodioSelecionado.temporadaId - 1].tema).toUpperCase()}
+                </h2>
+                <p style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '18px',
+                  color: cores.primaria,
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  marginBottom: '40px',
+                  textShadow: `0 0 10px ${cores.primariaRgba}0.5)`
+                }}>
+                  MÓDULO {episodioSelecionado.episodioId} • TEMPORADA {episodioSelecionado.temporadaId}
+                </p>
+
+                {/* Container de Vídeo */}
+                <div style={{
+                  width: '100%',
+                  aspectRatio: '16/9',
+                  backgroundColor: '#0a0a0a',
+                  border: `2px solid ${cores.primaria}`,
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  boxShadow: `0 0 30px ${cores.primariaRgba}0.4), inset 0 0 50px ${cores.primariaRgba}0.1)`,
+                  marginBottom: '30px'
+                }}>
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    textAlign: 'center',
+                    color: cores.primaria,
+                    fontFamily: 'Orbitron, sans-serif',
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    textShadow: `0 0 20px ${cores.primariaRgba}0.8)`,
+                    letterSpacing: '0.1em'
+                  }}>
+                    🎥 PLAYER DE VÍDEO
+                  </div>
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: `linear-gradient(135deg, ${cores.primariaRgba}0.05) 0%, rgba(0, 0, 0, 0.95) 100%)`
+                  }}></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página de Detalhes da Temporada */}
+          {!episodioSelecionado && temporadaSelecionada && (
+            <div style={{ padding: '40px', minHeight: '100vh' }}>
+              <button
+                onClick={voltar}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h2 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 20px ${cores.primariaRgba}0.5)`,
+                  marginBottom: '10px'
+                }}>
+                  {obterTitulo(dadosTemporadas[temporadaSelecionada - 1].tema).toUpperCase()}
+                </h2>
+                <p style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '18px',
+                  color: cores.primaria,
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  marginBottom: '40px',
+                  textShadow: `0 0 10px ${cores.primariaRgba}0.5)`
+                }}>
+                  TEMPORADA {temporadaSelecionada} • 10 MÓDULOS
+                </p>
+
+                {/* Grid de Episódios */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gap: '24px',
+                  marginTop: '40px'
+                }}>
+                  {gerarEpisodios(temporadaSelecionada).map(episodio => (
+                    <div
+                      key={episodio.id}
+                      onClick={() => setEpisodioSelecionado({ temporadaId: temporadaSelecionada, episodioId: episodio.id })}
+                      style={{
+                        backgroundColor: '#1e1f20',
+                        borderRadius: '12px',
+                        padding: '20px',
+                        border: `1px solid ${cores.primariaRgba}0.1)`,
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = cores.primaria;
+                        e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.3)`;
+                        e.currentTarget.style.transform = 'translateY(-5px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = `${cores.primariaRgba}0.1)`;
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }}
+                    >
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '16px',
+                        fontWeight: 700,
+                        color: cores.primaria,
+                        marginBottom: '10px',
+                        textShadow: `0 0 10px ${cores.primariaRgba}0.5)`,
+                        letterSpacing: '0.05em'
+                      }}>
+                        MÓDULO {episodio.numero}
+                      </div>
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '12px',
+                        color: '#9AA0A6',
+                        fontWeight: 600,
+                        letterSpacing: '0.1em'
+                      }}>
+                        {modo === 'kids' ? '🎓 Aula Divertida' : '📚 Conteúdo Técnico'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página Principal (Grid de Temporadas) */}
+          {!temporadaSelecionada && !episodioSelecionado && (
+            <div>
       {/* Menu Superior Estilo Studio */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 40px', borderBottom: `1px solid ${cores.primariaRgba}0.2)`, backgroundColor: 'rgba(19, 19, 20, 0.9)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 100 }}>
         <div 
@@ -390,6 +626,7 @@ const AIStudioPortal = () => {
             <div 
               key={temporada.id} 
               className="module-card" 
+              onClick={() => setTemporadaSelecionada(temporada.id)}
               style={{ 
                 minWidth: '300px', 
                 maxWidth: '300px',
@@ -399,16 +636,19 @@ const AIStudioPortal = () => {
                 overflow: 'hidden', 
                 border: `1px solid ${cores.primariaRgba}0.1)`,
                 transition: 'all 0.3s ease',
+                cursor: 'pointer',
                 '--neon-color': cores.primaria,
                 '--neon-rgba': cores.primariaRgba
               } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = cores.primaria;
                 e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.3)`;
+                e.currentTarget.style.transform = 'scale(1.05)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = `${cores.primariaRgba}0.1)`;
                 e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.transform = 'scale(1)';
               }}
             >
               {/* Fundo Escuro com Brilho Neon */}
@@ -464,6 +704,8 @@ const AIStudioPortal = () => {
           ))}
         </div>
       </div>
+            </div>
+          )}
         </div>
       )}
     </div>
