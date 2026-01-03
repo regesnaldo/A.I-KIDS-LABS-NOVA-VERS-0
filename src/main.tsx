@@ -2,24 +2,59 @@ import './neon-styles.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-// Gerador das 50 Temporadas do A.I. KIDS LABS
-const temas = ["A.I.", "Robótica", "Código", "Espaço", "Futuro", "Cibernética", "Dados", "Hologramas", "Redes", "Bio-Tech"];
-
-const temporadasData = Array.from({ length: 50 }, (_, tIndex) => {
-  const tNum = tIndex + 1;
-  const temaBase = temas[tIndex % temas.length];
-  return {
-    id: tNum,
-    titulo: `TEMPORADA ${tNum}: ${tIndex === 0 ? 'O DESPERTAR DA MÁQUINA' : 'FRONTEIRAS DE ' + temaBase.toUpperCase()}`,
-    modulos: [
-      { id: 1, nome: "NEURÔNIOS DIGITAIS", tipo: "VIDEO", img: `temp${tNum}_mod1.jpg` },
-      { id: 2, nome: "LÓGICA BINÁRIA", tipo: "INTERATIVO", img: `temp${tNum}_mod2.jpg` },
-      { id: 3, nome: "SENSORES ATIVOS", tipo: "DESAFIO", img: `temp${tNum}_mod3.jpg` },
-      { id: 4, nome: "PROCESSAMENTO", tipo: "VIDEO", img: `temp${tNum}_mod4.jpg` },
-      { id: 5, nome: "REDES NEURAIS", tipo: "GAME", img: `temp${tNum}_mod5.jpg` },
-    ]
-  };
-});
+// Array de dados das 50 Temporadas do A.I. KIDS LABS
+const dadosTemporadas = [
+  { id: 1, tema: 'Neurônios Digitais', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Neurônios+Digitais&font=roboto' },
+  { id: 2, tema: 'Algoritmos Mágicos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Algoritmos+Mágicos&font=roboto' },
+  { id: 3, tema: 'Visão Computacional', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Visão+Computacional&font=roboto' },
+  { id: 4, tema: 'Redes Neurais Profundas', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+4&font=roboto' },
+  { id: 5, tema: 'Processamento de Linguagem Natural', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+5&font=roboto' },
+  { id: 6, tema: 'Robótica Autônoma', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+6&font=roboto' },
+  { id: 7, tema: 'Inteligência Artificial Generativa', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+7&font=roboto' },
+  { id: 8, tema: 'Machine Learning Avançado', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+8&font=roboto' },
+  { id: 9, tema: 'Cibernética e Interfaces', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+9&font=roboto' },
+  { id: 10, tema: 'Realidade Virtual e Aumentada', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+10&font=roboto' },
+  { id: 11, tema: 'Blockchain e Criptografia', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+11&font=roboto' },
+  { id: 12, tema: 'Internet das Coisas (IoT)', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+12&font=roboto' },
+  { id: 13, tema: 'Computação Quântica', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+13&font=roboto' },
+  { id: 14, tema: 'Big Data e Analytics', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+14&font=roboto' },
+  { id: 15, tema: 'Cibersegurança Avançada', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+15&font=roboto' },
+  { id: 16, tema: 'Hologramas Interativos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+16&font=roboto' },
+  { id: 17, tema: 'Biometria e Reconhecimento', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+17&font=roboto' },
+  { id: 18, tema: 'Automação Inteligente', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+18&font=roboto' },
+  { id: 19, tema: 'Sistemas Embarcados', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+19&font=roboto' },
+  { id: 20, tema: 'Cloud Computing e Edge', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+20&font=roboto' },
+  { id: 21, tema: 'Nanotecnologia Digital', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+21&font=roboto' },
+  { id: 22, tema: 'Sensores Inteligentes', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+22&font=roboto' },
+  { id: 23, tema: 'Processamento de Sinais', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+23&font=roboto' },
+  { id: 24, tema: 'Arquitetura de Sistemas', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+24&font=roboto' },
+  { id: 25, tema: 'Algoritmos Genéticos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+25&font=roboto' },
+  { id: 26, tema: 'Deep Learning e CNN', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+26&font=roboto' },
+  { id: 27, tema: 'Processamento Paralelo', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+27&font=roboto' },
+  { id: 28, tema: 'Sistemas Distribuídos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+28&font=roboto' },
+  { id: 29, tema: 'Inteligência Coletiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+29&font=roboto' },
+  { id: 30, tema: 'Reconhecimento de Padrões', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+30&font=roboto' },
+  { id: 31, tema: 'Sistemas Adaptativos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+31&font=roboto' },
+  { id: 32, tema: 'Computação Cognitiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+32&font=roboto' },
+  { id: 33, tema: 'Interfaces Cérebro-Computador', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+33&font=roboto' },
+  { id: 34, tema: 'Sistemas Autônomos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+34&font=roboto' },
+  { id: 35, tema: 'Análise Preditiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+35&font=roboto' },
+  { id: 36, tema: 'Realidade Mista', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+36&font=roboto' },
+  { id: 37, tema: 'Sistemas de Recomendação', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+37&font=roboto' },
+  { id: 38, tema: 'Processamento de Imagens', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+38&font=roboto' },
+  { id: 39, tema: 'Sistemas Multiagente', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+39&font=roboto' },
+  { id: 40, tema: 'Computação em Nuvem', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+40&font=roboto' },
+  { id: 41, tema: 'Sistemas de Tempo Real', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+41&font=roboto' },
+  { id: 42, tema: 'Análise de Sentimentos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+42&font=roboto' },
+  { id: 43, tema: 'Sistemas Embarcados Avançados', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+43&font=roboto' },
+  { id: 44, tema: 'Processamento de Áudio', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+44&font=roboto' },
+  { id: 45, tema: 'Sistemas de Controle', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+45&font=roboto' },
+  { id: 46, tema: 'Inteligência Artificial Ética', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+46&font=roboto' },
+  { id: 47, tema: 'Sistemas de Detecção', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+47&font=roboto' },
+  { id: 48, tema: 'Computação Evolutiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+48&font=roboto' },
+  { id: 49, tema: 'Sistemas de Rastreamento', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+49&font=roboto' },
+  { id: 50, tema: 'Futuro da Inteligência', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+50&font=roboto' },
+];
 
 const AIStudioPortal = () => {
   return (
@@ -51,36 +86,72 @@ const AIStudioPortal = () => {
 
       {/* Grid de Temporadas */}
       <div style={{ padding: '0 40px 50px' }}>
-        {temporadasData.map(temp => (
-          <div key={temp.id} style={{ marginBottom: '50px' }}>
-            <h3 style={{ 
-              fontFamily: 'Orbitron, sans-serif',
-              fontWeight: 600,
-              fontSize: '18px', 
-              color: '#FFFFFF', 
-              letterSpacing: '0.1em',
-              marginBottom: '20px', 
-              borderLeft: '4px solid #00FFFF', 
-              paddingLeft: '15px',
-              textShadow: '0 0 10px rgba(0, 255, 255, 0.3)',
-              boxShadow: '0 0 20px rgba(0, 255, 255, 0.1)'
-            }}>{temp.titulo}</h3>
-            <div style={{ display: 'flex', overflowX: 'auto', gap: '25px', padding: '15px 5px', scrollbarWidth: 'none' }}>
-              {temp.modulos.map(mod => (
-                <div key={mod.id} className="module-card" style={{ minWidth: '300px', backgroundColor: '#1e1f20', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(0, 255, 255, 0.1)' }}>
-                  {/* Local da Imagem gerada por IA */}
-                  <div style={{ height: '170px', backgroundColor: '#131314', backgroundImage: `url(/${mod.img})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%)' }}></div>
-                  </div>
-                  <div style={{ padding: '15px' }}>
-                    <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{mod.nome}</div>
-                    <div style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '11px', color: '#00FFFF', marginTop: '8px', fontWeight: 600, letterSpacing: '0.1em', textShadow: '0 0 5px rgba(0, 255, 255, 0.5)' }}>{mod.tipo} • PREMIUM HD</div>
-                  </div>
+        <div style={{ display: 'flex', overflowX: 'auto', gap: '25px', padding: '15px 5px', scrollbarWidth: 'none', flexWrap: 'wrap' }}>
+          {dadosTemporadas.map(temporada => (
+            <div 
+              key={temporada.id} 
+              className="module-card" 
+              style={{ 
+                minWidth: '300px', 
+                maxWidth: '300px',
+                backgroundColor: '#1e1f20', 
+                borderRadius: '12px', 
+                overflow: 'hidden', 
+                border: '1px solid rgba(0, 255, 255, 0.1)',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              {/* Imagem do Tema */}
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden' }}>
+                <img 
+                  src={temporada.imagemUrl} 
+                  alt={temporada.tema}
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover',
+                    display: 'block'
+                  }}
+                />
+                {/* Overlay de Gradiente Neon */}
+                <div style={{ 
+                  position: 'absolute', 
+                  top: 0, 
+                  left: 0, 
+                  right: 0, 
+                  bottom: 0, 
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)' 
+                }}></div>
+              </div>
+              
+              {/* Conteúdo do Card */}
+              <div style={{ padding: '15px' }}>
+                <div style={{ 
+                  fontFamily: 'Orbitron, sans-serif', 
+                  fontSize: '14px', 
+                  fontWeight: 700, 
+                  color: '#FFFFFF', 
+                  letterSpacing: '0.05em', 
+                  textTransform: 'uppercase',
+                  marginBottom: '8px',
+                  textShadow: '0 0 10px rgba(0, 255, 255, 0.3)'
+                }}>
+                  {temporada.tema}
                 </div>
-              ))}
+                <div style={{ 
+                  fontFamily: 'Orbitron, sans-serif', 
+                  fontSize: '11px', 
+                  color: '#00FFFF', 
+                  fontWeight: 600, 
+                  letterSpacing: '0.1em', 
+                  textShadow: '0 0 5px rgba(0, 255, 255, 0.5)' 
+                }}>
+                  TEMPORADA {temporada.id} • PREMIUM HD
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
