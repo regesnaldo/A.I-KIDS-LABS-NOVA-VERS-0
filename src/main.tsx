@@ -86,7 +86,7 @@ const AIStudioPortal = () => {
 
       {/* Grid de Temporadas */}
       <div style={{ padding: '0 40px 50px' }}>
-        <div style={{ display: 'flex', overflowX: 'auto', gap: '25px', padding: '15px 5px', scrollbarWidth: 'none', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', overflowX: 'auto', gap: '32px', padding: '20px 5px', scrollbarWidth: 'none', flexWrap: 'wrap' }}>
           {dadosTemporadas.map(temporada => (
             <div 
               key={temporada.id} 
@@ -94,6 +94,7 @@ const AIStudioPortal = () => {
               style={{ 
                 minWidth: '300px', 
                 maxWidth: '300px',
+                marginBottom: '20px',
                 backgroundColor: '#1e1f20', 
                 borderRadius: '12px', 
                 overflow: 'hidden', 
@@ -101,31 +102,32 @@ const AIStudioPortal = () => {
                 transition: 'all 0.3s ease'
               }}
             >
-              {/* Imagem do Tema */}
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden' }}>
-                <img 
-                  src={temporada.imagemUrl} 
-                  alt={temporada.tema}
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover',
-                    display: 'block'
-                  }}
-                />
-                {/* Overlay de Gradiente Neon */}
+              {/* Fundo Escuro com Brilho Neon */}
+              <div style={{ 
+                position: 'relative', 
+                width: '100%', 
+                aspectRatio: '16/9', 
+                overflow: 'hidden',
+                backgroundColor: '#0a0a0a',
+                background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%)',
+                boxShadow: 'inset 0 0 50px rgba(0, 255, 255, 0.1)'
+              }}>
+                {/* Efeito de Brilho Neon Sutil */}
                 <div style={{ 
                   position: 'absolute', 
-                  top: 0, 
-                  left: 0, 
-                  right: 0, 
-                  bottom: 0, 
-                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)' 
+                  top: '50%', 
+                  left: '50%', 
+                  transform: 'translate(-50%, -50%)',
+                  width: '200px',
+                  height: '200px',
+                  background: 'radial-gradient(circle, rgba(0, 255, 255, 0.2) 0%, transparent 70%)',
+                  borderRadius: '50%',
+                  filter: 'blur(40px)'
                 }}></div>
               </div>
               
               {/* Conteúdo do Card */}
-              <div style={{ padding: '15px' }}>
+              <div style={{ padding: '20px' }}>
                 <div style={{ 
                   fontFamily: 'Orbitron, sans-serif', 
                   fontSize: '14px', 
@@ -133,10 +135,10 @@ const AIStudioPortal = () => {
                   color: '#FFFFFF', 
                   letterSpacing: '0.05em', 
                   textTransform: 'uppercase',
-                  marginBottom: '8px',
+                  marginBottom: '16px',
                   textShadow: '0 0 10px rgba(0, 255, 255, 0.3)'
                 }}>
-                  {temporada.tema}
+                  {temporada.tema.toUpperCase()}
                 </div>
                 <div style={{ 
                   fontFamily: 'Orbitron, sans-serif', 
