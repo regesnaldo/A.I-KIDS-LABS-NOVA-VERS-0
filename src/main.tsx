@@ -85,8 +85,8 @@ const AIStudioPortal = () => {
       </div>
 
       {/* Grid de Temporadas */}
-      <div style={{ padding: '0 40px 50px' }}>
-        <div style={{ display: 'flex', overflowX: 'auto', gap: '32px', padding: '20px 5px', scrollbarWidth: 'none', flexWrap: 'wrap' }}>
+      <div style={{ padding: '0 40px 50px', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '32px', padding: '20px 5px', scrollbarWidth: 'none', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%', width: '100%' }}>
           {dadosTemporadas.map(temporada => (
             <div 
               key={temporada.id} 
