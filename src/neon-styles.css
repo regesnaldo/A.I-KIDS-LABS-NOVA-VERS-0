@@ -1,44 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
 
-/* DNA: Fundo preto profundo e sem barras brancas */
+/* DNA: Fundo preto profundo #050505 em tela cheia - NETFLIX FUTURISTA */
 html, body, #root {
-  width: 100% !important;
+  width: 100vw !important;
+  min-height: 100vh !important;
   height: 100% !important;
   background-color: #050505 !important;
-  color: white;
-  overflow-x: hidden;
+  color: white !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .portal-container {
-  width: 100vw;
-  min-height: 100vh;
-  padding: 50px 2%;
-  background-color: #050505;
+  width: 100vw !important;
+  min-height: 100vh !important;
+  padding: 50px 2% !important;
+  background-color: #050505 !important;
+  background-image: none !important;
+  background: #050505 !important;
 }
 
+/* TÍTULOS NEON ROXO #7c3aed - ESTILO ORIGINAL */
 .neon-header {
-  font-family: 'Orbitron', sans-serif;
-  text-shadow: 0 0 15px #7c3aed;
-  color: #7c3aed;
+  font-family: 'Orbitron', sans-serif !important;
+  text-shadow: 0 0 20px #7c3aed, 0 0 40px #7c3aed !important;
+  color: #7c3aed !important;
   text-transform: uppercase;
   text-align: center;
   margin-bottom: 60px;
+  letter-spacing: 0.1em;
 }
 
-/* CARDS NO ESTILO GLASS QUE VOCÊ TINHA */
+/* GRID 5 COLUNAS - LAYOUT NETFLIX FUTURISTA */
+.mission-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 20px !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* CARDS GLASS COM BORDA NEON ROXA - DNA ORIGINAL */
 .card-dna {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(124, 58, 237, 0.3) !important;
   border-radius: 12px;
   padding: 25px;
   text-align: center;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .card-dna:hover {
-  border-color: #7c3aed;
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
-  transform: translateY(-5px);
+  border-color: #7c3aed !important;
+  box-shadow: 0 0 25px rgba(124, 58, 237, 0.5), 0 0 50px rgba(124, 58, 237, 0.3) !important;
+  transform: translateY(-8px) scale(1.02) !important;
+  background: rgba(124, 58, 237, 0.05) !important;
+}
+
+/* REMOVER GRADIENTES E MARGENS BRANCAS */
+body::before,
+body::after,
+.gradient,
+.bg-gradient {
+  display: none !important;
+  background: none !important;
+}
+
+/* RESPONSIVO: 4 colunas em tablets, 2 em mobile */
+@media (max-width: 1200px) {
+  .mission-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mission-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .neon-header {
+    font-size: 2.5rem !important;
+  }
 }

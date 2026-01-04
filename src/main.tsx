@@ -12,18 +12,21 @@ const AIStudioPortal = () => (
   <div className="portal-container">
     <h1 className="neon-header" style={{ fontSize: '4rem' }}>A.I. KIDS LABS</h1>
     
-    <div style={{ 
-      display: 'grid', 
-      // FORÇA 5 COLUNAS NO DESKTOP
-      gridTemplateColumns: 'repeat(5, 1fr)', 
-      gap: '20px', 
-      width: '100%' 
-    }}>
+    {/* GRID 5 COLUNAS - NETFLIX FUTURISTA */}
+    <div className="mission-grid">
       {missions.map((m) => (
         <div key={m.id} className="card-dna">
           <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>{m.icon}</div>
-          <h2 style={{ fontSize: '1.2rem', color: 'white' }}>{m.title}</h2>
-          <p style={{ color: '#6b7280', fontSize: '0.8rem', marginTop: '10px' }}>
+          <h2 style={{ 
+            fontSize: '1.2rem', 
+            color: 'white',
+            fontFamily: 'Orbitron, sans-serif'
+          }}>{m.title}</h2>
+          <p style={{ 
+            color: '#6b7280', 
+            fontSize: '0.8rem', 
+            marginTop: '10px' 
+          }}>
             Missão Generativa
           </p>
         </div>
