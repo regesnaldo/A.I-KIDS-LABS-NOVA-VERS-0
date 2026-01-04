@@ -301,42 +301,6 @@ const AIStudioPortal = () => {
       maxWidth: '100%',
       margin: '0 auto'
     }}>
-      {/* Botão Tela Cheia Global */}
-      {modo !== null && (
-        <button
-          onClick={toggleFullscreen}
-          style={{
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            zIndex: 10000,
-            fontFamily: 'Orbitron, sans-serif',
-            fontWeight: 700,
-            fontSize: '12px',
-            color: cores.primaria,
-            backgroundColor: 'transparent',
-            border: `2px solid ${cores.primaria}`,
-            padding: '10px 20px',
-            borderRadius: '20px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
-            e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
-          }}
-        >
-          ⛶ TELA CHEIA
-        </button>
-      )}
-
       {/* Tela de Seleção Inicial (Kids vs Adulto) */}
       {modo === null && (
         <div style={{
@@ -3367,6 +3331,8 @@ const AIStudioPortal = () => {
               setMostrarSalaTrofeus(false);
               setMostrarAdminLogin(false);
               setMostrarAdminDashboard(false);
+              setMostrarBlog(false);
+              setMostrarFamilia(false);
             }}
             style={{ 
               color: '#9AA0A6', 
@@ -3385,6 +3351,41 @@ const AIStudioPortal = () => {
             }}
           >
             LABORATÓRIO
+          </span>
+          <span 
+            className="nav-link" 
+            onClick={() => { 
+              setMostrarBlog(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+              setMostrarAdminLogin(false);
+              setMostrarAdminDashboard(false);
+              setMostrarFamilia(false);
+            }}
+            style={{ 
+              color: '#9AA0A6', 
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              '--neon-color': cores.primaria,
+              '--neon-rgba': cores.primariaRgba
+            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = cores.primaria;
+              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9AA0A6';
+              e.currentTarget.style.textShadow = 'none';
+            }}
+          >
+            BLOG
           </span>
           <span 
             className="nav-link" 
@@ -3625,6 +3626,8 @@ const AIStudioPortal = () => {
               setMostrarLaboratorioMissoes(false);
               setMostrarSalaTrofeus(false);
               setMostrarAdminDashboard(false);
+              setMostrarBlog(false);
+              setMostrarFamilia(false);
             }}
             style={{ 
               color: '#9AA0A6', 
@@ -3644,41 +3647,34 @@ const AIStudioPortal = () => {
           >
             ADMIN
           </span>
-          <span 
-            className="nav-link" 
-            onClick={() => { 
-              setMostrarBlog(true); 
-              setTemporadaSelecionada(null); 
-              setEpisodioSelecionado(null); 
-              setMostrarPlanos(false); 
-              setMostrarConvidar(false); 
-              setMostrarLaboratorio(false);
-              setMostrarSobre(false);
-              setMostrarContato(false);
-              setMostrarLaboratorioMissoes(false);
-              setMostrarSalaTrofeus(false);
-              setMostrarAdminLogin(false);
-              setMostrarAdminDashboard(false);
-              setMostrarFamilia(false);
-            }}
-            style={{ 
-              color: '#9AA0A6', 
+          <button
+            onClick={toggleFullscreen}
+            style={{
+              fontFamily: 'Orbitron, sans-serif',
+              fontWeight: 700,
+              fontSize: '11px',
+              color: cores.primaria,
+              backgroundColor: 'transparent',
+              border: `2px solid ${cores.primaria}`,
+              padding: '8px 16px',
+              borderRadius: '20px',
               textTransform: 'uppercase',
+              letterSpacing: '0.1em',
               cursor: 'pointer',
-              '--neon-color': cores.primaria,
-              '--neon-rgba': cores.primariaRgba
-            } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
+              transition: 'all 0.3s ease',
+              boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+            }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = cores.primaria;
-              e.currentTarget.style.textShadow = `0 0 10px ${cores.primariaRgba}0.6)`;
+              e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+              e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#9AA0A6';
-              e.currentTarget.style.textShadow = 'none';
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
             }}
           >
-            BLOG
-          </span>
+            ⛶ TELA CHEIA
+          </button>
           <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#333', border: `2px solid ${cores.primaria}`, boxShadow: `0 0 10px ${cores.primariaRgba}0.5)`, cursor: 'pointer', transition: 'all 0.3s ease' }}></div>
         </div>
       </nav>
