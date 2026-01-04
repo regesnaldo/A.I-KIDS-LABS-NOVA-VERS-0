@@ -5,31 +5,38 @@ import './neon-styles.css';
 const missions = Array.from({ length: 50 }, (_, i) => ({
   id: i + 1,
   title: `LAB ${i + 1}`,
-  category: i % 2 === 0 ? "INTELIGÊNCIA" : "CRIATIVIDADE"
+  icon: ["🚀", "🤖", "🧠", "🌌", "🦾"][i % 5]
 }));
 
 const AIStudioPortal = () => (
-  <div className="app-container">
-    <header style={{ textAlign: 'center', marginBottom: '80px' }}>
-      <h1 className="neon-title" style={{ fontSize: 'clamp(2rem, 8vw, 5rem)' }}>A.I. KIDS LABS</h1>
-      <p style={{ color: '#a78bfa', fontWeight: 'bold' }}>DESPERTE O GÊNIO DIGITAL</p>
+  <div className="portal-background">
+    <header style={{ textAlign: 'center', marginBottom: '100px' }}>
+      <h1 className="neon-title" style={{ fontSize: 'clamp(3rem, 10vw, 6rem)' }}>
+        A.I. KIDS LABS
+      </h1>
+      <p style={{ color: '#a78bfa', fontSize: '1.5rem', marginTop: '20px', letterSpacing: '3px' }}>
+        A ESCOLA DO FUTURO - 100% FULL SCREEN
+      </p>
     </header>
 
     <div style={{ 
       display: 'grid', 
-      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-      gap: '25px', width: '100%' 
+      gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
+      gap: '40px', 
+      width: '100%' 
     }}>
       {missions.map((m) => (
-        <div key={m.id} className="netflix-card" style={{ borderRadius: '15px', padding: '30px' }}>
-          <div style={{ opacity: 0.3, fontSize: '0.8rem', fontWeight: 'bold' }}>{m.category}</div>
-          <h2 style={{ fontSize: '1.8rem', margin: '15px 0' }}>{m.title}</h2>
-          <div style={{ height: '4px', width: '40px', background: '#7c3aed', borderRadius: '2px' }}></div>
-          <p style={{ marginTop: '20px', color: '#94a3b8', fontSize: '0.9rem' }}>Toque para iniciar esta missão generativa.</p>
+        <div key={m.id} className="card-gigante">
+          <div style={{ fontSize: '4rem', marginBottom: '20px' }}>{m.icon}</div>
+          <h2 style={{ fontSize: '2rem', marginBottom: '15px' }}>{m.title}</h2>
+          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Domine a IA generativa e mude o mundo.</p>
+          <div style={{ marginTop: '30px', color: '#7c3aed', fontWeight: 'bold' }}>ACESSAR MISSÃO →</div>
         </div>
       ))}
     </div>
   </div>
 );
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><AIStudioPortal /></React.StrictMode>);
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode><AIStudioPortal /></React.StrictMode>
+);
