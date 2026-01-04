@@ -2,59 +2,137 @@ import './neon-styles.css';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
-// Array de dados das 50 Temporadas do A.I. KIDS LABS
-const dadosTemporadas = [
-  { id: 1, tema: 'Neurônios Digitais', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Neurônios+Digitais&font=roboto' },
-  { id: 2, tema: 'Algoritmos Mágicos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Algoritmos+Mágicos&font=roboto' },
-  { id: 3, tema: 'Visão Computacional', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Visão+Computacional&font=roboto' },
-  { id: 4, tema: 'Redes Neurais Profundas', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+4&font=roboto' },
-  { id: 5, tema: 'Processamento de Linguagem Natural', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+5&font=roboto' },
-  { id: 6, tema: 'Robótica Autônoma', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+6&font=roboto' },
-  { id: 7, tema: 'Inteligência Artificial Generativa', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+7&font=roboto' },
-  { id: 8, tema: 'Machine Learning Avançado', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+8&font=roboto' },
-  { id: 9, tema: 'Cibernética e Interfaces', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+9&font=roboto' },
-  { id: 10, tema: 'Realidade Virtual e Aumentada', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+10&font=roboto' },
-  { id: 11, tema: 'Blockchain e Criptografia', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+11&font=roboto' },
-  { id: 12, tema: 'Internet das Coisas (IoT)', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+12&font=roboto' },
-  { id: 13, tema: 'Computação Quântica', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+13&font=roboto' },
-  { id: 14, tema: 'Big Data e Analytics', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+14&font=roboto' },
-  { id: 15, tema: 'Cibersegurança Avançada', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+15&font=roboto' },
-  { id: 16, tema: 'Hologramas Interativos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+16&font=roboto' },
-  { id: 17, tema: 'Biometria e Reconhecimento', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+17&font=roboto' },
-  { id: 18, tema: 'Automação Inteligente', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+18&font=roboto' },
-  { id: 19, tema: 'Sistemas Embarcados', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+19&font=roboto' },
-  { id: 20, tema: 'Cloud Computing e Edge', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+20&font=roboto' },
-  { id: 21, tema: 'Nanotecnologia Digital', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+21&font=roboto' },
-  { id: 22, tema: 'Sensores Inteligentes', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+22&font=roboto' },
-  { id: 23, tema: 'Processamento de Sinais', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+23&font=roboto' },
-  { id: 24, tema: 'Arquitetura de Sistemas', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+24&font=roboto' },
-  { id: 25, tema: 'Algoritmos Genéticos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+25&font=roboto' },
-  { id: 26, tema: 'Deep Learning e CNN', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+26&font=roboto' },
-  { id: 27, tema: 'Processamento Paralelo', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+27&font=roboto' },
-  { id: 28, tema: 'Sistemas Distribuídos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+28&font=roboto' },
-  { id: 29, tema: 'Inteligência Coletiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+29&font=roboto' },
-  { id: 30, tema: 'Reconhecimento de Padrões', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+30&font=roboto' },
-  { id: 31, tema: 'Sistemas Adaptativos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+31&font=roboto' },
-  { id: 32, tema: 'Computação Cognitiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+32&font=roboto' },
-  { id: 33, tema: 'Interfaces Cérebro-Computador', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+33&font=roboto' },
-  { id: 34, tema: 'Sistemas Autônomos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+34&font=roboto' },
-  { id: 35, tema: 'Análise Preditiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+35&font=roboto' },
-  { id: 36, tema: 'Realidade Mista', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+36&font=roboto' },
-  { id: 37, tema: 'Sistemas de Recomendação', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+37&font=roboto' },
-  { id: 38, tema: 'Processamento de Imagens', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+38&font=roboto' },
-  { id: 39, tema: 'Sistemas Multiagente', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+39&font=roboto' },
-  { id: 40, tema: 'Computação em Nuvem', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+40&font=roboto' },
-  { id: 41, tema: 'Sistemas de Tempo Real', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+41&font=roboto' },
-  { id: 42, tema: 'Análise de Sentimentos', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+42&font=roboto' },
-  { id: 43, tema: 'Sistemas Embarcados Avançados', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+43&font=roboto' },
-  { id: 44, tema: 'Processamento de Áudio', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+44&font=roboto' },
-  { id: 45, tema: 'Sistemas de Controle', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+45&font=roboto' },
-  { id: 46, tema: 'Inteligência Artificial Ética', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+46&font=roboto' },
-  { id: 47, tema: 'Sistemas de Detecção', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+47&font=roboto' },
-  { id: 48, tema: 'Computação Evolutiva', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+48&font=roboto' },
-  { id: 49, tema: 'Sistemas de Rastreamento', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+49&font=roboto' },
-  { id: 50, tema: 'Futuro da Inteligência', imagemUrl: 'https://placehold.co/400x225/1a1a2e/00ffff.png?text=Tema+50&font=roboto' },
+// Estrutura de dados baseada em @material-aulas
+// 10 Categorias (Temporadas) com 50 Aulas no total
+
+interface Aula {
+  id: number;
+  titulo: string;
+  categoriaId: number;
+  categoriaNome: string;
+  conteudo?: string;
+  promptMestre?: string;
+}
+
+interface Categoria {
+  id: number;
+  nome: string;
+  aulas: Aula[];
+}
+
+const categorias: Categoria[] = [
+  {
+    id: 1,
+    nome: 'MÓDULOS FUNDAMENTAIS',
+    aulas: [
+      { id: 1, titulo: 'O Que é IA?', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 2, titulo: 'Como Máquinas Aprendem?', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 3, titulo: 'Reconhecimento de Imagens', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 4, titulo: 'Seu Primeiro Chatbot', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 5, titulo: 'Desenhando com IA', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 6, titulo: 'IA nos Jogos', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 7, titulo: 'Ética da IA', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 8, titulo: 'Treinando Seu Primeiro Modelo', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 9, titulo: 'IA no Mundo Real', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+      { id: 10, titulo: 'Projeto Completo', categoriaId: 1, categoriaNome: 'MÓDULOS FUNDAMENTAIS' },
+    ]
+  },
+  {
+    id: 2,
+    nome: 'VISÃO COMPUTACIONAL',
+    aulas: [
+      { id: 11, titulo: 'Detecção de Objetos', categoriaId: 2, categoriaNome: 'VISÃO COMPUTACIONAL' },
+      { id: 12, titulo: 'Reconhecimento Facial', categoriaId: 2, categoriaNome: 'VISÃO COMPUTACIONAL' },
+      { id: 13, titulo: 'Análise de Vídeos', categoriaId: 2, categoriaNome: 'VISÃO COMPUTACIONAL' },
+      { id: 14, titulo: 'IA na Medicina', categoriaId: 2, categoriaNome: 'VISÃO COMPUTACIONAL' },
+      { id: 15, titulo: 'Projeto: Detector de Emoções', categoriaId: 2, categoriaNome: 'VISÃO COMPUTACIONAL' },
+    ]
+  },
+  {
+    id: 3,
+    nome: 'PROCESSAMENTO DE LINGUAGEM',
+    aulas: [
+      { id: 16, titulo: 'Como Chatbots Entendem', categoriaId: 3, categoriaNome: 'PROCESSAMENTO DE LINGUAGEM' },
+      { id: 17, titulo: 'Tradutores Automáticos', categoriaId: 3, categoriaNome: 'PROCESSAMENTO DE LINGUAGEM' },
+      { id: 18, titulo: 'Geradores de Texto', categoriaId: 3, categoriaNome: 'PROCESSAMENTO DE LINGUAGEM' },
+      { id: 19, titulo: 'Análise de Sentimentos', categoriaId: 3, categoriaNome: 'PROCESSAMENTO DE LINGUAGEM' },
+      { id: 20, titulo: 'Projeto: Seu Assistente Pessoal', categoriaId: 3, categoriaNome: 'PROCESSAMENTO DE LINGUAGEM' },
+    ]
+  },
+  {
+    id: 4,
+    nome: 'IA NA CRIATIVIDADE',
+    aulas: [
+      { id: 21, titulo: 'Música com IA', categoriaId: 4, categoriaNome: 'IA NA CRIATIVIDADE' },
+      { id: 22, titulo: 'Histórias Geradas', categoriaId: 4, categoriaNome: 'IA NA CRIATIVIDADE' },
+      { id: 23, titulo: 'Design com IA', categoriaId: 4, categoriaNome: 'IA NA CRIATIVIDADE' },
+      { id: 24, titulo: 'Animação Automática', categoriaId: 4, categoriaNome: 'IA NA CRIATIVIDADE' },
+      { id: 25, titulo: 'Projeto: Seu Filme com IA', categoriaId: 4, categoriaNome: 'IA NA CRIATIVIDADE' },
+    ]
+  },
+  {
+    id: 5,
+    nome: 'JOGOS E ENTRETENIMENTO',
+    aulas: [
+      { id: 26, titulo: 'IA em Jogos de Tabuleiro', categoriaId: 5, categoriaNome: 'JOGOS E ENTRETENIMENTO' },
+      { id: 27, titulo: 'NPCs Realistas', categoriaId: 5, categoriaNome: 'JOGOS E ENTRETENIMENTO' },
+      { id: 28, titulo: 'Geração de Mundos', categoriaId: 5, categoriaNome: 'JOGOS E ENTRETENIMENTO' },
+      { id: 29, titulo: 'Dificuldade Adaptativa', categoriaId: 5, categoriaNome: 'JOGOS E ENTRETENIMENTO' },
+      { id: 30, titulo: 'Projeto: Seu Jogo com IA', categoriaId: 5, categoriaNome: 'JOGOS E ENTRETENIMENTO' },
+    ]
+  },
+  {
+    id: 6,
+    nome: 'IA NO COTIDIANO',
+    aulas: [
+      { id: 31, titulo: 'Casas Inteligentes', categoriaId: 6, categoriaNome: 'IA NO COTIDIANO' },
+      { id: 32, titulo: 'IA na Educação', categoriaId: 6, categoriaNome: 'IA NO COTIDIANO' },
+      { id: 33, titulo: 'Assistentes Pessoais', categoriaId: 6, categoriaNome: 'IA NO COTIDIANO' },
+      { id: 34, titulo: 'IA no Transporte', categoriaId: 6, categoriaNome: 'IA NO COTIDIANO' },
+      { id: 35, titulo: 'Projeto: Sua Casa Inteligente', categoriaId: 6, categoriaNome: 'IA NO COTIDIANO' },
+    ]
+  },
+  {
+    id: 7,
+    nome: 'ÉTICA E FUTURO',
+    aulas: [
+      { id: 36, titulo: 'Privacidade e IA', categoriaId: 7, categoriaNome: 'ÉTICA E FUTURO' },
+      { id: 37, titulo: 'Empregos do Futuro', categoriaId: 7, categoriaNome: 'ÉTICA E FUTURO' },
+      { id: 38, titulo: 'IA e Sociedade', categoriaId: 7, categoriaNome: 'ÉTICA E FUTURO' },
+      { id: 39, titulo: 'Futuro da IA', categoriaId: 7, categoriaNome: 'ÉTICA E FUTURO' },
+      { id: 40, titulo: 'Projeto: Sua Visão do Futuro', categoriaId: 7, categoriaNome: 'ÉTICA E FUTURO' },
+    ]
+  },
+  {
+    id: 8,
+    nome: 'PROJETOS AVANÇADOS',
+    aulas: [
+      { id: 41, titulo: 'Desafio Avançado 1', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 42, titulo: 'Desafio Avançado 2', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 43, titulo: 'Desafio Avançado 3', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 44, titulo: 'Desafio Avançado 4', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 45, titulo: 'Desafio Avançado 5', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 46, titulo: 'Desafio Avançado 6', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 47, titulo: 'Desafio Avançado 7', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 48, titulo: 'Desafio Avançado 8', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 49, titulo: 'Desafio Avançado 9', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+      { id: 50, titulo: 'Desafio Avançado 10', categoriaId: 8, categoriaNome: 'PROJETOS AVANÇADOS' },
+    ]
+  },
 ];
+
+// Array plano de todas as aulas para compatibilidade
+const todasAulas: Aula[] = categorias.flatMap(cat => cat.aulas);
+
+// Função para obter aula por ID
+const obterAula = (id: number): Aula | undefined => {
+  return todasAulas.find(aula => aula.id === id);
+};
+
+// Função para obter categoria por ID
+const obterCategoria = (id: number): Categoria | undefined => {
+  return categorias.find(cat => cat.id === id);
+};
 
 // Mapeamento de títulos adultos para apelidos kids
 const apelidosKids: Record<string, string> = {
@@ -124,6 +202,8 @@ const AIStudioPortal = () => {
   const [mostrarSalaTrofeus, setMostrarSalaTrofeus] = useState(false);
   const [mostrarAdminLogin, setMostrarAdminLogin] = useState(false);
   const [mostrarAdminDashboard, setMostrarAdminDashboard] = useState(false);
+  const [mostrarBlog, setMostrarBlog] = useState(false);
+  const [mostrarFamilia, setMostrarFamilia] = useState(false);
   const [codigoIndicacao] = useState(`AIKIDS${Math.random().toString(36).substring(2, 8).toUpperCase()}`);
   const [creditosPremium] = useState(150.00);
   const [amigosConvidados] = useState(2);
@@ -211,7 +291,52 @@ const AIStudioPortal = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', color: '#e3e3e3', minHeight: '100vh', fontFamily: 'Inter, sans-serif', position: 'relative' }}>
+    <div style={{ 
+      backgroundColor: '#0a0a0a', 
+      color: '#e3e3e3', 
+      minHeight: '100vh', 
+      fontFamily: 'Inter, sans-serif', 
+      position: 'relative',
+      width: '100%',
+      maxWidth: '100%',
+      margin: '0 auto'
+    }}>
+      {/* Botão Tela Cheia Global */}
+      {modo !== null && (
+        <button
+          onClick={toggleFullscreen}
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            zIndex: 10000,
+            fontFamily: 'Orbitron, sans-serif',
+            fontWeight: 700,
+            fontSize: '12px',
+            color: cores.primaria,
+            backgroundColor: 'transparent',
+            border: `2px solid ${cores.primaria}`,
+            padding: '10px 20px',
+            borderRadius: '20px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+            e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+          }}
+        >
+          ⛶ TELA CHEIA
+        </button>
+      )}
+
       {/* Tela de Seleção Inicial (Kids vs Adulto) */}
       {modo === null && (
         <div style={{
@@ -1318,7 +1443,7 @@ const AIStudioPortal = () => {
                     textShadow: `0 0 20px ${cores.primariaRgba}0.5)`,
                     marginBottom: '5px'
                   }}>
-                    {obterTitulo(dadosTemporadas[episodioSelecionado.temporadaId - 1].tema).toUpperCase()}
+                    {obterAula(episodioSelecionado.episodioId)?.titulo.toUpperCase() || 'AULA'}
                   </h2>
                   <p style={{
                     fontFamily: 'Orbitron, sans-serif',
@@ -1328,7 +1453,7 @@ const AIStudioPortal = () => {
                     letterSpacing: '0.1em',
                     textShadow: `0 0 10px ${cores.primariaRgba}0.5)`
                   }}>
-                    MÓDULO {episodioSelecionado.episodioId} • TEMPORADA {episodioSelecionado.temporadaId}
+                    MÓDULO {episodioSelecionado.episodioId} • {obterCategoria(episodioSelecionado.temporadaId)?.nome || 'CATEGORIA'}
                   </p>
                 </div>
               </div>
@@ -1697,7 +1822,7 @@ const AIStudioPortal = () => {
                   textShadow: `0 0 20px ${cores.primariaRgba}0.5)`,
                   marginBottom: '10px'
                 }}>
-                  {obterTitulo(dadosTemporadas[temporadaSelecionada - 1].tema).toUpperCase()}
+                  {obterCategoria(temporadaSelecionada)?.nome.toUpperCase() || 'CATEGORIA'}
                 </h2>
                 <p style={{
                   fontFamily: 'Orbitron, sans-serif',
@@ -1718,10 +1843,10 @@ const AIStudioPortal = () => {
                   gap: '24px',
                   marginTop: '40px'
                 }}>
-                  {gerarEpisodios(temporadaSelecionada).map(episodio => (
+                  {obterCategoria(temporadaSelecionada)?.aulas.map(aula => (
                     <div
-                      key={episodio.id}
-                      onClick={() => setEpisodioSelecionado({ temporadaId: temporadaSelecionada, episodioId: episodio.id })}
+                      key={aula.id}
+                      onClick={() => setEpisodioSelecionado({ temporadaId: temporadaSelecionada, episodioId: aula.id })}
                       style={{
                         backgroundColor: '#1e1f20',
                         borderRadius: '12px',
@@ -1752,7 +1877,7 @@ const AIStudioPortal = () => {
                         textShadow: `0 0 10px ${cores.primariaRgba}0.5)`,
                         letterSpacing: '0.05em'
                       }}>
-                        MÓDULO {episodio.numero}
+                        {aula.titulo}
                       </div>
                       <div style={{
                         fontFamily: 'Orbitron, sans-serif',
@@ -1761,7 +1886,7 @@ const AIStudioPortal = () => {
                         fontWeight: 600,
                         letterSpacing: '0.1em'
                       }}>
-                        {modo === 'kids' ? '🎓 Aula Divertida' : '📚 Conteúdo Técnico'}
+                        MÓDULO {aula.id} • {modo === 'kids' ? '🎓 Aula Divertida' : '📚 Conteúdo Técnico'}
                       </div>
                     </div>
                   ))}
@@ -2744,8 +2869,454 @@ const AIStudioPortal = () => {
             </div>
           )}
 
-          {/* Página Principal (Grid de Temporadas) */}
-          {!temporadaSelecionada && !episodioSelecionado && !mostrarPlanos && !mostrarConvidar && !mostrarLaboratorio && !mostrarSobre && !mostrarContato && !mostrarLaboratorioMissoes && !mostrarSalaTrofeus && !mostrarAdminLogin && !mostrarAdminDashboard && (
+          {/* Página Blog */}
+          {mostrarBlog && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '60px 40px', minHeight: '100vh', position: 'relative' }}>
+              <button
+                onClick={toggleFullscreen}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => setMostrarBlog(false)}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 30px ${cores.primariaRgba}0.6), 0 0 60px ${cores.primariaRgba}0.3)`,
+                  marginBottom: '40px'
+                }}>
+                  BLOG
+                </h1>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                  {[
+                    { id: 1, titulo: 'O Que é Inteligência Artificial?', categoria: 'MÓDULOS FUNDAMENTAIS', resumo: 'A Inteligência Artificial (IA) é uma área da ciência da computação que busca criar sistemas capazes de realizar tarefas que normalmente requerem inteligência humana.', conteudo: 'A Inteligência Artificial representa uma das maiores revoluções tecnológicas da história. Ela permite que máquinas aprendam, raciocinem e tomem decisões de forma autônoma.' },
+                    { id: 2, titulo: 'Como Máquinas Aprendem?', categoria: 'MÓDULOS FUNDAMENTAIS', resumo: 'O aprendizado de máquina é o processo pelo qual sistemas computacionais melhoram seu desempenho através da experiência.', conteudo: 'O aprendizado de máquina funciona através de algoritmos que analisam grandes volumes de dados, identificam padrões e fazem previsões.' },
+                    { id: 3, titulo: 'IA na Educação: Transformando o Aprendizado', categoria: 'IA NO COTIDIANO', resumo: 'A Inteligência Artificial está revolucionando a educação, oferecendo personalização e adaptação.', conteudo: 'A IA na educação permite criar experiências de aprendizado personalizadas, adaptando o conteúdo ao ritmo de cada aluno.' },
+                    { id: 4, titulo: 'Ética e Inteligência Artificial', categoria: 'ÉTICA E FUTURO', resumo: 'Com o avanço da IA, questões éticas se tornam cada vez mais importantes.', conteudo: 'A ética em IA envolve garantir que sistemas inteligentes sejam desenvolvidos de forma responsável.' },
+                  ].map(artigo => (
+                    <article
+                      key={artigo.id}
+                      style={{
+                        backgroundColor: '#1e1f20',
+                        border: `2px solid ${cores.primaria}`,
+                        borderRadius: '20px',
+                        padding: '40px',
+                        transition: 'all 0.3s ease',
+                        boxShadow: `0 0 20px ${cores.primariaRgba}0.3)`
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-5px)';
+                        e.currentTarget.style.boxShadow = `0 0 30px ${cores.primariaRgba}0.5)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.3)`;
+                      }}
+                    >
+                      <div style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '12px',
+                        color: cores.primaria,
+                        marginBottom: '15px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        textShadow: `0 0 10px ${cores.primariaRgba}0.5)`
+                      }}>
+                        {artigo.categoria}
+                      </div>
+                      <h2 style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '28px',
+                        fontWeight: 700,
+                        color: '#FFFFFF',
+                        marginBottom: '15px',
+                        letterSpacing: '-0.01em',
+                        textShadow: `0 0 15px ${cores.primariaRgba}0.4)`
+                      }}>
+                        {artigo.titulo}
+                      </h2>
+                      <p style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '16px',
+                        color: '#9AA0A6',
+                        lineHeight: '1.8',
+                        marginBottom: '20px'
+                      }}>
+                        {artigo.resumo}
+                      </p>
+                      <p style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '15px',
+                        color: '#E3E3E3',
+                        lineHeight: '1.8'
+                      }}>
+                        {artigo.conteudo}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página Família (Planos) */}
+          {mostrarFamilia && !temporadaSelecionada && !episodioSelecionado && (
+            <div style={{ padding: '60px 40px', minHeight: '100vh', position: 'relative' }}>
+              <button
+                onClick={toggleFullscreen}
+                style={{
+                  position: 'fixed',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1000,
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '10px 20px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ⛶ TELA CHEIA
+              </button>
+              <button
+                onClick={() => setMostrarFamilia(false)}
+                style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: cores.primaria,
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${cores.primaria}`,
+                  padding: '12px 24px',
+                  borderRadius: '24px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  marginBottom: '30px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 0 10px ${cores.primariaRgba}0.3)`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${cores.primariaRgba}0.1)`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.boxShadow = `0 0 10px ${cores.primariaRgba}0.3)`;
+                }}
+              >
+                ← VOLTAR
+              </button>
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <h1 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontWeight: 900,
+                  fontSize: '48px',
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.02em',
+                  textShadow: `0 0 30px ${cores.primariaRgba}0.6), 0 0 60px ${cores.primariaRgba}0.3)`,
+                  marginBottom: '20px',
+                  textAlign: 'center'
+                }}>
+                  UM ÚNICO PLANO, EVOLUÇÃO PARA A FAMÍLIA TODA.
+                </h1>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '18px',
+                  color: '#9AA0A6',
+                  textAlign: 'center',
+                  marginBottom: '60px',
+                  lineHeight: '1.6'
+                }}>
+                  Assine uma vez e libere o acesso total para Kids e Adultos
+                </p>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+                  gap: '40px',
+                  marginBottom: '40px'
+                }}>
+                  <div style={{
+                    backgroundColor: '#1e1f20',
+                    border: `2px solid ${cores.primaria}`,
+                    borderRadius: '20px',
+                    padding: '40px',
+                    boxShadow: `0 0 30px ${cores.primariaRgba}0.4)`
+                  }}>
+                    <h2 style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: cores.primaria,
+                      marginBottom: '20px',
+                      textShadow: `0 0 15px ${cores.primariaRgba}0.5)`,
+                      letterSpacing: '0.05em'
+                    }}>
+                      PLANO MENSAL
+                    </h2>
+                    <div style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '48px',
+                      fontWeight: 900,
+                      color: '#FFFFFF',
+                      marginBottom: '10px',
+                      textShadow: `0 0 20px ${cores.primariaRgba}0.6)`
+                    }}>
+                      R$ 97,00
+                    </div>
+                    <p style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      color: '#9AA0A6',
+                      marginBottom: '30px'
+                    }}>
+                      Flexibilidade total, cancele quando quiser
+                    </p>
+                    <ul style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      color: '#E3E3E3',
+                      lineHeight: '2',
+                      marginBottom: '30px',
+                      paddingLeft: '20px'
+                    }}>
+                      <li>✓ Acesso completo Kids e Adultos</li>
+                      <li>✓ 50 módulos de aprendizado</li>
+                      <li>✓ Tutores IA integrados</li>
+                      <li>✓ Suporte prioritário</li>
+                    </ul>
+                    <button
+                      style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontWeight: 700,
+                        fontSize: '16px',
+                        color: '#000000',
+                        backgroundColor: cores.primaria,
+                        border: 'none',
+                        padding: '16px 32px',
+                        borderRadius: '24px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        boxShadow: `0 0 25px ${cores.primariaRgba}0.5)`,
+                        width: '100%'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                        e.currentTarget.style.boxShadow = `0 0 35px ${cores.primariaRgba}0.7)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.boxShadow = `0 0 25px ${cores.primariaRgba}0.5)`;
+                      }}
+                    >
+                      💳 PAGAR COM PIX
+                    </button>
+                  </div>
+                  <div style={{
+                    backgroundColor: '#1e1f20',
+                    border: `3px solid #FFD700`,
+                    borderRadius: '20px',
+                    padding: '40px',
+                    boxShadow: `0 0 40px rgba(255, 215, 0, 0.5)`,
+                    position: 'relative'
+                  }}>
+                    <div style={{
+                      position: 'absolute',
+                      top: '-15px',
+                      right: '30px',
+                      backgroundColor: '#FFD700',
+                      color: '#000000',
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontWeight: 700,
+                      fontSize: '12px',
+                      padding: '8px 16px',
+                      borderRadius: '20px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      boxShadow: `0 0 20px rgba(255, 215, 0, 0.6)`
+                    }}>
+                      MELHOR VALOR
+                    </div>
+                    <h2 style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: '#FFD700',
+                      marginBottom: '20px',
+                      textShadow: `0 0 15px rgba(255, 215, 0, 0.6)`,
+                      letterSpacing: '0.05em'
+                    }}>
+                      PLANO ANUAL
+                    </h2>
+                    <div style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '48px',
+                      fontWeight: 900,
+                      color: '#FFFFFF',
+                      marginBottom: '10px',
+                      textShadow: `0 0 20px rgba(255, 215, 0, 0.6)`
+                    }}>
+                      R$ 697,00
+                    </div>
+                    <div style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      color: '#00FF88',
+                      marginBottom: '10px',
+                      fontWeight: 600
+                    }}>
+                      Economia de R$ 467,00 (40% OFF)
+                    </div>
+                    <p style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      color: '#9AA0A6',
+                      marginBottom: '30px'
+                    }}>
+                      Fidelização com desconto especial
+                    </p>
+                    <ul style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      color: '#E3E3E3',
+                      lineHeight: '2',
+                      marginBottom: '30px',
+                      paddingLeft: '20px'
+                    }}>
+                      <li>✓ Acesso completo Kids e Adultos</li>
+                      <li>✓ 50 módulos de aprendizado</li>
+                      <li>✓ Tutores IA integrados</li>
+                      <li>✓ Suporte prioritário</li>
+                      <li>✓ Conteúdo exclusivo anual</li>
+                    </ul>
+                    <button
+                      style={{
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontWeight: 700,
+                        fontSize: '16px',
+                        color: '#000000',
+                        backgroundColor: '#FFD700',
+                        border: 'none',
+                        padding: '16px 32px',
+                        borderRadius: '24px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        boxShadow: `0 0 30px rgba(255, 215, 0, 0.6)`,
+                        width: '100%'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                        e.currentTarget.style.boxShadow = `0 0 40px rgba(255, 215, 0, 0.8)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.boxShadow = `0 0 30px rgba(255, 215, 0, 0.6)`;
+                      }}
+                    >
+                      💳 PAGAR COM PIX
+                    </button>
+                  </div>
+                </div>
+                <div style={{
+                  backgroundColor: '#1e1f20',
+                  border: `1px solid ${cores.primariaRgba}0.2)`,
+                  borderRadius: '12px',
+                  padding: '20px',
+                  textAlign: 'center'
+                }}>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '12px',
+                    color: '#9AA0A6',
+                    lineHeight: '1.6'
+                  }}>
+                    Assinatura realizada por responsáveis maiores de 18 anos. Todos os planos incluem acesso completo para Kids e Adultos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Página Principal (Homepage Estilo Netflix) */}
+          {!temporadaSelecionada && !episodioSelecionado && !mostrarPlanos && !mostrarConvidar && !mostrarLaboratorio && !mostrarSobre && !mostrarContato && !mostrarLaboratorioMissoes && !mostrarSalaTrofeus && !mostrarAdminLogin && !mostrarAdminDashboard && !mostrarBlog && !mostrarFamilia && (
             <div>
       {/* Menu Superior Estilo Studio */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 40px', borderBottom: `1px solid ${cores.primariaRgba}0.2)`, backgroundColor: 'rgba(19, 19, 20, 0.9)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 100 }}>
@@ -2817,9 +3388,25 @@ const AIStudioPortal = () => {
           </span>
           <span 
             className="nav-link" 
+            onClick={() => { 
+              setMostrarFamilia(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+              setMostrarAdminLogin(false);
+              setMostrarAdminDashboard(false);
+              setMostrarBlog(false);
+            }}
             style={{ 
               color: '#9AA0A6', 
               textTransform: 'uppercase',
+              cursor: 'pointer',
               '--neon-color': cores.primaria,
               '--neon-rgba': cores.primariaRgba
             } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
@@ -3059,9 +3646,25 @@ const AIStudioPortal = () => {
           </span>
           <span 
             className="nav-link" 
+            onClick={() => { 
+              setMostrarBlog(true); 
+              setTemporadaSelecionada(null); 
+              setEpisodioSelecionado(null); 
+              setMostrarPlanos(false); 
+              setMostrarConvidar(false); 
+              setMostrarLaboratorio(false);
+              setMostrarSobre(false);
+              setMostrarContato(false);
+              setMostrarLaboratorioMissoes(false);
+              setMostrarSalaTrofeus(false);
+              setMostrarAdminLogin(false);
+              setMostrarAdminDashboard(false);
+              setMostrarFamilia(false);
+            }}
             style={{ 
               color: '#9AA0A6', 
               textTransform: 'uppercase',
+              cursor: 'pointer',
               '--neon-color': cores.primaria,
               '--neon-rgba': cores.primariaRgba
             } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
@@ -3100,138 +3703,147 @@ const AIStudioPortal = () => {
         <p style={{ color: '#9aa0a6', maxWidth: '600px', fontSize: '16px', lineHeight: '1.6' }}>Explore o futuro agora com o laboratório imersivo para todas as idades.</p>
       </div>
 
-      {/* Grid de Temporadas */}
-      <div style={{ padding: '0 40px 50px', display: 'flex', justifyContent: 'center' }}>
-        <div style={{ display: 'flex', gap: '32px', padding: '20px 5px', scrollbarWidth: 'none', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%', width: '100%' }}>
-          {dadosTemporadas.map(temporada => (
-            <div 
-              key={temporada.id} 
-              className="module-card" 
-              onClick={() => setTemporadaSelecionada(temporada.id)}
-              style={{ 
-                minWidth: '300px', 
-                maxWidth: '300px',
-                marginBottom: '20px',
-                backgroundColor: '#1e1f20', 
-                borderRadius: '12px', 
-                overflow: 'hidden', 
-                border: `1px solid ${cores.primariaRgba}0.1)`,
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-                '--neon-color': cores.primaria,
-                '--neon-rgba': cores.primariaRgba
-              } as React.CSSProperties & { '--neon-color': string; '--neon-rgba': string }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = cores.primaria;
-                e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.3)`;
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = `${cores.primariaRgba}0.1)`;
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              {/* Fundo Escuro com Brilho Neon */}
-              <div style={{ 
-                position: 'relative', 
-                width: '100%', 
-                aspectRatio: '16/9', 
-                overflow: 'hidden',
-                backgroundColor: '#0a0a0a',
-                background: `linear-gradient(135deg, ${cores.primariaRgba}0.1) 0%, rgba(0, 0, 0, 0.9) 100%)`,
-                boxShadow: `inset 0 0 50px ${cores.primariaRgba}0.1)`
-              }}>
-                {/* Efeito de Brilho Neon Sutil */}
-                <div style={{ 
-                  position: 'absolute', 
-                  top: '50%', 
-                  left: '50%', 
-                  transform: 'translate(-50%, -50%)',
-                  width: '200px',
-                  height: '200px',
-                  background: `radial-gradient(circle, ${cores.primariaRgba}0.2) 0%, transparent 70%)`,
-                  borderRadius: '50%',
-                  filter: 'blur(40px)'
-                }}></div>
-                
-                {/* Selo de Conclusão de Temporada */}
-                {temporadaCompleta(temporada.id) && (
+      {/* Carrosséis Estilo Netflix - 10 Categorias */}
+      <div style={{ padding: '40px 0', backgroundColor: '#0a0a0a' }}>
+        {categorias.map((categoria, categoriaIndex) => (
+          <div key={categoria.id} style={{ marginBottom: '50px' }}>
+            <h2 style={{
+              fontFamily: 'Orbitron, sans-serif',
+              fontSize: '24px',
+              fontWeight: 700,
+              color: '#FFFFFF',
+              marginBottom: '20px',
+              paddingLeft: '40px',
+              letterSpacing: '0.05em',
+              textShadow: `0 0 15px ${cores.primariaRgba}0.4)`
+            }}>
+              {categoria.nome}
+            </h2>
+            <div style={{
+              display: 'flex',
+              gap: '16px',
+              padding: '0 40px',
+              overflowX: 'auto',
+              scrollbarWidth: 'thin',
+              scrollbarColor: `${cores.primaria} transparent`,
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: '-ms-autohiding-scrollbar'
+            }}>
+              {categoria.aulas.map(aula => (
+                <div
+                  key={aula.id}
+                  onClick={() => setEpisodioSelecionado({ temporadaId: categoria.id, episodioId: aula.id })}
+                  style={{
+                    minWidth: '280px',
+                    maxWidth: '280px',
+                    backgroundColor: '#1e1f20',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    border: `1px solid ${cores.primariaRgba}0.2)`,
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    flexShrink: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = cores.primaria;
+                    e.currentTarget.style.boxShadow = `0 0 20px ${cores.primariaRgba}0.4)`;
+                    e.currentTarget.style.transform = 'scale(1.08) translateY(-5px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = `${cores.primariaRgba}0.2)`;
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  }}
+                >
                   <div style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    width: '60px',
-                    height: '60px',
+                    position: 'relative',
+                    width: '100%',
+                    aspectRatio: '16/9',
+                    backgroundColor: '#0a0a0a',
+                    background: `linear-gradient(135deg, ${cores.primariaRgba}0.15) 0%, rgba(0, 0, 0, 0.95) 100%)`,
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#0a0a0a',
-                    borderRadius: '50%',
-                    border: `3px solid ${cores.primaria}`,
-                    boxShadow: `0 0 20px ${cores.primariaRgba}0.8), 0 0 40px ${cores.primariaRgba}0.4)`,
-                    animation: 'pulse-badge 2s ease-in-out infinite',
-                    zIndex: 10
+                    justifyContent: 'center'
                   }}>
-                    <span style={{
-                      fontSize: '32px',
-                      filter: `drop-shadow(0 0 10px ${cores.primariaRgba}0.8))`
+                    <div style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      color: cores.primaria,
+                      textAlign: 'center',
+                      textShadow: `0 0 15px ${cores.primariaRgba}0.6)`,
+                      letterSpacing: '0.05em',
+                      padding: '20px'
                     }}>
-                      {modo === 'kids' ? '⭐' : '🏆'}
-                    </span>
+                      {modo === 'kids' ? '🎓' : '📚'} {aula.titulo}
+                    </div>
+                    {modo === 'kids' && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        color: '#FF00FF',
+                        backgroundColor: 'rgba(255, 0, 255, 0.2)',
+                        padding: '4px 8px',
+                        borderRadius: '8px',
+                        border: `1px solid #FF00FF`,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em'
+                      }}>
+                        KIDS
+                      </div>
+                    )}
+                    {modo === 'adulto' && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        fontFamily: 'Orbitron, sans-serif',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        color: '#00F7FF',
+                        backgroundColor: 'rgba(0, 247, 255, 0.2)',
+                        padding: '4px 8px',
+                        borderRadius: '8px',
+                        border: `1px solid #00F7FF`,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em'
+                      }}>
+                        ADULTO
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              
-              {/* Conteúdo do Card */}
-              <div style={{ padding: '20px', position: 'relative' }}>
-                {temporadaCompleta(temporada.id) && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '-10px',
-                    right: '20px',
-                    fontFamily: 'Orbitron, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    color: cores.primaria,
-                    backgroundColor: '#0a0a0a',
-                    padding: '4px 8px',
-                    borderRadius: '12px',
-                    border: `1px solid ${cores.primaria}`,
-                    boxShadow: `0 0 10px ${cores.primariaRgba}0.5)`,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    animation: 'pulse-badge 2s ease-in-out infinite'
-                  }}>
-                    {modo === 'kids' ? '✨ COMPLETA!' : 'CONCLUÍDA'}
+                  <div style={{ padding: '12px' }}>
+                    <div style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#FFFFFF',
+                      marginBottom: '4px',
+                      letterSpacing: '0.05em',
+                      textShadow: `0 0 8px ${cores.primariaRgba}0.3)`
+                    }}>
+                      {aula.titulo}
+                    </div>
+                    <div style={{
+                      fontFamily: 'Orbitron, sans-serif',
+                      fontSize: '10px',
+                      color: cores.primaria,
+                      fontWeight: 600,
+                      letterSpacing: '0.1em',
+                      textShadow: `0 0 5px ${cores.primariaRgba}0.4)`
+                    }}>
+                      MÓDULO {aula.id}
+                    </div>
                   </div>
-                )}
-                <div style={{ 
-                  fontFamily: 'Orbitron, sans-serif', 
-                  fontSize: '14px', 
-                  fontWeight: 700, 
-                  color: '#FFFFFF', 
-                  letterSpacing: '0.05em', 
-                  textTransform: 'uppercase',
-                  marginBottom: '16px',
-                  textShadow: `0 0 10px ${cores.primariaRgba}0.3)`
-                }}>
-                  {obterTitulo(temporada.tema).toUpperCase()}
                 </div>
-                <div style={{ 
-                  fontFamily: 'Orbitron, sans-serif', 
-                  fontSize: '11px', 
-                  color: cores.primaria, 
-                  fontWeight: 600, 
-                  letterSpacing: '0.1em', 
-                  textShadow: `0 0 5px ${cores.primariaRgba}0.5)` 
-                }}>
-                  TEMPORADA {temporada.id} • PREMIUM HD
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
             </div>
           )}
