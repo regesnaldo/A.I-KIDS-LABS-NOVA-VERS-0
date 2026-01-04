@@ -1,16 +1,28 @@
-/* RESET TOTAL PARA TELA CHEIA */
-* { margin: 0; padding: 0; box-sizing: border-box !important; }
-
+/* RESET PARA OCUPAR A TELA TODA */
 html, body, #root {
-  width: 100vw !important;
-  height: 100vh !important;
-  background-color: #0B0E14 !important;
-  overflow-x: hidden !important;
-  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #050505 !important; /* Cor do seu index.html */
+  overflow-x: hidden;
 }
 
-/* FORÇA O CONTEÚDO A OCUPAR 100% */
-div, section, main, .app-container {
-  width: 100% !important;
-  max-width: none !important;
+.app-container {
+  width: 100vw !important;
+  min-height: 100vh !important;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* ESTILO NEON DO SEU INDEX.HTML */
+.neon-text { 
+  text-shadow: 0 0 10px #7c3aed, 0 0 20px #7c3aed !important; 
+  font-family: 'Orbitron', sans-serif !important;
+}
+
+.glass { 
+  background: rgba(255, 255, 255, 0.03) !important; 
+  backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.1) !important; 
 }
