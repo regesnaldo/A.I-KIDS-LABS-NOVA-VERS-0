@@ -1,0 +1,452 @@
+[
+  {
+    "id": "module-001",
+    "title": "Introdução à Inteligência Artificial",
+    "ageGroup": "5-7",
+    "difficulty": "easy",
+    "videoPlaceholder": "/videos/module-001.mp4",
+    "thumbnail": "/images/module-001-thumb.jpg",
+    "description": "Aprenda o que é Inteligência Artificial e como ela pode nos ajudar no dia a dia.",
+    "duration": "8 min",
+    "phase": 1,
+    "seasonId": "season-01",
+    "quiz": [
+      {
+        "question": "O que é Inteligência Artificial?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Um robô que sente emoções", "isCorrect": false },
+          { "text": "Programas que aprendem e ajudam as pessoas", "isCorrect": true },
+          { "text": "Uma forma de brincar com computadores", "isCorrect": false },
+          { "text": "Um tipo de comida", "isCorrect": false }
+        ],
+        "answer": "Programas que aprendem e ajudam as pessoas",
+        "difficulty": "easy"
+      },
+      {
+        "question": "A IA pode ajudar as pessoas?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-001",
+        "name": "Explorador de IA",
+        "description": "Completou o primeiro módulo de IA",
+        "icon": "🤖"
+      }
+    ],
+    "skills": ["Raciocínio Lógico", "Curiosidade Científica"],
+    "tags": ["introdução", "ia", "educacional"],
+    "prerequisites": [],
+    "learningObjectives": ["Entender o conceito de IA", "Ver exemplos de IA no cotidiano"]
+  },
+  {
+    "id": "module-002",
+    "title": "Robôs Amigos",
+    "ageGroup": "5-7",
+    "difficulty": "easy",
+    "videoPlaceholder": "/videos/module-002.mp4",
+    "thumbnail": "/images/module-002-thumb.jpg",
+    "description": "Conheça diferentes tipos de robôs e como eles podem ser nossos amigos.",
+    "duration": "7 min",
+    "phase": 1,
+    "seasonId": "season-01",
+    "quiz": [
+      {
+        "question": "Qual robô ajuda na cozinha?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Robô de limpeza", "isCorrect": false },
+          { "text": "Robô cozinha", "isCorrect": true },
+          { "text": "Robô de brincar", "isCorrect": false },
+          { "text": "Robô de dormir", "isCorrect": false }
+        ],
+        "answer": "Robô cozinha",
+        "difficulty": "easy"
+      },
+      {
+        "question": "Robôs podem ter sentimentos?",
+        "type": "trueFalse",
+        "answer": false,
+        "correct": false,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-002",
+        "name": "Amigo dos Robôs",
+        "description": "Aprendeu sobre robôs amigos",
+        "icon": "🤖"
+      }
+    ],
+    "skills": ["Empatia", "Tecnologia"],
+    "tags": ["robôs", "amizade", "tecnologia"],
+    "prerequisites": ["module-001"],
+    "learningObjectives": ["Reconhecer diferentes tipos de robôs", "Entender a utilidade dos robôs"]
+  },
+  {
+    "id": "module-003",
+    "title": "Matemágica com IA",
+    "ageGroup": "5-7",
+    "difficulty": "medium",
+    "videoPlaceholder": "/videos/module-003.mp4",
+    "thumbnail": "/images/module-003-thumb.jpg",
+    "description": "Aprenda matemática de forma divertida com a ajuda da IA.",
+    "duration": "9 min",
+    "phase": 1,
+    "seasonId": "season-01",
+    "quiz": [
+      {
+        "question": "Quanto é 2 + 2?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "3", "isCorrect": false },
+          { "text": "4", "isCorrect": true },
+          { "text": "5", "isCorrect": false },
+          { "text": "6", "isCorrect": false }
+        ],
+        "answer": "4",
+        "difficulty": "easy"
+      },
+      {
+        "question": "A IA pode ajudar a resolver contas?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-003",
+        "name": "Matemágico",
+        "description": "Aprendeu matemática com IA",
+        "icon": "🔢"
+      }
+    ],
+    "skills": ["Matemática", "Lógica"],
+    "tags": ["matemática", "ia", "educação"],
+    "prerequisites": ["module-001"],
+    "learningObjectives": ["Praticar operações matemáticas básicas", "Ver como IA pode auxiliar em cálculos"]
+  },
+  {
+    "id": "module-004",
+    "title": "Código para Crianças",
+    "ageGroup": "5-7",
+    "difficulty": "medium",
+    "videoPlaceholder": "/videos/module-004.mp4",
+    "thumbnail": "/images/module-004-thumb.jpg",
+    "description": "Introdução divertida à programação e como os computadores entendem comandos.",
+    "duration": "10 min",
+    "phase": 1,
+    "seasonId": "season-01",
+    "quiz": [
+      {
+        "question": "O que é programar?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Escrever histórias", "isCorrect": false },
+          { "text": "Dar instruções para o computador", "isCorrect": true },
+          { "text": "Fazer desenhos", "isCorrect": false },
+          { "text": "Cantar músicas", "isCorrect": false }
+        ],
+        "answer": "Dar instruções para o computador",
+        "difficulty": "medium"
+      },
+      {
+        "question": "Computadores entendem linguagem humana?",
+        "type": "trueFalse",
+        "answer": false,
+        "correct": false,
+        "difficulty": "medium"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-004",
+        "name": "Pequeno Programador",
+        "description": "Teve primeiro contato com programação",
+        "icon": "💻"
+      }
+    ],
+    "skills": ["Lógica", "Sequência"],
+    "tags": ["programação", "computador", "educação"],
+    "prerequisites": ["module-001", "module-003"],
+    "learningObjectives": ["Entender o conceito de programação", "Aprender sobre instruções para computadores"]
+  },
+  {
+    "id": "module-005",
+    "title": "Lógica Divertida",
+    "ageGroup": "5-7",
+    "difficulty": "medium",
+    "videoPlaceholder": "/videos/module-005.mp4",
+    "thumbnail": "/images/module-005-thumb.jpg",
+    "description": "Exercícios de raciocínio lógico com ajuda da IA.",
+    "duration": "8 min",
+    "phase": 1,
+    "seasonId": "season-01",
+    "quiz": [
+      {
+        "question": "Se todos os gatos são animais e meu bichano é um gato, então meu bichano é:",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Uma planta", "isCorrect": false },
+          { "text": "Um animal", "isCorrect": true },
+          { "text": "Uma pedra", "isCorrect": false },
+          { "text": "Um brinquedo", "isCorrect": false }
+        ],
+        "answer": "Um animal",
+        "difficulty": "medium"
+      },
+      {
+        "question": "Lógica serve para resolver problemas?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-005",
+        "name": "Mestre da Lógica",
+        "description": "Demonstrou habilidades lógicas",
+        "icon": "🧠"
+      }
+    ],
+    "skills": ["Raciocínio Lógico", "Resolução de Problemas"],
+    "tags": ["lógica", "pensamento", "educação"],
+    "prerequisites": ["module-001", "module-004"],
+    "learningObjectives": ["Desenvolver habilidades de raciocínio lógico", "Praticar resolução de problemas simples"]
+  },
+  {
+    "id": "module-006",
+    "title": "Inteligência Artificial no Dia a Dia",
+    "ageGroup": "8-10",
+    "difficulty": "easy",
+    "videoPlaceholder": "/videos/module-006.mp4",
+    "thumbnail": "/images/module-006-thumb.jpg",
+    "description": "Descubra como a IA está presente em nosso cotidiano.",
+    "duration": "10 min",
+    "phase": 2,
+    "seasonId": "season-02",
+    "quiz": [
+      {
+        "question": "Onde encontramos IA no dia a dia?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Apenas em laboratórios", "isCorrect": false },
+          { "text": "Em celulares, assistentes virtuais e recomendações", "isCorrect": true },
+          { "text": "Somente em filmes", "isCorrect": false },
+          { "text": "Não encontramos IA", "isCorrect": false }
+        ],
+        "answer": "Em celulares, assistentes virtuais e recomendações",
+        "difficulty": "easy"
+      },
+      {
+        "question": "Assistentes virtuais usam IA?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-006",
+        "name": "Detetive de IA",
+        "description": "Identificou IA no cotidiano",
+        "icon": "🔍"
+      }
+    ],
+    "skills": ["Observação", "Tecnologia"],
+    "tags": ["ia", "cotidiano", "tecnologia"],
+    "prerequisites": ["module-001"],
+    "learningObjectives": ["Identificar exemplos de IA no cotidiano", "Entender a presença da IA em tecnologias comuns"]
+  },
+  {
+    "id": "module-007",
+    "title": "Máquinas que Aprendem",
+    "ageGroup": "8-10",
+    "difficulty": "medium",
+    "videoPlaceholder": "/videos/module-007.mp4",
+    "thumbnail": "/images/module-007-thumb.jpg",
+    "description": "Aprenda como as máquinas podem aprender com exemplos, como humanos.",
+    "duration": "12 min",
+    "phase": 2,
+    "seasonId": "season-02",
+    "quiz": [
+      {
+        "question": "Como as máquinas aprendem?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Assistindo TV", "isCorrect": false },
+          { "text": "Com muitos exemplos e dados", "isCorrect": true },
+          { "text": "Dormindo", "isCorrect": false },
+          { "text": "Brincando", "isCorrect": false }
+        ],
+        "answer": "Com muitos exemplos e dados",
+        "difficulty": "medium"
+      },
+      {
+        "question": "IA pode aprender com erros?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-007",
+        "name": "Aprendiz de Aprendizado de Máquina",
+        "description": "Aprendeu como máquinas aprendem",
+        "icon": "🎓"
+      }
+    ],
+    "skills": ["Aprendizado", "Dados"],
+    "tags": ["aprendizado de máquina", "ia", "educação"],
+    "prerequisites": ["module-006"],
+    "learningObjectives": ["Entender o conceito de aprendizado de máquina", "Ver como máquinas aprendem com dados"]
+  },
+  {
+    "id": "module-008",
+    "title": "Robótica Educacional",
+    "ageGroup": "8-10",
+    "difficulty": "medium",
+    "videoPlaceholder": "/videos/module-008.mp4",
+    "thumbnail": "/images/module-008-thumb.jpg",
+    "description": "Conheça a robótica educacional e como construir robôs simples.",
+    "duration": "11 min",
+    "phase": 2,
+    "seasonId": "season-02",
+    "quiz": [
+      {
+        "question": "Para que serve a robótica educacional?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Aprender sobre tecnologia e programação", "isCorrect": true },
+          { "text": "Fazer brincadeiras", "isCorrect": false },
+          { "text": "Substituir humanos", "isCorrect": false },
+          { "text": "Não serve para nada", "isCorrect": false }
+        ],
+        "answer": "Aprender sobre tecnologia e programação",
+        "difficulty": "medium"
+      },
+      {
+        "question": "Robôs educacionais são programáveis?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-008",
+        "name": "Engenheiro Robótico",
+        "description": "Explorou robótica educacional",
+        "icon": "⚙️"
+      }
+    ],
+    "skills": ["Engenharia", "Programação"],
+    "tags": ["robótica", "educação", "tecnologia"],
+    "prerequisites": ["module-004", "module-007"],
+    "learningObjectives": ["Entender a robótica educacional", "Ver aplicações práticas de robôs"]
+  },
+  {
+    "id": "module-009",
+    "title": "Matemática Avançada com IA",
+    "ageGroup": "8-10",
+    "difficulty": "hard",
+    "videoPlaceholder": "/videos/module-009.mp4",
+    "thumbnail": "/images/module-009-thumb.jpg",
+    "description": "Resolução de problemas matemáticos complexos com auxílio de IA.",
+    "duration": "13 min",
+    "phase": 2,
+    "seasonId": "season-02",
+    "quiz": [
+      {
+        "question": "Se 3x + 5 = 14, quanto vale x?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "2", "isCorrect": false },
+          { "text": "3", "isCorrect": true },
+          { "text": "4", "isCorrect": false },
+          { "text": "5", "isCorrect": false }
+        ],
+        "answer": "3",
+        "difficulty": "hard"
+      },
+      {
+        "question": "IA pode resolver equações matemáticas?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-009",
+        "name": "Gênio Matemático",
+        "description": "Resolveu problemas matemáticos avançados",
+        "icon": "📊"
+      }
+    ],
+    "skills": ["Matemática Avançada", "Resolução de Problemas"],
+    "tags": ["matemática", "ia", "educação"],
+    "prerequisites": ["module-003", "module-007"],
+    "learningObjectives": ["Resolver equações matemáticas com IA", "Aplicar conceitos matemáticos avançados"]
+  },
+  {
+    "id": "module-010",
+    "title": "Ética e IA",
+    "ageGroup": "8-10",
+    "difficulty": "medium",
+    "videoPlaceholder": "/videos/module-010.mp4",
+    "thumbnail": "/images/module-010-thumb.jpg",
+    "description": "Aprenda sobre a importância de usar a IA de forma ética e responsável.",
+    "duration": "10 min",
+    "phase": 2,
+    "seasonId": "season-02",
+    "quiz": [
+      {
+        "question": "Por que é importante usar IA de forma ética?",
+        "type": "multipleChoice",
+        "options": [
+          { "text": "Para que todos sejam tratados com justiça", "isCorrect": true },
+          { "text": "Para ganhar dinheiro", "isCorrect": false },
+          { "text": "Para brincar", "isCorrect": false },
+          { "text": "Não é importante", "isCorrect": false }
+        ],
+        "answer": "Para que todos sejam tratados com justiça",
+        "difficulty": "medium"
+      },
+      {
+        "question": "IA deve respeitar a privacidade das pessoas?",
+        "type": "trueFalse",
+        "answer": true,
+        "correct": true,
+        "difficulty": "easy"
+      }
+    ],
+    "badges": [
+      {
+        "id": "badge-010",
+        "name": "Guardião Ético da IA",
+        "description": "Aprendeu sobre ética na IA",
+        "icon": "⚖️"
+      }
+    ],
+    "skills": ["Ética", "Responsabilidade"],
+    "tags": ["ética", "ia", "educação"],
+    "prerequisites": ["module-001", "module-006"],
+    "learningObjectives": ["Entender a importância da ética em IA", "Reconhecer questões de privacidade e justiça"]
+  }
+]
