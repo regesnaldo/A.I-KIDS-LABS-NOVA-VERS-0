@@ -22,3 +22,16 @@ export interface Mission {
   contentType: 'video' | 'interactive' | 'quiz';
   xp: number;
 }
+
+export interface CompletedMission {
+  missionId: string;
+  completedAt: string; // ISO date
+  score: number;
+  attempts: number;
+}
+
+export interface AIContext {
+  xp: number; // base real de progressão
+  completedMissions: CompletedMission[];
+  difficultyPreference: 'easy' | 'medium' | 'hard';
+}
