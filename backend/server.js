@@ -18,11 +18,13 @@ app.use(morgan('combined'));
 // Import routes
 const moduleRoutes = require('./routes/modules');
 const userRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
 const paymentRoutes = require('./routes/payments');
 
 // Routes
 app.use('/api/modules', moduleRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/payments', paymentRoutes);
 
 // Serve static files
