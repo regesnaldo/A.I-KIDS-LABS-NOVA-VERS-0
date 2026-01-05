@@ -23,6 +23,15 @@ html, body, #root {
   overflow-x: hidden !important;
 }
 
+/* ESTRUTURA DE ESCALA REAL - MAIN CONTAINER */
+.main-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 4vw !important;
+  transform: none !important;
+}
+
 .portal-container {
   width: 100vw !important;
   min-height: 100vh !important;
