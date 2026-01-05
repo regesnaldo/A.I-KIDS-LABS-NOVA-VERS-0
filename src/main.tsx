@@ -97,6 +97,7 @@ const AIStudioPortal = () => (
                   <article 
                     className={`lab-card ${module.state}`}
                     key={module.id}
+                    tabIndex={0}
                     style={{
                       opacity: module.state === 'locked' ? 0.5 : 1,
                       border: module.state === 'completed' ? '2px solid #10b981' : 
@@ -106,10 +107,16 @@ const AIStudioPortal = () => (
                   >
                     <h3 className="card-title">{module.title}</h3>
                     
-                    {/* HOVER OVERLAY INFO */}
-                    <div className="card-hover-info">
-                      <span className="duration">⏱️ 10 min</span>
-                      <span className="difficulty easy">🟢 Fácil</span>
+                    <div className="card-overlay">
+                      <div className="card-actions">
+                        <button className="btn-play">▶</button>
+                        <button className="btn-like">👍</button>
+                      </div>
+                      
+                      <div className="card-meta">
+                        <span className="duration">⏱️ 10 min</span>
+                        <span className="difficulty easy">🟢 Fácil</span>
+                      </div>
                     </div>
                   </article>
                 ))
