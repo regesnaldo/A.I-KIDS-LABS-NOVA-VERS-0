@@ -360,8 +360,63 @@ const processWebhook = async (req, res) => {
       });
     }
 
-    // Call the notification handler
-    await handlePagSeguroNotification(req, res);
+    // Verify notification with PagSeguro API
+    const verificationResponse = await axios.get(
+      `${PAGSEGURO_BASE_URL}/notifications/${notificationCode}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${PAGSEGURO_TOKEN}`
+        }
+      }
+    );
+
+    const notificationData = verificationResponse.data;
+
+    // Find user by subscription ID
+    let user = null;
+    if (notificationData.code) {
+      user = await User.findOne({ 'subscription.subscriptionId': notificationData.code });
+    }
+
+    // Process the notification based on type
+    if (notificationType === 'transaction') {
+      // Handle transaction notification
+      console.log('Processing transaction notification:', notificationData);
+      
+      if (user) {
+        // Update user subscription status based on transaction
+        if (notificationData.status === 'PAID') {
+          user.subscription.status = 'ACTIVE';
+          user.subscription.startDate = new Date();
+          user.subscription.nextBillingDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+          await user.save();
+        } else if (notificationData.status === 'CANCELLED') {
+          user.subscription.status = 'CANCELLED';
+          await user.save();
+        }
+      }
+    } else if (notificationType === 'preApproval') {
+      // Handle subscription notification
+      console.log('Processing subscription notification:', notificationData);
+      
+      if (user) {
+        // Update user subscription status based on pre-approval
+        if (notificationData.status === 'ACTIVE') {
+          user.subscription.status = 'ACTIVE';
+          user.subscription.startDate = new Date();
+          user.subscription.nextBillingDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+        } else if (notificationData.status === 'CANCELLED') {
+          user.subscription.status = 'CANCELLED';
+          user.subscription.cancellationDate = new Date();
+        } else if (notificationData.status === 'SUSPENDED') {
+          user.subscription.status = 'SUSPENDED';
+        }
+        
+        await user.save();
+      }
+    }
+
+    res.status(200).send('OK');
   } catch (error) {
     console.error('Error processing webhook:', error);
     res.status(500).json({
