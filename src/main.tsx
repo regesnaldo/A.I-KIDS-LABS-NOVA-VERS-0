@@ -74,7 +74,7 @@ const AIStudioPortal = () => (
       {/* GRADE DE CARDS DEFINITIVA - AUTO-AJUSTÁVEL */}
       <div className="labs-grid">
         {missions.map((m) => (
-          <div key={m.id} className="card">
+          <div key={m.id} className="lab-card">
             <div style={{ 
               fontSize: '4rem', 
               marginBottom: '20px',
