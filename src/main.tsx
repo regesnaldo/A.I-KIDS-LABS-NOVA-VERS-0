@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './neon-styles.css';
 
 // 50 MISSÕES EDUCATIVAS REAIS - A.I. KIDS LABS
 // Projetado para crianças de 7+ anos e adultos leigos
