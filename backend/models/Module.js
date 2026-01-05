@@ -1,18 +1,31 @@
 const mongoose = require('mongoose');
 
+// Quiz question schema
 const quizQuestionSchema = new mongoose.Schema({
   question: {
     type: String,
+    required: [true, 'Question is required']
+  },
+  type: {
+    type: String,
+    enum: ['multipleChoice', 'trueFalse'],
     required: true
   },
   options: [{
     text: String,
     isCorrect: Boolean
   }],
-  type: {
+  answer: {
     type: String,
-    enum: ['multiple-choice', 'true-false'],
-    default: 'multiple-choice'
+    required: function() {
+      return this.type === 'multipleChoice';
+    }
+  },
+  correct: {
+    type: Boolean,
+    required: function() {
+      return this.type === 'trueFalse';
+    }
   },
   difficulty: {
     type: String,
@@ -21,76 +34,74 @@ const quizQuestionSchema = new mongoose.Schema({
   }
 });
 
+// Badge schema
 const badgeSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  icon: {
-    type: String,
-    default: '🏆'
-  },
-  earnedAt: {
-    type: Date,
-    default: Date.now
-  }
+  id: String,
+  name: String,
+  description: String,
+  icon: String,
+  earnedAt: { type: Date, default: Date.now }
 });
 
 const moduleSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
+    required: [true, 'Module ID is required'],
     unique: true
   },
   title: {
     type: String,
-    required: true
+    required: [true, 'Title is required'],
+    trim: true
   },
-  description: {
-    type: String,
-    required: true
-  },
-  ageRange: {
+  ageGroup: {
     type: String,
     enum: ['5-7', '8-10', '11-12'],
-    required: true
+    required: [true, 'Age group is required']
   },
   difficulty: {
     type: String,
     enum: ['easy', 'medium', 'hard'],
-    required: true
+    required: [true, 'Difficulty is required']
   },
-  duration: {
+  videoPlaceholder: {
     type: String,
-    required: true
+    default: '/videos/placeholder.mp4'
   },
-  videoUrl: {
-    type: String,
-    default: '/videos/placeholder.mp4' // Placeholder for now
-  },
-  thumbnailUrl: {
+  thumbnail: {
     type: String,
     default: '/images/module-thumbnail.jpg'
   },
+  description: {
+    type: String,
+    required: [true, 'Description is required']
+  },
+  duration: {
+    type: String,
+    default: '10 min'
+  },
   phase: {
     type: Number,
-    enum: [1, 2, 3, 4, 5],
-    required: true
+    min: 1,
+    max: 5,
+    required: [true, 'Phase is required']
   },
   seasonId: {
     type: String,
-    required: true
+    required: [true, 'Season ID is required']
   },
-  quizzes: [quizQuestionSchema],
+  quiz: [quizQuestionSchema],
   badges: [badgeSchema],
   skills: [{
     type: String
   }],
   tags: [{
+    type: String
+  }],
+  prerequisites: [{
+    type: String
+  }],
+  learningObjectives: [{
     type: String
   }],
   isActive: {
@@ -106,5 +117,31 @@ const moduleSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+// Update the updated at field before saving
+moduleSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+// Method to check if user can access this module
+moduleSchema.methods.canAccess = function(user) {
+  if (user.role === 'admin') return true;
+  
+  // Check age group compatibility
+  if (!user.canAccessContent(this.ageGroup)) {
+    return false;
+  }
+  
+  // Check difficulty
+  if (user.preferences?.maxDifficulty === 'easy' && this.difficulty !== 'easy') {
+    return false;
+  }
+  if (user.preferences?.maxDifficulty === 'medium' && this.difficulty === 'hard') {
+    return false;
+  }
+  
+  return true;
+};
 
 module.exports = mongoose.model('Module', moduleSchema);
