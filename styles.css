@@ -40,6 +40,65 @@ html, body {
   text-transform: uppercase !important;
 }
 
+/* HERO SECTION */
+.hero {
+  min-height: 70vh;
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/images/season-001-cover.jpg') center/cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6vw;
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.hero-button {
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+.hero-button.primary {
+  background: #e50914; /* Netflix red */
+  color: white;
+}
+
+.hero-button.secondary {
+  background: rgba(109, 109, 110, 0.7);
+  color: white;
+}
+
+.hero-button:hover {
+  opacity: 0.8;
+}
+
 /* GRID PRINCIPAL */
 .labs-grid {
   display: grid !important;
