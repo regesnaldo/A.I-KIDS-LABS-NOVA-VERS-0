@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { seasons, seasonModules, missions } from './data/seasons';
 import { AIContext, CompletedMission } from './types';
 
+// DEBUG: Log seasons data to console for verification
+console.log('DEBUG - All Seasons Data:', seasons);
+
+// DEBUG: Log published seasons after filtering
+const filteredSeasons = seasons.filter(season => season.status === 'published');
+console.log('DEBUG - Published Seasons:', filteredSeasons);
+
 // Sample AI context for demonstration
 const sampleAIContext: AIContext = {
   xp: 1500,
@@ -24,22 +31,24 @@ const sampleAIContext: AIContext = {
 };
 
 // Join data for display - group modules by season
-const seasonsWithModules = seasons
-  .filter(season => season.status === 'published') // Only show published seasons
+const seasonsWithModules = filteredSeasons
   .map(season => ({
-  ...season,
-  modules: seasonModules
-    .filter(module => module.seasonId === season.id)
-    .map(module => ({
-      ...module,
-      // Get sample missions for display
-      missions: missions
-        .filter(mission => mission.moduleId === module.id)
-        .slice(0, 3), // Show first 3 missions as examples
-      // Determine visual state based on AI context
-      state: getModuleState(module.id, sampleAIContext)
-    }))
-}));
+    ...season,
+    modules: seasonModules
+      .filter(module => module.seasonId === season.id)
+      .map(module => ({
+        ...module,
+        // Get sample missions for display
+        missions: missions
+          .filter(mission => mission.moduleId === module.id)
+          .slice(0, 3), // Show first 3 missions as examples
+        // Determine visual state based on AI context
+        state: getModuleState(module.id, sampleAIContext)
+      }))
+  }));
+
+// DEBUG: Log final seasons with modules
+console.log('DEBUG - Seasons with Modules:', seasonsWithModules);
 
 // Function to determine visual state without complex logic
 function getModuleState(moduleId: string, context: AIContext): 'completed' | 'recommended' | 'locked' | 'available' {
