@@ -309,10 +309,10 @@ html, body {
   left: 12px;
   right: 12px;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
 }
 
@@ -323,19 +323,12 @@ html, body {
 
 .duration,
 .difficulty {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.75);
   padding: 6px 10px;
   border-radius: 4px;
-  font-size: 0.8rem;
-  white-space: nowrap;
+  font-size: 0.75rem;
 }
 
-.difficulty.easy {
-  color: #7CFC90;
-}
-.difficulty.medium {
-  color: #FFD700;
-}
-.difficulty.hard {
-  color: #FF7A7A;
-}
+.difficulty.easy { color: #7CFC90; }
+.difficulty.medium { color: #FFD700; }
+.difficulty.hard { color: #FF7A7A; }
