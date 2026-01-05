@@ -113,6 +113,21 @@ const AIStudioPortal = () => (
                        module.state === 'locked' ? '🔒 Bloqueado' : 
                        `${module.missions.length} missões disponíveis`}
                     </p>
+                    
+                    {/* INFO REVELADA NO HOVER */}
+                    <div className="card-info">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
+                          {module.missions[0]?.xp || 100} XP
+                        </span>
+                        <span className={`difficulty-${module.missions[0]?.difficulty || 'medium'}`}>
+                          {module.missions[0]?.difficulty || 'medium'}
+                        </span>
+                      </div>
+                      <button className="play-button" onClick={() => console.log('Play module:', module.id)}>
+                        ▶️
+                      </button>
+                    </div>
                   </article>
                 ))
               ) : (
