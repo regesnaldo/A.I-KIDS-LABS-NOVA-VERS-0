@@ -1,7 +1,7 @@
 // API Service for A.I. Kids Labs
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://your-domain.com/api' 
-  : 'http://localhost:5000/api';
+  : 'http://localhost:5001/api';
 
 // Authentication API
 export const authAPI = {
