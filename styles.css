@@ -300,3 +300,41 @@ html, body {
 .lab-card:hover .card-info {
   opacity: 1;
 }
+
+/* CARD HOVER OVERLAY INFO */
+.card-hover-info {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.lab-card:hover .card-hover-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.duration,
+.difficulty {
+  background: rgba(0,0,0,0.7);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.difficulty.easy {
+  color: #7CFC90;
+}
+.difficulty.medium {
+  color: #FFD700;
+}
+.difficulty.hard {
+  color: #FF7A7A;
+}

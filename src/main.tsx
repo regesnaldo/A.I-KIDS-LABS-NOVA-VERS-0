@@ -116,6 +116,12 @@ const AIStudioPortal = () => (
                         ℹ️ Mais informações
                       </button>
                     </div>
+                    
+                    {/* HOVER OVERLAY INFO */}
+                    <div className="card-hover-info">
+                      <span className="duration">⏱️ 10 min</span>
+                      <span className="difficulty easy">🟢 Fácil</span>
+                    </div>
                   </article>
                 ))
               ) : (
