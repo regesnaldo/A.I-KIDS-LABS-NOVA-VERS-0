@@ -79,6 +79,15 @@ body {
   transform: none !important;
 }
 
+.labs-grid {
+  display: grid !important;
+  /* Adapta ao PC, não encolhe e é independente */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 32px !important;
+  width: 100% !important;
+  transform: none !important;
+}
+
 /* DESIGN FINAL DOS CARDS - PÚBLICO INFANTIL E ADULTO LEIGO */
 .card {
   width: 100% !important;

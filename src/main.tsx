@@ -72,7 +72,7 @@ const AIStudioPortal = () => (
       <h1 className="neon-header" style={{ fontSize: '5rem', fontWeight: 900 }}>A.I. KIDS LABS</h1>
       
       {/* GRADE DE CARDS DEFINITIVA - AUTO-AJUSTÁVEL */}
-      <div className="cards-grid">
+      <div className="labs-grid">
         {missions.map((m) => (
           <div key={m.id} className="card">
             <div style={{ 
