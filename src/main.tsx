@@ -24,7 +24,9 @@ const sampleAIContext: AIContext = {
 };
 
 // Join data for display - group modules by season
-const seasonsWithModules = seasons.map(season => ({
+const seasonsWithModules = seasons
+  .filter(season => season.status === 'published') // Only show published seasons
+  .map(season => ({
   ...season,
   modules: seasonModules
     .filter(module => module.seasonId === season.id)
