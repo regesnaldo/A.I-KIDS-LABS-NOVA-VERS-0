@@ -448,7 +448,7 @@
     "tags": ["ética", "ia", "educação"],
     "prerequisites": ["module-001", "module-006"],
     "learningObjectives": ["Entender a importância da ética em IA", "Reconhecer questões de privacidade e justiça"]
-  }
+  },
 
   {
   "id": "module-011",
