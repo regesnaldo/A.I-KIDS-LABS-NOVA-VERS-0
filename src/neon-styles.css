@@ -23,6 +23,14 @@ html, body, #root {
   overflow-x: hidden !important;
 }
 
+/* AJUSTE FINAL DE CORPO */
+body {
+  overflow-x: hidden !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  background-color: #050505 !important;
+}
+
 /* ESTRUTURA DE ESCALA REAL - MAIN CONTAINER */
 .main-container {
   width: 100% !important;
