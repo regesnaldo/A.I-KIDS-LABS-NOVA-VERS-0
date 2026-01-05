@@ -105,17 +105,6 @@ const AIStudioPortal = () => (
                     }}
                   >
                     <h3 className="card-title">{module.title}</h3>
-                    <p className="card-description">
-                      Explore o fascinante mundo da Inteligência Artificial com missões divertidas e educativas! Aprenda conceitos importantes enquanto se diverte.
-                    </p>
-                    <div className="card-actions">
-                      <button className="btn-play" onClick={(e) => { e.stopPropagation(); console.log('Play module:', module.id); }}>
-                        ▶️ Assistir
-                      </button>
-                      <button className="btn-info" onClick={(e) => { e.stopPropagation(); console.log('Info module:', module.id); }}>
-                        ℹ️ Mais informações
-                      </button>
-                    </div>
                     
                     {/* HOVER OVERLAY INFO */}
                     <div className="card-hover-info">
