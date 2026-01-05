@@ -104,53 +104,17 @@ const AIStudioPortal = () => (
                              '1px solid rgba(124, 58, 237, 0.3)'
                     }}
                   >
-                    <div style={{ 
-                      fontSize: '4rem', 
-                      marginBottom: '20px',
-                      filter: 'drop-shadow(0 0 10px rgba(124, 58, 237, 0.5))'
-                    }}>📚</div>
-                    <h2 style={{ 
-                      fontSize: '1.8rem', 
-                      color: module.state === 'locked' ? '#6b7280' : 'white',
-                      fontFamily: 'Orbitron, sans-serif',
-                      fontWeight: 900,
-                      letterSpacing: '0.05em',
-                      textShadow: '0 0 15px rgba(124, 58, 237, 0.6)',
-                      marginBottom: '12px'
-                    }}>{module.title}</h2>
-                    <p style={{ 
-                      color: module.state === 'locked' ? '#6b7280' : '#9ca3af', 
-                      fontSize: '1rem', 
-                      marginTop: '8px',
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 500,
-                      lineHeight: '1.4'
-                    }}>
-                      {module.state === 'completed' ? '✓ Concluído' : 
-                       module.state === 'locked' ? '🔒 Bloqueado' : 
-                       `${module.missions.length} missões disponíveis`}
+                    <h3 className="card-title">{module.title}</h3>
+                    <p className="card-description">
+                      Explore o fascinante mundo da Inteligência Artificial com missões divertidas e educativas! Aprenda conceitos importantes enquanto se diverte.
                     </p>
-                    
-                    {/* INFO REVELADA NO HOVER */}
-                    <div className="card-info">
-                      <div className="card-info-content">
-                        <div className="card-info-stats">
-                          <span className="card-xp">
-                            {module.missions[0]?.xp || 100} XP
-                          </span>
-                          <span className="card-duration">
-                            {module.missions[0]?.difficulty || 'medium'}
-                          </span>
-                        </div>
-                        <div className="card-actions">
-                          <button className="play-button" onClick={(e) => { e.stopPropagation(); console.log('Play module:', module.id); }}>
-                            ▶️
-                          </button>
-                          <button className="like-button" onClick={(e) => { e.stopPropagation(); console.log('Like module:', module.id); }}>
-                            👍
-                          </button>
-                        </div>
-                      </div>
+                    <div className="card-actions">
+                      <button className="btn-play" onClick={(e) => { e.stopPropagation(); console.log('Play module:', module.id); }}>
+                        ▶️ Assistir
+                      </button>
+                      <button className="btn-info" onClick={(e) => { e.stopPropagation(); console.log('Info module:', module.id); }}>
+                        ℹ️ Mais informações
+                      </button>
                     </div>
                   </article>
                 ))
