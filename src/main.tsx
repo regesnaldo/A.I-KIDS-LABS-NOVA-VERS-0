@@ -66,43 +66,41 @@ const missions = [
 ];
 
 const AIStudioPortal = () => (
-  <div className="app">
-    <div className="portal-container" style={{ width: '100%' }}>
-      <h1 className="title">A.I. KIDS LABS</h1>
-      
-      {/* GRADE DE CARDS DEFINITIVA - AUTO-AJUSTÁVEL */}
-      <div className="labs-grid">
-        {missions.map((m) => (
-          <div key={m.id} className="lab-card">
-            <div style={{ 
-              fontSize: '4rem', 
-              marginBottom: '20px',
-              filter: 'drop-shadow(0 0 10px rgba(124, 58, 237, 0.5))'
-            }}>{m.icon}</div>
-            <h2 style={{ 
-              fontSize: '1.8rem', 
-              color: 'white',
-              fontFamily: 'Orbitron, sans-serif',
-              fontWeight: 900,
-              letterSpacing: '0.05em',
-              textShadow: '0 0 15px rgba(124, 58, 237, 0.6)',
-              marginBottom: '12px'
-            }}>{m.title}</h2>
-            <p style={{ 
-              color: '#9ca3af', 
-              fontSize: '1rem', 
-              marginTop: '8px',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-              lineHeight: '1.4'
-            }}>
-              {m.desc}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
+  <main className="app">
+    <h1 className="title">A.I. KIDS LABS</h1>
+    
+    {/* GRADE DE CARDS DEFINITIVA - AUTO-AJUSTÁVEL */}
+    <section className="labs-grid">
+      {missions.map((m) => (
+        <article className="lab-card" key={m.id}>
+          <div style={{ 
+            fontSize: '4rem', 
+            marginBottom: '20px',
+            filter: 'drop-shadow(0 0 10px rgba(124, 58, 237, 0.5))'
+          }}>{m.icon}</div>
+          <h2 style={{ 
+            fontSize: '1.8rem', 
+            color: 'white',
+            fontFamily: 'Orbitron, sans-serif',
+            fontWeight: 900,
+            letterSpacing: '0.05em',
+            textShadow: '0 0 15px rgba(124, 58, 237, 0.6)',
+            marginBottom: '12px'
+          }}>{m.title}</h2>
+          <p style={{ 
+            color: '#9ca3af', 
+            fontSize: '1rem', 
+            marginTop: '8px',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 500,
+            lineHeight: '1.4'
+          }}>
+            {m.desc}
+          </p>
+        </article>
+      ))}
+    </section>
+  </main>
 );
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
