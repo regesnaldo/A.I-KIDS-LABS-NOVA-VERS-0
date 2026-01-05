@@ -42,7 +42,7 @@ body {
 /* ESTRUTURA DE ESCALA REAL - MAIN CONTAINER */
 .main-container {
   width: 100% !important;
-  max-width: 100% !important;
+  max-width: none !important;
   margin: 0 !important;
   padding: 0 4vw !important;
   transform: none !important;
@@ -81,6 +81,7 @@ body {
 /* DESIGN FINAL DOS CARDS - PÚBLICO INFANTIL E ADULTO LEIGO */
 .card {
   width: 100% !important;
+  min-width: 220px !important;
   max-width: 260px !important;
   height: 360px !important;
   background: #0b0b0b !important;
