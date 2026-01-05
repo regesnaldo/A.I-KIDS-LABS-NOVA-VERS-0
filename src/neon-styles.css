@@ -1,47 +1,103 @@
-/* RESET GLOBAL (RECOMENDADO)  */
-* {
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
+
+/* RESET DEFINITIVO */
+*, *::before, *::after { 
+  box-sizing: border-box; 
 }
 
+html, body, #root { 
+  width: 100% !important; 
+  height: 100% !important; 
+  margin: 0 !important; 
+  padding: 0 !important; 
+  zoom: 1 !important; 
+  transform: none !important; 
+}
+
+/* DNA: Fundo preto profundo #050505 em tela cheia - NETFLIX FUTURISTA */
 html, body, #root {
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow-x: hidden;
-  background-color: #050505; /* DNA Original [cite: 3] */
-  color: white;
+  width: 100vw !important;
+  min-height: 100vh !important;
+  background-color: #050505 !important;
+  color: white !important;
+  overflow-x: hidden !important;
 }
 
-/* CORREÇÃO REAL DA LARGURA  */
-.container {
+.portal-container {
+  width: 100vw !important;
+  min-height: 100vh !important;
+  padding: 60px 3% !important;
+  background-color: #050505 !important;
+  background-image: none !important;
+  background: #050505 !important;
+}
+
+/* TÍTULOS NEON ROXO #7c3aed - ESTILO ORIGINAL */
+.neon-header {
+  font-family: 'Orbitron', sans-serif !important;
+  text-shadow: 0 0 20px #7c3aed, 0 0 40px #7c3aed !important;
+  color: #7c3aed !important;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 60px;
+  letter-spacing: 0.1em;
+}
+
+/* GRID 5 COLUNAS - LAYOUT NETFLIX FUTURISTA - FULLSCREEN */
+.mission-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 30px !important;
   width: 100% !important;
   max-width: none !important;
-  padding: 0 4vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-/* ESTILO NETFLIX PARA OS CARDS [cite: 45] */
-.card {
-  min-width: 220px;
-  max-width: 260px;
-  flex: 0 0 auto;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(124, 58, 237, 0.3);
-  border-radius: 12px;
-  padding: 25px;
+/* CARDS GIGANTES - IMPONENTES E SEM MARGENS */
+.card-dna {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 2px solid rgba(124, 58, 237, 0.4) !important;
+  border-radius: 16px;
+  padding: 45px 30px !important;
   text-align: center;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.card:hover {
-  border-color: #7c3aed;
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
-  transform: translateY(-5px);
+.card-dna:hover {
+  border-color: #7c3aed !important;
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.6), 0 0 60px rgba(124, 58, 237, 0.4) !important;
+  transform: translateY(-10px) scale(1.03) !important;
+  background: rgba(124, 58, 237, 0.08) !important;
 }
 
-.neon-title {
-  font-family: 'Orbitron', sans-serif;
-  text-shadow: 0 0 15px #7c3aed;
-  text-align: center;
-  margin: 50px 0;
-  text-transform: uppercase;
+/* REMOVER GRADIENTES E MARGENS BRANCAS */
+body::before,
+body::after,
+.gradient,
+.bg-gradient {
+  display: none !important;
+  background: none !important;
+}
+
+/* RESPONSIVO: 4 colunas em tablets, 2 em mobile */
+@media (max-width: 1200px) {
+  .mission-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mission-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .neon-header {
+    font-size: 2.5rem !important;
+  }
 }
