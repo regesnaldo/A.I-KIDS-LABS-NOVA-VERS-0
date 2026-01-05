@@ -1,57 +1,123 @@
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+
+// Path to users JSON file
+const usersPath = path.join(__dirname, '../data/users.json');
+
+// Initialize users file if it doesn't exist
+const initializeUsersFile = () => {
+  if (!fs.existsSync(usersPath)) {
+    fs.writeFileSync(usersPath, JSON.stringify([]));
+  }
+};
+
+// Read users from JSON file
+const readUsers = () => {
+  initializeUsersFile();
+  const usersData = fs.readFileSync(usersPath, 'utf8');
+  return JSON.parse(usersData);
+};
+
+// Write users to JSON file
+const writeUsers = (users) => {
+  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
+};
+
+// Generate a unique ID
+const generateId = () => {
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+};
 
 // @desc    Register user
 // @route   POST /api/users/register
 // @access  Public
 const register = async (req, res) => {
   try {
-    const { username, email, password, role, age, parentId } = req.body;
-    
+    const { username, email, password, role = 'student', age, parentId } = req.body;
+
+    // Read existing users
+    const users = readUsers();
+
     // Check if user already exists
-    let user = await User.findOne({ email });
-    if (user) {
+    const existingUser = users.find(user => user.email === email);
+    if (existingUser) {
       return res.status(400).json({
         success: false,
         error: 'User already exists'
       });
     }
-    
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     // Create new user
-    user = new User({
+    const newUser = {
+      id: generateId(),
       username,
       email,
-      password,
+      password: hashedPassword,
       role,
       age: role === 'student' ? age : undefined,
-      parentId: role === 'student' ? parentId : undefined
-    });
-    
-    // Save user
-    await user.save();
-    
+      parentId: role === 'student' ? parentId : undefined,
+      profilePicture: '/images/default-avatar.png',
+      preferences: {
+        parentalPin: '0000',
+        maxDailyTime: 60,
+        maxDifficulty: 'medium',
+        allowedHours: { start: '08:00', end: '20:00' }
+      },
+      progress: {
+        totalModules: 0,
+        completedModules: 0,
+        totalStars: 0,
+        avgProgress: 0
+      },
+      badges: [],
+      isActive: true,
+      lastLogin: null,
+      createdAt: new Date().toISOString(),
+      subscription: {
+        status: 'INACTIVE',
+        planId: null,
+        subscriptionId: null,
+        startDate: null,
+        nextBillingDate: null,
+        endDate: null,
+        amount: null,
+        cancellationDate: null,
+        cancellationReason: null,
+        paymentMethod: null
+      }
+    };
+
+    // Add user to array
+    users.push(newUser);
+    writeUsers(users);
+
     // Create JWT token
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: newUser.id, role: newUser.role },
       process.env.JWT_SECRET || 'defaultSecretKey',
       { expiresIn: '7d' }
     );
-    
+
     res.status(201).json({
       success: true,
       token,
       data: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        age: user.age
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+        age: newUser.age
       }
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in register:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -65,41 +131,44 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
-    // Check if user exists
-    const user = await User.findOne({ email });
+
+    // Read users from JSON file
+    const users = readUsers();
+
+    // Find user by email
+    const user = users.find(u => u.email === email);
     if (!user) {
       return res.status(400).json({
         success: false,
         error: 'Invalid credentials'
       });
     }
-    
+
     // Check password
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
         success: false,
         error: 'Invalid credentials'
       });
     }
-    
+
     // Update last login
-    user.lastLogin = Date.now();
-    await user.save();
-    
+    user.lastLogin = new Date().toISOString();
+    writeUsers(users);
+
     // Create JWT token
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user.id, role: user.role },
       process.env.JWT_SECRET || 'defaultSecretKey',
       { expiresIn: '7d' }
     );
-    
+
     res.json({
       success: true,
       token,
       data: {
-        id: user._id,
+        id: user.id,
         username: user.username,
         email: user.email,
         role: user.role,
@@ -107,7 +176,7 @@ const login = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in login:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -121,27 +190,34 @@ const login = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    
-    const user = await User.findOne({ email });
-    if (!user) {
+
+    // Read users from JSON file
+    const users = readUsers();
+
+    // Find user by email
+    const userIndex = users.findIndex(u => u.email === email);
+    if (userIndex === -1) {
       return res.status(400).json({
         success: false,
         error: 'Email not found'
       });
     }
-    
+
     // Generate reset token
     const resetToken = crypto.randomBytes(20).toString('hex');
-    
+
     // Hash token and save to user
-    user.resetPasswordToken = crypto
+    const hashedToken = crypto
       .createHash('sha256')
       .update(resetToken)
       .digest('hex');
-    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
-    
-    await user.save();
-    
+
+    // Update user with reset token and expiration
+    users[userIndex].resetPasswordToken = hashedToken;
+    users[userIndex].resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+    writeUsers(users);
+
     // In a real app, you would send an email with the reset token
     // For now, we'll just return the token for demonstration
     res.json({
@@ -150,7 +226,7 @@ const forgotPassword = async (req, res) => {
       resetToken
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in forgotPassword:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -164,39 +240,46 @@ const forgotPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
-    
+
     // Hash the token
     const hashedToken = crypto
       .createHash('sha256')
       .update(token)
       .digest('hex');
-    
+
+    // Read users from JSON file
+    const users = readUsers();
+
     // Find user with matching token and check if it's not expired
-    const user = await User.findOne({
-      resetPasswordToken: hashedToken,
-      resetPasswordExpire: { $gt: Date.now() }
-    });
-    
-    if (!user) {
+    const userIndex = users.findIndex(u => 
+      u.resetPasswordToken === hashedToken && 
+      u.resetPasswordExpire > Date.now()
+    );
+
+    if (userIndex === -1) {
       return res.status(400).json({
         success: false,
         error: 'Invalid or expired token'
       });
     }
-    
-    // Set new password
-    user.password = newPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
-    
-    await user.save();
-    
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update user with new password
+    users[userIndex].password = hashedPassword;
+    users[userIndex].resetPasswordToken = undefined;
+    users[userIndex].resetPasswordExpire = undefined;
+
+    writeUsers(users);
+
     res.json({
       success: true,
       message: 'Password reset successfully'
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in resetPassword:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -209,21 +292,29 @@ const resetPassword = async (req, res) => {
 // @access  Private
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password');
-    
+    const userId = req.user.id;
+
+    // Read users from JSON file
+    const users = readUsers();
+
+    // Find user by ID
+    const user = users.find(u => u.id === userId);
     if (!user) {
       return res.status(404).json({
         success: false,
         error: 'User not found'
       });
     }
-    
+
+    // Return user profile (excluding sensitive information)
+    const { password, resetPasswordToken, resetPasswordExpire, ...profile } = user;
+
     res.json({
       success: true,
-      data: user
+      data: profile
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in getProfile:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -236,31 +327,49 @@ const getProfile = async (req, res) => {
 // @access  Private
 const updateProfile = async (req, res) => {
   try {
-    const { username, email, age, preferences } = req.body;
-    
-    const user = await User.findById(req.user.userId);
-    
-    if (!user) {
+    const userId = req.user.id;
+    const updateData = req.body;
+
+    // Read users from JSON file
+    const users = readUsers();
+
+    // Find user by ID
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) {
       return res.status(404).json({
         success: false,
         error: 'User not found'
       });
     }
-    
-    // Update fields if provided
-    if (username) user.username = username;
-    if (email) user.email = email;
-    if (age && user.role === 'student') user.age = age;
-    if (preferences) user.preferences = { ...user.preferences, ...preferences };
-    
-    await user.save();
-    
+
+    // Update user profile (excluding sensitive fields)
+    const allowedUpdates = ['username', 'email', 'age', 'preferences', 'profilePicture'];
+    const updates = Object.keys(updateData);
+
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+    if (!isValidOperation) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid updates'
+      });
+    }
+
+    // Apply updates
+    updates.forEach(update => {
+      users[userIndex][update] = updateData[update];
+    });
+
+    writeUsers(users);
+
+    // Return updated user (excluding sensitive information)
+    const { password, resetPasswordToken, resetPasswordExpire, ...updatedUser } = users[userIndex];
+
     res.json({
       success: true,
-      data: user
+      data: updatedUser
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in updateProfile:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -273,23 +382,30 @@ const updateProfile = async (req, res) => {
 // @access  Private
 const deleteAccount = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId);
-    
-    if (!user) {
+    const userId = req.user.id;
+
+    // Read users from JSON file
+    let users = readUsers();
+
+    // Find user by ID
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) {
       return res.status(404).json({
         success: false,
         error: 'User not found'
       });
     }
-    
-    await user.remove();
-    
+
+    // Remove user from array
+    users = users.filter(u => u.id !== userId);
+    writeUsers(users);
+
     res.json({
       success: true,
-      message: 'User account deleted'
+      message: 'User account deleted successfully'
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in deleteAccount:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -302,31 +418,20 @@ const deleteAccount = async (req, res) => {
 // @access  Private (parent only)
 const getChildren = async (req, res) => {
   try {
-    const parent = await User.findById(req.user.userId);
-    
-    if (!parent) {
-      return res.status(404).json({
-        success: false,
-        error: 'Parent not found'
-      });
-    }
-    
-    if (parent.role !== 'parent') {
-      return res.status(401).json({
-        success: false,
-        error: 'Not authorized as parent'
-      });
-    }
-    
-    const children = await User.find({ parentId: parent._id });
-    
+    const parentId = req.user.id;
+
+    // Read users from JSON file
+    const users = readUsers();
+
+    // Find children with this parent ID
+    const children = users.filter(user => user.parentId === parentId);
+
     res.json({
       success: true,
-      count: children.length,
       data: children
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in getChildren:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -339,60 +444,81 @@ const getChildren = async (req, res) => {
 // @access  Private (parent only)
 const addChild = async (req, res) => {
   try {
+    const parentId = req.user.id;
     const { username, email, password, age } = req.body;
-    
-    const parent = await User.findById(req.user.userId);
-    
-    if (!parent) {
-      return res.status(404).json({
-        success: false,
-        error: 'Parent not found'
-      });
-    }
-    
-    if (parent.role !== 'parent') {
-      return res.status(401).json({
-        success: false,
-        error: 'Not authorized as parent'
-      });
-    }
-    
-    // Check if child already exists
-    let child = await User.findOne({ email });
-    if (child) {
+
+    // Read users from JSON file
+    const users = readUsers();
+
+    // Check if user already exists
+    const existingUser = users.find(user => user.email === email);
+    if (existingUser) {
       return res.status(400).json({
         success: false,
-        error: 'Child with this email already exists'
+        error: 'User already exists'
       });
     }
-    
-    // Create new child
-    child = new User({
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create new child user
+    const newChild = {
+      id: generateId(),
       username,
       email,
-      password,
+      password: hashedPassword,
       role: 'student',
       age,
-      parentId: parent._id
-    });
-    
-    await child.save();
-    
-    // Add child to parent's children array
-    parent.children.push(child._id);
-    await parent.save();
-    
+      parentId,
+      profilePicture: '/images/default-avatar.png',
+      preferences: {
+        parentalPin: '0000',
+        maxDailyTime: 60,
+        maxDifficulty: 'medium',
+        allowedHours: { start: '08:00', end: '20:00' }
+      },
+      progress: {
+        totalModules: 0,
+        completedModules: 0,
+        totalStars: 0,
+        avgProgress: 0
+      },
+      badges: [],
+      isActive: true,
+      lastLogin: null,
+      createdAt: new Date().toISOString(),
+      subscription: {
+        status: 'INACTIVE',
+        planId: null,
+        subscriptionId: null,
+        startDate: null,
+        nextBillingDate: null,
+        endDate: null,
+        amount: null,
+        cancellationDate: null,
+        cancellationReason: null,
+        paymentMethod: null
+      }
+    };
+
+    // Add child to array
+    users.push(newChild);
+    writeUsers(users);
+
     res.status(201).json({
       success: true,
       data: {
-        id: child._id,
-        username: child.username,
-        email: child.email,
-        age: child.age
+        id: newChild.id,
+        username: newChild.username,
+        email: newChild.email,
+        role: newChild.role,
+        age: newChild.age
       }
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in addChild:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -400,33 +526,40 @@ const addChild = async (req, res) => {
   }
 };
 
-// @desc    Get parents for child
+// @desc    Get parent for child
 // @route   GET /api/users/parents
 // @access  Private (student only)
 const getParents = async (req, res) => {
   try {
-    const child = await User.findById(req.user.userId).populate('parentId', 'username email');
-    
-    if (!child) {
+    const childId = req.user.id;
+
+    // Read users from JSON file
+    const users = readUsers();
+
+    // Find user
+    const childUser = users.find(user => user.id === childId);
+    if (!childUser || !childUser.parentId) {
       return res.status(404).json({
         success: false,
-        error: 'Child not found'
+        error: 'Parent not found'
       });
     }
-    
-    if (child.role !== 'student') {
-      return res.status(401).json({
+
+    // Find parent by ID
+    const parent = users.find(user => user.id === childUser.parentId);
+    if (!parent) {
+      return res.status(404).json({
         success: false,
-        error: 'Not authorized as student'
+        error: 'Parent not found'
       });
     }
-    
+
     res.json({
       success: true,
-      data: child.parentId
+      data: parent
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error in getParents:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
