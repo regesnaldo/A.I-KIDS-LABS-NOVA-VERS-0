@@ -1,13 +1,7 @@
+const Module = require('../models/Module');
 const User = require('../models/User');
 const fs = require('fs');
 const path = require('path');
-
-// Function to get modules from JSON file
-const getModulesFromJson = () => {
-  const modulesPath = path.join(__dirname, '../data/modules.json');
-  const modulesData = fs.readFileSync(modulesPath, 'utf8');
-  return JSON.parse(modulesData);
-};
 
 // @desc    Get all modules with filters
 // @route   GET /api/modules
@@ -16,28 +10,22 @@ const getAllModules = async (req, res) => {
   try {
     const { phase, ageGroup, difficulty, seasonId } = req.query;
     
-    // Read modules from JSON file
-    let modules = getModulesFromJson();
+    let filter = { isActive: true };
     
-    // Apply filters
-    if (phase) modules = modules.filter(m => m.phase == phase);
-    if (ageGroup) modules = modules.filter(m => m.ageGroup === ageGroup);
-    if (difficulty) modules = modules.filter(m => m.difficulty === difficulty);
-    if (seasonId) modules = modules.filter(m => m.seasonId === seasonId);
+    if (phase) filter.phase = phase;
+    if (ageGroup) filter.ageGroup = ageGroup;
+    if (difficulty) filter.difficulty = difficulty;
+    if (seasonId) filter.seasonId = seasonId;
     
-    // Remove quiz data for performance when getting all modules
-    const modulesWithoutQuiz = modules.map(m => {
-      const { quiz, ...moduleWithoutQuiz } = m;
-      return moduleWithoutQuiz;
-    });
+    const modules = await Module.find(filter).select('-quiz').sort({ phase: 1, id: 1 });
     
     res.json({
       success: true,
-      count: modulesWithoutQuiz.length,
-      data: modulesWithoutQuiz
+      count: modules.length,
+      data: modules
     });
   } catch (error) {
-    console.error('Error in getAllModules:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -50,11 +38,7 @@ const getAllModules = async (req, res) => {
 // @access  Public
 const getModuleById = async (req, res) => {
   try {
-    const { id } = req.params;
-    
-    // Read modules from JSON file
-    const modules = getModulesFromJson();
-    const module = modules.find(m => m.id === id);
+    const module = await Module.findOne({ id: req.params.id, isActive: true });
     
     if (!module) {
       return res.status(404).json({
@@ -68,7 +52,7 @@ const getModuleById = async (req, res) => {
       data: module
     });
   } catch (error) {
-    console.error('Error in getModuleById:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -94,8 +78,17 @@ const updateProgress = async (req, res) => {
       });
     }
     
-    // In a real app, you would update progress in the database
-    // For now, we'll just return success
+    // Get the module
+    const module = await Module.findOne({ id: moduleId });
+    if (!module) {
+      return res.status(404).json({
+        success: false,
+        error: 'Module not found'
+      });
+    }
+    
+    // Update user progress (in a real app, you would have a separate Progress model)
+    // For simplicity, we're updating user progress directly
     if (isCompleted) {
       user.progress.completedModules += 1;
     }
@@ -130,7 +123,7 @@ const updateProgress = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error in updateProgress:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -147,10 +140,8 @@ const submitQuiz = async (req, res) => {
     const userId = req.user.id;
     const moduleId = req.params.id;
     
-    // Read modules from JSON file to get quiz data
-    const modules = getModulesFromJson();
-    const module = modules.find(m => m.id === moduleId);
-    
+    // Get the module
+    const module = await Module.findOne({ id: moduleId });
     if (!module) {
       return res.status(404).json({
         success: false,
@@ -214,7 +205,7 @@ const submitQuiz = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error in submitQuiz:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -229,10 +220,7 @@ const getQuiz = async (req, res) => {
   try {
     const moduleId = req.params.id;
     
-    // Read modules from JSON file to get quiz data
-    const modules = getModulesFromJson();
-    const module = modules.find(m => m.id === moduleId);
-    
+    const module = await Module.findOne({ id: moduleId });
     if (!module) {
       return res.status(404).json({
         success: false,
@@ -242,10 +230,14 @@ const getQuiz = async (req, res) => {
     
     res.json({
       success: true,
-      data: module.quiz
+      data: {
+        moduleId: module.id,
+        title: module.title,
+        quiz: module.quiz
+      }
     });
   } catch (error) {
-    console.error('Error in getQuiz:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -260,10 +252,7 @@ const getBadges = async (req, res) => {
   try {
     const moduleId = req.params.id;
     
-    // Read modules from JSON file to get badges
-    const modules = getModulesFromJson();
-    const module = modules.find(m => m.id === moduleId);
-    
+    const module = await Module.findOne({ id: moduleId });
     if (!module) {
       return res.status(404).json({
         success: false,
@@ -276,7 +265,7 @@ const getBadges = async (req, res) => {
       data: module.badges
     });
   } catch (error) {
-    console.error('Error in getBadges:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -290,34 +279,33 @@ const getBadges = async (req, res) => {
 const getModulesForUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const requestingUserId = req.user.id;
     
-    // Only allow users to access their own data
-    if (userId !== requestingUserId) {
-      return res.status(403).json({
+    // Verify user has permission to access this data
+    if (req.user.id !== userId && req.user.role !== 'admin' && req.user.role !== 'parent') {
+      return res.status(401).json({
         success: false,
-        error: 'Access denied'
+        error: 'Not authorized to access this data'
       });
     }
     
-    // Read modules from JSON file
-    const modules = getModulesFromJson();
+    const modules = await Module.find({ isActive: true }).select('-quiz').sort({ phase: 1, id: 1 });
     
-    // In a real implementation, you would fetch user's progress
-    // For now, return all modules with placeholder progress
-    const modulesWithProgress = modules.map(m => ({
-      ...m,
-      progress: 0, // Placeholder
-      isCompleted: false, // Placeholder
-      starsEarned: 0 // Placeholder
+    // In a real app, you would fetch user progress from a separate Progress model
+    // For simplicity, we're returning modules with placeholder progress data
+    const modulesWithProgress = modules.map(module => ({
+      ...module.toObject(),
+      progress: Math.floor(Math.random() * 100), // Placeholder progress
+      isCompleted: Math.random() > 0.5, // Placeholder completion
+      starsEarned: Math.floor(Math.random() * 4) // Placeholder stars (0-3)
     }));
     
     res.json({
       success: true,
+      count: modulesWithProgress.length,
       data: modulesWithProgress
     });
   } catch (error) {
-    console.error('Error in getModulesForUser:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
@@ -331,17 +319,15 @@ const getModulesForUser = async (req, res) => {
 const getUserProgress = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const requestingUserId = req.user.id;
     
-    // Only allow users to access their own data
-    if (userId !== requestingUserId) {
-      return res.status(403).json({
+    // Verify user has permission to access this data
+    if (req.user.id !== userId && req.user.role !== 'admin' && req.user.role !== 'parent') {
+      return res.status(401).json({
         success: false,
-        error: 'Access denied'
+        error: 'Not authorized to access this data'
       });
     }
     
-    // Get user from database
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -352,10 +338,16 @@ const getUserProgress = async (req, res) => {
     
     res.json({
       success: true,
-      data: user.progress
+      data: {
+        totalModules: user.progress.totalModules,
+        completedModules: user.progress.completedModules,
+        totalStars: user.progress.totalStars,
+        avgProgress: user.progress.avgProgress,
+        badges: user.badges
+      }
     });
   } catch (error) {
-    console.error('Error in getUserProgress:', error);
+    console.error(error);
     res.status(500).json({
       success: false,
       error: 'Server Error'
