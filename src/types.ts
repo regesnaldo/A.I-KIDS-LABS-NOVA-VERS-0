@@ -1,8 +1,10 @@
+export type PedagogicalPhase = 1 | 2 | 3 | 4 | 5;
+
 export interface Season {
   id: string;          // UUID / CMS-friendly
   order: number;       // ordem da temporada
   title: string;
-  phase: number;
+  phase: PedagogicalPhase;
   description: string;
 }
 
