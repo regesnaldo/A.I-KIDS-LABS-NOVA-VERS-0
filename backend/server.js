@@ -6,6 +6,20 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.error(err.name, err.message);
+  console.error(err.stack);
+  // Keep server running in development for better DX, or exit(1) in production
+});
+
+// Handle unhandled rejections
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION! 💥');
+  console.error(err.name, err.message);
+});
+
 const app = express();
 const PORT = Number(process.env.PORT) || 5001;
 
