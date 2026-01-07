@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import './neon-styles.css'
 import RecommendationEngine from './components/RecommendationEngine';
 import ChatAssistant from './components/ChatAssistant';
 import VideoPlayer from './components/VideoPlayer';
 
-console.log(import.meta.env.VITE_API_URL);
+console.log('API URL:', import.meta.env.VITE_API_URL);
+
 // Tipos para as fases pedagógicas
 type PedagogicalPhase = 1 | 2 | 3 | 4 | 5;
 
@@ -31,6 +32,9 @@ interface MissionModule {
   difficulty: 'easy' | 'medium' | 'hard';
   seasonId: string;
   state: 'locked' | 'available' | 'completed';
+  videoUrl: string;
+  thumbnailUrl: string;
+  category: string;
 }
 
 // Dados das temporadas
@@ -38,63 +42,63 @@ const seasons: Season[] = [
   {
     id: 'season-001',
     order: 1,
-    title: 'Temporada 01',
+    title: 'Temporada 01: Lógica Básica',
     phase: 1,
-    description: 'Introdução à lógica de programação',
+    description: 'Introdução à lógica de programação para crianças.',
     ageRange: '6+',
     status: 'published',
-    coverImage: '/images/season-001-cover.jpg',
+    coverImage: '/assets/modules/season-001.jpg',
     featured: true
   },
   {
     id: 'season-002',
     order: 2,
-    title: 'Temporada 02',
+    title: 'Temporada 02: Matemática Divertida',
     phase: 1,
-    description: 'Conceitos básicos de matemática',
+    description: 'Conceitos básicos de matemática.',
     ageRange: '6+',
     status: 'published',
-    coverImage: '/images/season-002-cover.jpg',
+    coverImage: '/assets/modules/season-002.jpg',
     featured: false
   },
   {
     id: 'season-003',
     order: 3,
-    title: 'Temporada 03',
+    title: 'Temporada 03: Raciocínio Lógico',
     phase: 2,
-    description: 'Lógica e raciocínio lógico',
+    description: 'Lógica e raciocínio para resolver problemas.',
     ageRange: '7+',
     status: 'published',
-    coverImage: '/images/season-003-cover.jpg',
+    coverImage: '/assets/modules/season-003.jpg',
     featured: false
   },
   {
     id: 'season-004',
     order: 4,
-    title: 'Temporada 04',
+    title: 'Temporada 04: Formas e Cores',
     phase: 2,
-    description: 'Geometria e formas',
+    description: 'Geometria e reconhecimento de padrões.',
     ageRange: '7+',
     status: 'published',
-    coverImage: '/images/season-004-cover.jpg',
+    coverImage: '/assets/modules/season-004.jpg',
     featured: false
   },
   {
     id: 'season-005',
     order: 5,
-    title: 'Temporada 05',
+    title: 'Temporada 05: Álgebra Inicial',
     phase: 3,
-    description: 'Álgebra e padrões',
+    description: 'Introdução a variáveis e equações simples.',
     ageRange: '8+',
     status: 'published',
-    coverImage: '/images/season-005-cover.jpg',
+    coverImage: '/assets/modules/season-005.jpg',
     featured: false
   }
 ];
 
 // Gerar temporadas 6-50 programaticamente
-for (let i = 5; i < 49; i++) { // i = 5 to 49 corresponds to seasons 6-50
-  const seasonIndex = i + 1; // This will be 6-50
+for (let i = 5; i < 49; i++) {
+  const seasonIndex = i + 1;
   const phaseValue = Math.floor((seasonIndex - 1) / 10) + 1;
   const validPhase = Math.min(Math.max(phaseValue, 1), 5) as PedagogicalPhase;
   
@@ -106,7 +110,7 @@ for (let i = 5; i < 49; i++) { // i = 5 to 49 corresponds to seasons 6-50
     description: `Conteúdo educativo avançado ${seasonIndex.toString().padStart(2, '0')}`,
     ageRange: seasonIndex > 30 ? '12+' : '9+',
     status: 'published',
-    coverImage: `/images/season-${String(seasonIndex).padStart(3, '0')}-cover.jpg`,
+    coverImage: `/assets/modules/season-${String(seasonIndex).padStart(3, '0')}.jpg`,
     featured: false
   });
 }
@@ -119,51 +123,64 @@ const getMissionModules = (seasonId: string): MissionModule[] => {
   for (let i = 1; i <= 5; i++) {
     modules.push({
       id: `${seasonId}-module-${i}`,
-      title: `Missão ${i}`,
+      title: `Missão ${i}: Desafio`,
       description: `Conteúdo educativo da ${seasonId} - Missão ${i}`,
       duration: '10 min',
       difficulty: i <= 2 ? 'easy' : i <= 4 ? 'medium' : 'hard',
       seasonId,
-      state: seasonNumber <= 2 || i <= 3 ? 'available' : 'locked'
+      state: seasonNumber <= 2 || i <= 3 ? 'available' : 'locked',
+      videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      thumbnailUrl: `/assets/modules/${seasonId}-module-${i}.jpg`,
+      category: 'Lógica'
     });
   }
   
   return modules;
 };
 
-// Componente de Card de Laboratório
+// Componente de Card de Laboratório (Netflix Style)
 const LabCard = ({ module, level, onPlay }: { module: MissionModule; level?: 'kids' | 'teens' | 'adults'; onPlay: (m: MissionModule) => void }) => {
-  // Verificar se o conteúdo deve ser bloqueado por controle parental
+  const [imgError, setImgError] = useState(false);
   const isParentalLocked = module.difficulty === 'hard' && module.state !== 'completed';
-  
-  // Default to 'kids' if not provided
   const cardLevel = level || 'kids';
   
   return (
-    <article className={`lab-card ${module.state} card-${cardLevel} ${isParentalLocked ? 'parental-locked' : ''}`} 
+    <article className={`lab-card ${module.state} card-${cardLevel} ${isParentalLocked ? 'parental-locked' : ''} ${imgError ? 'no-image' : ''}`} 
              tabIndex={0}
+             onClick={() => onPlay(module)}
              onKeyDown={(e) => {
                if (e.key === 'Enter' || e.key === ' ') {
                  e.preventDefault();
-                 // Lógica para interação via teclado
+                 onPlay(module);
                }
              }}>
-      <h3 className="card-title">{module.title}</h3>
       
+      {!imgError && (
+        <img 
+          src={module.thumbnailUrl} 
+          alt={module.title}
+          onError={() => setImgError(true)}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px', zIndex: -1 }}
+        />
+      )}
+
       <div className="card-overlay">
+        <h3 className="card-title-overlay" style={{ fontSize: '1rem', marginBottom: '10px' }}>{module.title}</h3>
         <div className="card-actions">
-          <button className="btn-play" onClick={() => onPlay(module)}>▶ Assistir</button>
-          <button className="btn-like">ℹ️ Mais Informações</button>
+          <button className="btn-play" onClick={(e) => { e.stopPropagation(); onPlay(module); }}>▶ Assistir</button>
+          <button className="btn-like" onClick={(e) => e.stopPropagation()}>ℹ️</button>
         </div>
         
         <div className="card-meta">
           <span className="duration">⏱️ {module.duration}</span>
           <span className={`difficulty ${module.difficulty}`}>
-            {module.difficulty === 'easy' ? '🟢 Fácil' : 
-             module.difficulty === 'medium' ? '🟡 Médio' : '🔴 Difícil'}
+            {module.difficulty === 'easy' ? '🟢' : 
+             module.difficulty === 'medium' ? '🟡' : '🔴'}
           </span>
         </div>
       </div>
+
+      {imgError && <h3 className="card-title-fallback" style={{ position: 'relative', zIndex: 2 }}>{module.title}</h3>}
     </article>
   );
 };
@@ -183,9 +200,9 @@ const SeasonRow = ({ season, onPlay }: { season: Season; onPlay: (m: MissionModu
   }
   
   return (
-    <section className="season-container" style={{ position: 'relative', zIndex: 5, marginTop: '-50px', paddingBottom: '40px' }}>
+    <section className="season-container" style={{ position: 'relative', zIndex: 5, marginTop: '20px', marginBottom: '40px' }}>
       <h2 className="season-title" style={{ marginLeft: '4%', marginBottom: '10px', fontSize: '1.4vw', color: '#e5e5e5' }}>{season.title}</h2>
-      <div className="season-row" style={{ paddingLeft: '4%' }}>
+      <div className="season-row" style={{ paddingLeft: '4%', display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '20px' }}>
         {modules.map(module => (
           <LabCard key={module.id} module={module} level={level} onPlay={onPlay} />
         ))}
@@ -194,55 +211,30 @@ const SeasonRow = ({ season, onPlay }: { season: Season; onPlay: (m: MissionModu
   );
 };
 
-// Componente Hero Section (Capa Estilo Netflix)
+// Componente Hero Section
 const HeroSection = () => {
   return (
-    <>
-      {/* Navbar Overlay */}
-      <nav className="navbar">
-        <div className="nav-logo" style={{ color: '#00ffff', textShadow: '0 0 10px rgba(0,255,255,0.7)' }}>A.I. KIDS LABS</div>
-        <ul className="nav-menu">
-          <li><a href="#" className="nav-link active">Início</a></li>
-          <li><a href="#" className="nav-link">Séries</a></li>
-          <li><a href="#" className="nav-link">Filmes</a></li>
-          <li><a href="#" className="nav-link">Bombando</a></li>
-          <li><a href="#" className="nav-link">Minha lista</a></li>
-        </ul>
-        <div className="nav-right">
-          <span>🔍</span>
-          <span>🔔</span>
-          <div style={{ width: '30px', height: '30px', background: '#333', borderRadius: '4px' }}></div>
+    <div className="hero" style={{ 
+      position: 'relative', 
+      height: '70vh', 
+      width: '100%', 
+      backgroundImage: 'url(/assets/hero-bg.jpg)', 
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      marginBottom: '-50px',
+      maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)'
+    }}>
+      <div className="hero-content" style={{ position: 'absolute', bottom: '150px', left: '4%', maxWidth: '40%' }}>
+        <h1 style={{ fontSize: '3rem', marginBottom: '1rem', textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>A.I. KIDS LABS</h1>
+        <p style={{ fontSize: '1.2rem', marginBottom: '1.5rem', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+          Aprenda Inteligência Artificial e Programação se divertindo. Missões interativas para todas as idades.
+        </p>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button style={{ padding: '0.8rem 2rem', fontSize: '1.2rem', fontWeight: 'bold', border: 'none', borderRadius: '4px', background: 'white', color: 'black', cursor: 'pointer' }}>▶ Assistir</button>
+          <button style={{ padding: '0.8rem 2rem', fontSize: '1.2rem', fontWeight: 'bold', border: 'none', borderRadius: '4px', background: 'rgba(109, 109, 110, 0.7)', color: 'white', cursor: 'pointer' }}>ℹ️ Mais Info</button>
         </div>
-      </nav>
-
-      {/* Hero Content */}
-      <header className="hero-section">
-        <div className="hero-overlay"></div>
-        <div className="hero-content">
-          <h1 className="hero-title">A.I. KIDS LABS</h1>
-          
-          <div className="hero-badge">
-            <div className="top-10-badge">
-              TOP <span>1</span>
-            </div>
-            <span>em Educação Tecnológica hoje</span>
-          </div>
-          
-          <p className="hero-description">
-            Paul Bettany interpreta um padre determinado a resgatar sua sobrinha... Ops! Aqui você é o herói que domina a Inteligência Artificial para criar o futuro.
-          </p>
-          
-          <div className="hero-buttons">
-            <button className="btn-hero play">
-              <span>▶</span> Assistir
-            </button>
-            <button className="btn-hero info">
-              <span>ℹ️</span> Mais informações
-            </button>
-          </div>
-        </div>
-      </header>
-    </>
+      </div>
+    </div>
   );
 };
 
@@ -267,7 +259,7 @@ const App = () => {
   };
 
   return (
-    <div className="app" style={{ backgroundColor: '#141414', minHeight: '100vh', color: 'white' }}>
+    <div className="app" style={{ backgroundColor: '#141414', minHeight: '100vh', color: 'white', overflowX: 'hidden' }}>
       <HeroSection />
       
       <main className="main-content" style={{ position: 'relative', zIndex: 10 }}>
@@ -278,7 +270,6 @@ const App = () => {
         
         {Object.entries(seasonsByPhase).map(([phase, seasonList]) => (
           <div key={phase} className="phase-section">
-             {/* Removido título da fase para ficar mais limpo estilo Netflix, ou manter discreto */}
             <div className="labs-grid">
               {seasonList.map(season => (
                 <SeasonRow key={season.id} season={season} onPlay={handlePlay} />
@@ -296,13 +287,19 @@ const App = () => {
             >
                 ×
             </button>
-            <div style={{ width: '100%', maxWidth: '1200px' }}>
+            <div style={{ width: '90%', height: '90%', maxWidth: '1400px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <VideoPlayer 
-                    videoUrl="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" 
+                    videoUrl={playingModule.videoUrl} 
                     title={playingModule.title}
+                    thumbnailUrl={playingModule.thumbnailUrl}
                     onProgressUpdate={() => {}}
                     onVideoComplete={() => {}}
                 />
+                <div style={{ marginTop: '20px', color: '#ccc', textAlign: 'left', maxWidth: '800px', margin: '20px auto' }}>
+                   <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>{playingModule.title}</h2>
+                   <p style={{ fontSize: '1.2rem', marginBottom: '10px' }}>{playingModule.description}</p>
+                   <span style={{ background: '#333', padding: '4px 12px', borderRadius: '4px', fontSize: '0.9rem', color: '#fff' }}>{playingModule.category}</span>
+                </div>
             </div>
         </div>
       )}
@@ -310,9 +307,8 @@ const App = () => {
   );
 };
 
-// Renderizar o app
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-);
+  </React.StrictMode>
+)

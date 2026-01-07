@@ -68,14 +68,20 @@
 
 /* GRID PRINCIPAL */
 .labs-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
-  gap: 32px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
   width: 100% !important;
   margin: 0 auto !important;
-  padding: 0 !important;
+  padding: 20px 0 !important;
   max-width: none !important;
-  overflow: visible !important;  /* PASSO 4 - Allow hover expansion */
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
+/* Scrollbar hide */
+.labs-grid::-webkit-scrollbar {
+  display: none;
 }
 
 /* RESPONSIVE DESIGN */
@@ -88,16 +94,13 @@
     font-size: 3rem !important;
   }
   
+  /* Horizontal scroll for mobile like Netflix */
   .labs-grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
-    gap: 20px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
   }
-  
-  .lab-card {
-    min-width: 240px;
-    max-width: 260px;
-    height: 320px;
-  }
+}
   
   .season-row {
     gap: 15px;

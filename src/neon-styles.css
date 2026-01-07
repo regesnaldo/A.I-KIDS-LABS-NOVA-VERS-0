@@ -28,19 +28,42 @@
 /* ESTILOS NEON PARA COMPONENTES */
 .lab-card {
   position: relative;
-  /* Removed float animation to ensure smooth scaling on hover */
-  /* animation: float 6s ease-in-out infinite; */
+  width: 220px;
+  height: 320px;
+  min-width: 220px; /* Prevent shrinking */
   transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out, z-index 0s;
   z-index: 1;
-  border-radius: 12px; /* Ensure rounded corners for the card itself */
-  background: #1e1e2e; /* Base background to avoid transparency issues during zoom */
-  backface-visibility: hidden; /* Performance optimization */
+  border-radius: 4px; /* Netflix style is less rounded */
+  background: #1e1e2e;
+  background-size: cover;
+  background-position: center;
+  margin-right: 10px;
+}
+
+/* Fallback for no image */
+.lab-card.no-image {
+  background: linear-gradient(135deg, #2b1055, #7597de);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.lab-card.no-image .card-title {
+  position: static; /* Center it */
+  font-size: 1.2rem;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+  background: none;
+  width: 100%;
 }
 
 /* Base hover fallback (if no specific level class) */
 .lab-card:hover {
   transform: scale(1.1);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 255, 255, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  border: 2px solid #fff;
   z-index: 100;
   cursor: pointer;
 }

@@ -9,6 +9,11 @@ const parentalControl = require('../middleware/parentalControl');
 // @access  Public (with parental control)
 router.get('/', parentalControl, moduleController.getAllModules);
 
+// @route   GET /api/modules/recommendations
+// @desc    Get smart recommendations (AI)
+// @access  Private
+router.get('/recommendations', auth, moduleController.getRecommendations);
+
 // @route   GET /api/modules/:id
 // @desc    Get module by ID
 // @access  Public (with parental control)
@@ -43,10 +48,5 @@ router.get('/user/:userId', auth, moduleController.getModulesForUser);
 // @desc    Get user's overall progress
 // @access  Private
 router.get('/progress/:userId', auth, moduleController.getUserProgress);
-
-// @route   GET /api/modules/recommendations
-// @desc    Get smart recommendations (AI)
-// @access  Private
-router.get('/recommendations', auth, moduleController.getRecommendations);
 
 module.exports = router;
