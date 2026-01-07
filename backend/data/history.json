@@ -1,0 +1,9 @@
+[
+  {
+    "userId": "2",
+    "videoId": "video-001",
+    "watchedAt": "2023-10-01T10:00:00.000Z",
+    "progress": 100,
+    "completed": true
+  }
+]
