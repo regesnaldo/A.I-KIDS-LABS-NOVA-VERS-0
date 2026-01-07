@@ -90,6 +90,27 @@ export const modulesAPI = {
     });
     return response.json();
   },
+
+  getRecommendations: async () => {
+    const response = await fetch(`${API_BASE_URL}/modules/recommendations`, {
+      headers: {
+        'x-auth-token': localStorage.getItem('token'),
+      },
+    });
+    return response.json();
+  },
+
+  updateProgress: async (moduleId, data) => {
+    const response = await fetch(`${API_BASE_URL}/modules/${moduleId}/progress`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': localStorage.getItem('token'),
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  },
 };
 
 // Progress API
