@@ -41,3 +41,16 @@ export interface AIContext {
   completedMissions: CompletedMission[];
   difficultyPreference: 'easy' | 'medium' | 'hard';
 }
+
+export interface MissionModule {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  seasonId: string;
+  state: 'locked' | 'available' | 'completed';
+  videoUrl: string;
+  thumbnailUrl: string;
+  category: string;
+}
