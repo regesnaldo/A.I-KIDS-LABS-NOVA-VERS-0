@@ -6,7 +6,7 @@ const API_BASE_URL = `${BASE_URL}/api`;
 // Authentication API
 export const authAPI = {
   register: async (userData) => {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    const response = await fetch(`${API_BASE_URL}/users/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ export const authAPI = {
   },
 
   login: async (credentials) => {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await fetch(`${API_BASE_URL}/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export const authAPI = {
   },
 
   forgotPassword: async (email) => {
-    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+    const response = await fetch(`${API_BASE_URL}/users/forgot-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const authAPI = {
   },
 
   resetPassword: async (token, newPassword) => {
-    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+    const response = await fetch(`${API_BASE_URL}/users/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,11 +50,11 @@ export const authAPI = {
   },
 };
 
-// Modules API
+// Modules/Videos API
 export const modulesAPI = {
   getAllModules: async (filters = {}) => {
     const queryParams = new URLSearchParams(filters).toString();
-    const url = queryParams ? `${API_BASE_URL}/modules?${queryParams}` : `${API_BASE_URL}/modules`;
+    const url = queryParams ? `${API_BASE_URL}/videos?${queryParams}` : `${API_BASE_URL}/videos`;
     
     const response = await fetch(url, {
       headers: {
@@ -65,7 +65,7 @@ export const modulesAPI = {
   },
 
   getModuleById: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/modules/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/videos/${id}`, {
       headers: {
         'x-auth-token': localStorage.getItem('token'),
       },
@@ -74,7 +74,7 @@ export const modulesAPI = {
   },
 
   getModulesBySeason: async (seasonId) => {
-    const response = await fetch(`${API_BASE_URL}/modules/season/${seasonId}`, {
+    const response = await fetch(`${API_BASE_URL}/videos/season/${seasonId}`, {
       headers: {
         'x-auth-token': localStorage.getItem('token'),
       },
@@ -83,7 +83,7 @@ export const modulesAPI = {
   },
 
   getModulesWithProgress: async (userId) => {
-    const response = await fetch(`${API_BASE_URL}/modules/user/${userId}`, {
+    const response = await fetch(`${API_BASE_URL}/videos/user/${userId}`, {
       headers: {
         'x-auth-token': localStorage.getItem('token'),
       },
@@ -92,117 +92,12 @@ export const modulesAPI = {
   },
 
   getRecommendations: async () => {
-    const response = await fetch(`${API_BASE_URL}/modules/recommendations`, {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/recommendations`, {
       headers: {
-        'x-auth-token': localStorage.getItem('token'),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
     return response.json();
-  },
-
-  updateProgress: async (moduleId, data) => {
-    const response = await fetch(`${API_BASE_URL}/modules/${moduleId}/progress`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('token'),
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  },
-};
-
-// Progress API
-export const progressAPI = {
-  getUserProgress: async (userId) => {
-    const response = await fetch(`${API_BASE_URL}/progress/user/${userId}`, {
-      headers: {
-        'x-auth-token': localStorage.getItem('token'),
-      },
-    });
-    return response.json();
-  },
-
-  getModuleProgress: async (userId, moduleId) => {
-    const response = await fetch(`${API_BASE_URL}/progress/user/${userId}/module/${moduleId}`, {
-      headers: {
-        'x-auth-token': localStorage.getItem('token'),
-      },
-    });
-    return response.json();
-  },
-
-  updateProgress: async (moduleId, progressData) => {
-    // progressData includes: { progress, starsEarned, badgesEarned, isCompleted, stoppedAt }
-    const response = await fetch(`${API_BASE_URL}/modules/${moduleId}/progress`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('token'),
-      },
-      body: JSON.stringify(progressData),
-    });
-    return response.json();
-  },
-
-  submitQuiz: async (quizData) => {
-    const response = await fetch(`${API_BASE_URL}/progress/quiz`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('token'),
-      },
-      body: JSON.stringify(quizData),
-    });
-    return response.json();
-  },
-
-  getUserStats: async (userId) => {
-    const response = await fetch(`${API_BASE_URL}/progress/user/${userId}/stats`, {
-      headers: {
-        'x-auth-token': localStorage.getItem('token'),
-      },
-    });
-    return response.json();
-  },
-};
-
-// Quizzes API
-export const quizzesAPI = {
-  getModuleQuiz: async (moduleId) => {
-    const response = await fetch(`${API_BASE_URL}/quizzes/module/${moduleId}`, {
-      headers: {
-        'x-auth-token': localStorage.getItem('token'),
-      },
-    });
-    return response.json();
-  },
-
-  gradeQuiz: async (quizData) => {
-    const response = await fetch(`${API_BASE_URL}/quizzes/grade`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('token'),
-      },
-      body: JSON.stringify(quizData),
-    });
-    return response.json();
-  },
-};
-
-// Chat API
-export const chatAPI = {
-  sendMessage: async (message, context) => {
-    const response = await fetch(`${API_BASE_URL}/chat/message`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('token'),
-      },
-      body: JSON.stringify({ message, context }),
-    });
-    return response.json();
-  },
+  }
 };
