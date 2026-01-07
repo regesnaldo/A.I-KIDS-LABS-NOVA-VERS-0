@@ -72,13 +72,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     <div className="video-player-container" style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
       <video
         ref={videoRef}
-        src={videoUrl}
         poster={thumbnailUrl}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onClick={togglePlay}
         style={{ width: '100%', display: 'block' }}
-      />
+      >
+        {videoUrl?.endsWith('.m3u8') && (
+          <source src={videoUrl} type="application/x-mpegURL" />
+        )}
+        {videoUrl?.endsWith('.mpd') && (
+          <source src={videoUrl} type="application/dash+xml" />
+        )}
+        {!videoUrl?.endsWith('.m3u8') && !videoUrl?.endsWith('.mpd') && (
+          <source src={videoUrl} type="video/mp4" />
+        )}
+      </video>
       
       {/* Play Overlay */}
       {!isPlaying && (

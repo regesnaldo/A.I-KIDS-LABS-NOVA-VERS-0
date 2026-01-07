@@ -21,15 +21,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       if (isLogin) {
         data = await authAPI.login({ email, password });
       } else {
-        data = await authAPI.register({ name, email, password, age: 10 });
+        data = await authAPI.register({ username: name, email, password, age: 10 });
       }
 
       if (data.success || data.token) {
         localStorage.setItem('token', data.token);
-        if (data.user) {
-            localStorage.setItem('user', JSON.stringify(data.user));
-        }
-        onLogin(data.user || { name: 'User', email }); 
+        const user = data.data || data.user || { username: 'User', email };
+        localStorage.setItem('user', JSON.stringify(user));
+        onLogin(user); 
       } else {
         setError(data.msg || data.error || 'Erro na autenticação');
       }

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './neon-styles.css';
+import './styles/styles.css';
 import Recommendations from './components/Recommendations';
 import ChatAssistant from './components/ChatAssistant';
 import VideoPlayer from './components/VideoPlayer';
 import Login from './components/Login';
 import HeroSection from './components/HeroSection';
 import SeasonRow, { Season } from './components/SeasonRow';
+import Navbar from './components/Navbar';
 import { MissionModule } from './components/VideoCard';
 // @ts-ignore
 import { modulesAPI } from './services/api';
@@ -97,6 +99,7 @@ const App = () => {
 
   return (
     <div className="app" style={{ backgroundColor: '#141414', minHeight: '100vh', color: 'white', overflowX: 'hidden' }}>
+      <Navbar />
       <HeroSection />
       
       <main className="main-content" style={{ position: 'relative', zIndex: 10 }}>
