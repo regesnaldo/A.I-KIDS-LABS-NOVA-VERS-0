@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './neon-styles.css';
 import './styles/styles.css';
 import Recommendations from './components/Recommendations';
-import ChatAssistant from './components/ChatAssistant';
 import VideoPlayer from './components/VideoPlayer';
 import Login from './components/Login';
 import HeroSection from './components/HeroSection';
@@ -106,7 +105,7 @@ const App = () => {
         <div style={{ padding: '0 4%', marginBottom: '2rem' }}>
           <Recommendations />
         </div>
-        <ChatAssistant />
+        
         
         {Object.entries(seasonsByPhase).map(([phase, seasonList]) => (
           <div key={phase} className="phase-section">
