@@ -1,18 +1,119 @@
 [
   {
-    "id": "1",
-    "name": "Admin User",
-    "email": "admin@aikids.com",
-    "password": "$2a$10$X7.1234567890123456789012345678901234567890", 
-    "role": "admin",
-    "createdAt": "2023-01-01T00:00:00.000Z"
+    "id": "1767650515201vm2wwlksl",
+    "username": "testuser",
+    "email": "test@example.com",
+    "password": "$2a$10$pQYryc.AdPqdZe3h18.5dOzVasp2AChayDIYx/5A5z2vRlz6UEUri",
+    "role": "student",
+    "profilePicture": "/images/default-avatar.png",
+    "preferences": {
+      "parentalPin": "0000",
+      "maxDailyTime": 60,
+      "maxDifficulty": "medium",
+      "allowedHours": {
+        "start": "08:00",
+        "end": "20:00"
+      }
+    },
+    "progress": {
+      "totalModules": 0,
+      "completedModules": 0,
+      "totalStars": 0,
+      "avgProgress": 0
+    },
+    "badges": [],
+    "isActive": true,
+    "lastLogin": null,
+    "createdAt": "2026-01-05T22:01:55.202Z",
+    "subscription": {
+      "status": "INACTIVE",
+      "planId": null,
+      "subscriptionId": null,
+      "startDate": null,
+      "nextBillingDate": null,
+      "endDate": null,
+      "amount": null,
+      "cancellationDate": null,
+      "cancellationReason": null,
+      "paymentMethod": null
+    }
   },
   {
-    "id": "2",
-    "name": "Joãozinho",
-    "email": "joao@email.com",
-    "password": "$2a$10$X7.1234567890123456789012345678901234567890",
-    "role": "user",
-    "createdAt": "2023-01-02T00:00:00.000Z"
+    "id": "1767657971227mlepp2ryj",
+    "username": "newuser",
+    "email": "newuser@example.com",
+    "password": "$2a$10$RchdhwsVnQzADbj/WB70JOTtkNcRIfLYA8O8cdu/nGYvbpKmFDBq6",
+    "role": "student",
+    "profilePicture": "/images/default-avatar.png",
+    "preferences": {
+      "parentalPin": "0000",
+      "maxDailyTime": 60,
+      "maxDifficulty": "medium",
+      "allowedHours": {
+        "start": "08:00",
+        "end": "20:00"
+      }
+    },
+    "progress": {
+      "totalModules": 0,
+      "completedModules": 0,
+      "totalStars": 0,
+      "avgProgress": 0
+    },
+    "badges": [],
+    "isActive": true,
+    "lastLogin": "2026-01-06T00:06:19.741Z",
+    "createdAt": "2026-01-06T00:06:11.227Z",
+    "subscription": {
+      "status": "INACTIVE",
+      "planId": null,
+      "subscriptionId": null,
+      "startDate": null,
+      "nextBillingDate": null,
+      "endDate": null,
+      "amount": null,
+      "cancellationDate": null,
+      "cancellationReason": null,
+      "paymentMethod": null
+    }
+  },
+  {
+    "id": "176780537953834fg0zuvj",
+    "email": "reginaldodealmeida@gmail.com",
+    "password": "$2a$10$/.xuh3zqIUJNsLz2Q4.lXeZF7ypCNetogP7cSGOaP0iihT1dSZq7C",
+    "role": "student",
+    "age": 10,
+    "profilePicture": "/images/default-avatar.png",
+    "preferences": {
+      "parentalPin": "0000",
+      "maxDailyTime": 60,
+      "maxDifficulty": "medium",
+      "allowedHours": {
+        "start": "08:00",
+        "end": "20:00"
+      }
+    },
+    "progress": {
+      "totalModules": 0,
+      "completedModules": 0,
+      "totalStars": 0,
+      "avgProgress": 0
+    },
+    "badges": [],
+    "isActive": true,
+    "lastLogin": null,
+    "createdAt": "2026-01-07T17:02:59.538Z",
+    "subscription": {
+      "status": "INACTIVE",
+      "planId": null,
+      "subscriptionId": null,
+      "startDate": null,
+      "nextBillingDate": null,
+      "endDate": null,
+      "amount": null,
+      "cancellationDate": null,
+      "cancellationReason": null,
+      "paymentMethod": null
+    }
   }
 ]

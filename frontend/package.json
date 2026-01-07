@@ -5,25 +5,24 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist -u 'github-actions-bot <support+actions@github.com>'"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.92.1",
     "@tanstack/react-router-devtools": "^1.92.1",
+    "axios": "^1.13.2",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "hls.js": "^1.5.8",
-    "dashjs": "^4.7.4"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.7.0",
+    "gh-pages": "^6.3.0",
     "typescript": "^5.5.3",
-    "vite": "^5.4.1",
-    "gh-pages": "^6.3.0"
+    "vite": "^5.4.1"
   }
 }
