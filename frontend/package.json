@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@tanstack/react-router": "^1.92.1",
-    "@tanstack/react-router-devtools": "^1.92.1",
+    "@tanstack/react-router-devtools": "^1.145.11",
     "axios": "^1.13.2",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
