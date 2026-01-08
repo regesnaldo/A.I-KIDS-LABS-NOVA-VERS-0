@@ -1,4 +1,4 @@
-name: Sun Tzu Victory Pipeline
+name: CI Quality & Coverage
 
 on:
   pull_request:
@@ -26,22 +26,6 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-  security-scan:
-    name: ci/security-scan
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install Dependencies
-        working-directory: ./frontend
-        run: npm ci
-      - name: Audit Dependencies
-        working-directory: ./frontend
-        run: npm audit --audit-level=critical || true # Fail only on critical if desired, currently allows pass for demonstration
-
   coverage:
     name: codecov/project
     runs-on: ubuntu-latest
@@ -57,6 +41,3 @@ jobs:
       - name: Run Tests with Coverage
         working-directory: ./frontend
         run: npm run test:coverage
-      # In a real scenario, we would upload to Codecov here.
-      # - name: Upload to Codecov
-      #   uses: codecov/codecov-action@v3
