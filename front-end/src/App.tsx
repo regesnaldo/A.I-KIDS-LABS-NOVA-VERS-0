@@ -183,6 +183,20 @@ const App = () => {
         </div>
         <ChatAssistant />
         
+        <section style={{ padding: '2rem 4%' }}>
+          <h2 className="text-gradient" style={{ marginBottom: '1.5rem', fontSize: '2rem' }}>Jornadas A.I. Kids</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {temporadasData.map((season) => (
+              <SeasonCard 
+                key={season.id}
+                title={season.title}
+                description={season.description}
+                image={season.image}
+              />
+            ))}
+          </div>
+        </section>
+        
         {Object.entries(seasonsByPhase).map(([phase, seasonList]) => (
           <div key={phase} className="phase-section">
             <div className="labs-grid">

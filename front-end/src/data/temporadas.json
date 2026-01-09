@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "O Início da IA",
+    "description": "Descubra como os computadores aprenderam a pensar e ajude-os a resolver mistérios!",
+    "image": "https://img.freepik.com/free-vector/artificial-intelligence-concept-illustration_114360-7086.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Treinando seu Primeiro Robô",
+    "description": "Ensine truques novos para seu amigo digital e veja ele ficando inteligente.",
+    "image": "https://img.freepik.com/free-vector/cute-robot-holding-phone-cartoon-vector-icon-illustration-science-technology-icon-isolated_138676-4859.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Arte com Redes Neurais",
+    "description": "Use a mágica da tecnologia para criar pinturas incríveis e coloridas.",
+    "image": "https://img.freepik.com/free-vector/digital-artist-concept-illustration_114360-5028.jpg"
+  }
+]
