@@ -19,8 +19,8 @@ const SeasonRow = ({ season, modules, onPlay }: SeasonRowProps) => {
   }
   
   return (
-    <section className="season-container" style={{ position: 'relative', zIndex: 5, marginTop: '20px', marginBottom: '40px' }}>
-      <h2 className="season-title" style={{ marginLeft: '4%', marginBottom: '10px', fontSize: '1.4vw', color: '#e5e5e5' }}>{season.title}</h2>
+    <section className="season-container animate-slide-up" style={{ position: 'relative', zIndex: 5, marginTop: '20px', marginBottom: '40px' }}>
+      <h2 className="season-title" style={{ marginLeft: '4%', marginBottom: '10px', fontSize: 'clamp(1.2rem, 2vw, 2rem)', color: '#e5e5e5', fontWeight: 'bold' }}>{season.title}</h2>
       <div className="season-row" style={{ paddingLeft: '4%', display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '20px' }}>
         {modules.map(module => (
           <LabCard key={module.id} module={module} level={level} onPlay={onPlay} />

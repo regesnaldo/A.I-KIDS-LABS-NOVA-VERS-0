@@ -12,10 +12,12 @@ const Login = ({ onLogin }: LoginProps) => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     
     try {
       let data;
@@ -36,56 +38,105 @@ const Login = ({ onLogin }: LoginProps) => {
       }
     } catch (err) {
       console.error(err);
-      setError('Erro de conexão com o servidor. Verifique se o backend está rodando.');
+      setError('Erro de conexão com o servidor.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="login-container" style={{ 
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
-      height: '100vh', background: '#000', color: '#fff' 
+      minHeight: '100vh', width: '100%', padding: '20px', boxSizing: 'border-box'
     }}>
-      <h1 style={{ color: '#00ff00', textShadow: '0 0 10px #00ff00', marginBottom: '2rem' }}>A.I. KIDS LABS</h1>
-      
       <div style={{ 
-        background: '#1a1a1a', padding: '2rem', borderRadius: '8px', 
-        boxShadow: '0 0 20px rgba(0, 255, 0, 0.2)', width: '300px' 
+        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
+        background: 'radial-gradient(circle at center, rgba(0,255,136,0.1) 0%, transparent 70%)', 
+        zIndex: -1, pointerEvents: 'none'
+      }}></div>
+
+      <h1 className="text-gradient" style={{ 
+        fontSize: '3.5rem', marginBottom: '2rem', textAlign: 'center', 
+        fontWeight: '900', letterSpacing: '-2px', textShadow: '0 10px 30px rgba(0,0,0,0.5)' 
       }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>{isLogin ? 'Entrar' : 'Cadastrar'}</h2>
+        A.I. KIDS LABS
+      </h1>
+      
+      <div className="glass-panel animate-slide-up" style={{ 
+        padding: '3rem', borderRadius: '24px', width: '100%', maxWidth: '400px',
+        animation: 'float 6s ease-in-out infinite'
+      }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.8rem' }}>
+          {isLogin ? 'Bem-vindo!' : 'Criar Conta'}
+        </h2>
         
-        {error && <div style={{ color: '#ff4444', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
+        {error && (
+          <div style={{ 
+            background: 'rgba(255, 68, 68, 0.1)', border: '1px solid #ff4444', 
+            color: '#ff4444', padding: '10px', borderRadius: '8px', marginBottom: '1rem', 
+            fontSize: '0.9rem', textAlign: 'center' 
+          }}>
+            {error}
+          </div>
+        )}
         
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
           {!isLogin && (
             <input 
-              type="text" placeholder="Nome" value={name} onChange={e => setName(e.target.value)}
-              style={{ padding: '0.8rem', background: '#333', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+              type="text" placeholder="Seu Nome" value={name} onChange={e => setName(e.target.value)}
+              style={{ 
+                padding: '1rem', background: 'rgba(255,255,255,0.05)', 
+                border: '1px solid rgba(255,255,255,0.1)', color: 'white', 
+                borderRadius: '12px', outline: 'none', fontSize: '1rem',
+                transition: 'border-color 0.3s'
+              }}
+              onFocus={(e) => e.target.style.borderColor = 'var(--primary)'}
+              onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
             />
           )}
           <input 
             type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}
-            style={{ padding: '0.8rem', background: '#333', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+            style={{ 
+              padding: '1rem', background: 'rgba(255,255,255,0.05)', 
+              border: '1px solid rgba(255,255,255,0.1)', color: 'white', 
+              borderRadius: '12px', outline: 'none', fontSize: '1rem',
+              transition: 'border-color 0.3s'
+            }}
+            onFocus={(e) => e.target.style.borderColor = 'var(--primary)'}
+            onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
           />
           <input 
             type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)}
-            style={{ padding: '0.8rem', background: '#333', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+            style={{ 
+              padding: '1rem', background: 'rgba(255,255,255,0.05)', 
+              border: '1px solid rgba(255,255,255,0.1)', color: 'white', 
+              borderRadius: '12px', outline: 'none', fontSize: '1rem',
+              transition: 'border-color 0.3s'
+            }}
+            onFocus={(e) => e.target.style.borderColor = 'var(--primary)'}
+            onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
           />
           
-          <button type="submit" style={{ 
-            padding: '0.8rem', background: '#00ff00', color: 'black', fontWeight: 'bold', 
-            border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '1rem' 
-          }}>
-            {isLogin ? 'ACESSAR' : 'CRIAR CONTA'}
+          <button type="submit" disabled={loading} style={{ 
+            padding: '1rem', background: 'var(--primary)', color: '#000', fontWeight: '800', 
+            border: 'none', borderRadius: '12px', cursor: 'pointer', marginTop: '1rem',
+            fontSize: '1.1rem', letterSpacing: '1px', transition: 'transform 0.2s',
+            opacity: loading ? 0.7 : 1
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            {loading ? 'CARREGANDO...' : (isLogin ? 'ACESSAR' : 'COMEÇAR AVENTURA')}
           </button>
         </form>
         
-        <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.9rem', color: '#ccc' }}>
-          {isLogin ? 'Não tem conta?' : 'Já tem conta?'}
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: '#888' }}>
+          {isLogin ? 'Ainda não é um explorador?' : 'Já tem seu passaporte?'}
           <span 
             onClick={() => setIsLogin(!isLogin)} 
-            style={{ color: '#00ff00', cursor: 'pointer', marginLeft: '5px' }}
+            style={{ color: 'var(--primary)', cursor: 'pointer', marginLeft: '8px', fontWeight: 'bold' }}
           >
-            {isLogin ? 'Registre-se' : 'Faça login'}
+            {isLogin ? 'Criar conta grátis' : 'Entrar agora'}
           </span>
         </p>
       </div>

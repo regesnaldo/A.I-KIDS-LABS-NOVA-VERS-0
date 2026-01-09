@@ -3,7 +3,16 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/A.I-KIDS-LABS-NOVA-VERS-0/',
+  base: '/-A.I-KIDS-LABS-V1-/',
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5002',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  },
   test: {
     globals: true,
     environment: 'jsdom',

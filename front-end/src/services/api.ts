@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5002/api';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -59,6 +59,69 @@ export const chatAPI = {
         const response = await api.post('/chat', { message, context });
         return response.data;
     }
+};
+
+// --- Connection Management ---
+
+type ConnectionStatus = 'online' | 'offline' | 'reconnecting';
+type ConnectionListener = (status: ConnectionStatus) => void;
+
+const listeners: ConnectionListener[] = [];
+let isReconnecting = false;
+
+export const onConnectionChange = (listener: ConnectionListener) => {
+    listeners.push(listener);
+    return () => {
+        const index = listeners.indexOf(listener);
+        if (index > -1) listeners.splice(index, 1);
+    };
+};
+
+const notifyListeners = (status: ConnectionStatus) => {
+    listeners.forEach(l => l(status));
+};
+
+// Response interceptor to detect disconnection
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (!error.response || error.code === 'ERR_NETWORK' || error.response.status === 503) {
+            if (!isReconnecting) {
+                isReconnecting = true;
+                notifyListeners('offline');
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
+export const checkBackendHealth = async (): Promise<boolean> => {
+    try {
+        await api.get('/health'); // Tries /api/health
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const waitForBackend = async (maxRetries = 20, interval = 2000): Promise<boolean> => {
+    let retries = 0;
+    notifyListeners('reconnecting');
+    
+    while (retries < maxRetries) {
+        const isHealthy = await checkBackendHealth();
+        if (isHealthy) {
+            isReconnecting = false;
+            notifyListeners('online');
+            return true;
+        }
+        retries++;
+        await new Promise(resolve => setTimeout(resolve, interval));
+    }
+    
+    isReconnecting = false;
+    notifyListeners('offline');
+    return false;
 };
 
 export default api;

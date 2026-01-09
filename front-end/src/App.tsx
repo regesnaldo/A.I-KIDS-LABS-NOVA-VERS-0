@@ -7,10 +7,8 @@ import VideoPlayer from './components/VideoPlayer';
 import Login from './components/Login';
 import SeasonRow from './components/SeasonRow';
 import HeroSection from './components/HeroSection';
-import { modulesAPI } from './services/api';
+import { modulesAPI, waitForBackend, onConnectionChange } from './services/api';
 import { Season, MissionModule, PedagogicalPhase } from './types';
-
-console.log('API URL:', import.meta.env.VITE_API_URL);
 
 const App = () => {
   const [user, setUser] = useState<unknown>(null);
@@ -18,6 +16,36 @@ const App = () => {
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [allModules, setAllModules] = useState<MissionModule[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Connection States: 'checking' (initial), 'online', 'reconnecting', 'offline'
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'online' | 'reconnecting' | 'offline'>('checking');
+
+  // Monitor Connection
+  useEffect(() => {
+    // 1. Subscribe to connection changes from API interceptors
+    const unsubscribe = onConnectionChange((status) => {
+      setConnectionStatus(status);
+      if (status === 'offline') {
+        // Auto-retry connection when we go offline
+        waitForBackend().then(success => {
+            if (!success) setConnectionStatus('offline');
+        });
+      }
+    });
+
+    // 2. Initial Check
+    const checkServer = async () => {
+      const isReady = await waitForBackend(5, 1000); // Quick check on load
+      if (isReady) {
+        setConnectionStatus('online');
+      } else {
+        setConnectionStatus('offline');
+      }
+    };
+    checkServer();
+
+    return () => unsubscribe();
+  }, []);
 
   // Load User from LocalStorage
   useEffect(() => {
@@ -85,6 +113,51 @@ const App = () => {
       setUser(userData);
       setLoading(true); // Trigger loading to fetch data
   };
+
+  // --- CONNECTION SCREENS ---
+
+  if (connectionStatus === 'offline') {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#050505', color: '#ff4444' }}>
+            <h2 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '1rem' }}>SISTEMA OFFLINE</h2>
+            <p style={{ color: '#aaa', marginBottom: '2rem' }}>Não foi possível conectar ao servidor neural.</p>
+            <button 
+                onClick={() => {
+                    setConnectionStatus('reconnecting');
+                    waitForBackend();
+                }} 
+                style={{ 
+                    padding: '12px 30px', 
+                    background: 'var(--primary)', 
+                    color: '#000', 
+                    border: 'none', 
+                    borderRadius: '50px', 
+                    fontWeight: 'bold', 
+                    cursor: 'pointer',
+                    fontSize: '1rem'
+                }}
+            >
+                TENTAR NOVAMENTE
+            </button>
+        </div>
+      );
+  }
+
+  if (connectionStatus === 'checking' || connectionStatus === 'reconnecting') {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#050505', color: '#0f0' }}>
+            <h2 className="text-gradient" style={{ animation: 'pulse 2s infinite' }}>
+                {connectionStatus === 'reconnecting' ? 'RECONECTANDO SISTEMA...' : 'INICIANDO PROTOCOLOS...'}
+            </h2>
+            <div className="loading-bar" style={{ width: '200px', height: '4px', background: '#333', marginTop: '20px', overflow: 'hidden', borderRadius: '2px' }}>
+                <div style={{ width: '50%', height: '100%', background: 'var(--primary)', animation: 'loading 1s infinite' }}></div>
+            </div>
+            {connectionStatus === 'reconnecting' && (
+                <p style={{ marginTop: '20px', color: '#666', fontSize: '0.9rem' }}>Aguardando servidor...</p>
+            )}
+        </div>
+      );
+  }
 
   if (!user) {
       return <Login onLogin={handleLogin} />;

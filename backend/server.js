@@ -14,6 +14,7 @@ const History = require('./models/history');
 const Recommendation = require('./models/recommendation');
 
 // Importa Rotas
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const videoRoutes = require('./routes/videos');
 const historyRoutes = require('./routes/history');
@@ -33,13 +34,14 @@ app.use((req, res, next) => {
 });
 
 // Rotas da API
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 
 // Endpoint de Status (Health Check)
-app.get('/api/status', (req, res) => {
+app.get(['/api/status', '/api/health'], (req, res) => {
     res.json({ 
         status: 'online', 
         uptime: process.uptime(),

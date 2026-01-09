@@ -1,12 +1,10 @@
 const User = require('../models/User');
-const fs = require('fs');
-const path = require('path');
+// Pre-load modules data for performance (cached by require)
+const modulesData = require('../data/modules.json');
 
-// Function to get modules from JSON file
+// Function to get modules (returns cached data)
 const getModulesFromJson = () => {
-  const modulesPath = path.join(__dirname, '../data/modules.json');
-  const modulesData = fs.readFileSync(modulesPath, 'utf8');
-  return JSON.parse(modulesData);
+  return modulesData;
 };
 
 // Helper: Get AI Persona Message
