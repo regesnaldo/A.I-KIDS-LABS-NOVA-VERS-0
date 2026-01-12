@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './neon-styles.css'
 import Navbar from './components/Navbar';
-import Recommendations from './components/Recommendations';
 import ChatAssistant from './components/ChatAssistant';
 import VideoPlayer from './components/VideoPlayer';
 import Login from './components/Login';
