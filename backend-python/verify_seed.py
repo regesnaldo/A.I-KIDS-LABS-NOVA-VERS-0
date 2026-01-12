@@ -1,11 +1,11 @@
 from app import create_app
 from extensions import db
-from models import Temporada, Missao
+from models import Season, Missao
 
 app = create_app()
 
 with app.app_context():
-    t_count = Temporada.query.count()
+    t_count = Season.query.count()
     m_count = Missao.query.count()
     print(f"📊 Verificação de Integridade:")
     print(f"   - Temporadas: {t_count} (Esperado: 50)")

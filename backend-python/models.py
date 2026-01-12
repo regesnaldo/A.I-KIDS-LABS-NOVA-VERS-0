@@ -17,19 +17,21 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class Temporada(db.Model):
-    __tablename__ = 'temporadas'
+class Season(db.Model):
+    __tablename__ = 'seasons'
     id = db.Column(db.Integer, primary_key=True)
-    numero = db.Column(db.Integer, unique=True, nullable=False)
-    titulo = db.Column(db.String(100), nullable=False)
-    descricao = db.Column(db.Text, nullable=True)
-    # Relacionamento: Uma temporada tem muitas missões
-    missoes = db.relationship('Missao', backref='temporada', lazy=True)
+    titulo = db.Column(db.String(100))
+    descricao = db.Column(db.Text)
+    imagem = db.Column(db.String(255))
+    # Mantendo numero para compatibilidade de ordenação se necessário, mas opcional
+    numero = db.Column(db.Integer, unique=True, nullable=True)
+    # Relacionamento
+    missoes = db.relationship('Missao', backref='season', lazy=True)
 
 class Missao(db.Model):
     __tablename__ = 'missoes'
     id = db.Column(db.Integer, primary_key=True)
-    temporada_id = db.Column(db.Integer, db.ForeignKey('temporadas.id'), nullable=False)
+    season_id = db.Column(db.Integer, db.ForeignKey('seasons.id'), nullable=False)
     numero = db.Column(db.Integer, nullable=False)
     titulo = db.Column(db.String(100), nullable=False)
     video_url = db.Column(db.String(255), nullable=True)

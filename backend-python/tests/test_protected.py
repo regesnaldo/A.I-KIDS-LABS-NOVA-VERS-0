@@ -1,15 +1,15 @@
 import json
-from models import Temporada, Missao
+from models import Season, Missao
 from extensions import db
 
 def setup_content(app):
     with app.app_context():
-        t1 = Temporada(numero=1, titulo="Temp 1", descricao="Desc 1")
-        db.session.add(t1)
+        s1 = Season(numero=1, titulo="Temp 1", descricao="Desc 1", imagem="img1.jpg")
+        db.session.add(s1)
         db.session.flush()
         
-        m1 = Missao(temporada_id=t1.id, numero=1, titulo="Missao 1", video_url="url1", conteudo_apoio="apoio1")
-        m2 = Missao(temporada_id=t1.id, numero=2, titulo="Missao 2", video_url="url2", conteudo_apoio="apoio2")
+        m1 = Missao(season_id=s1.id, numero=1, titulo="Missao 1", video_url="url1", conteudo_apoio="apoio1")
+        m2 = Missao(season_id=s1.id, numero=2, titulo="Missao 2", video_url="url2", conteudo_apoio="apoio2")
         db.session.add(m1)
         db.session.add(m2)
         db.session.commit()
@@ -48,7 +48,7 @@ def test_missoes_locked_status_anonymous(client, app):
     setup_content(app)
     # Recupera ID da temporada criada
     with app.app_context():
-        t_id = Temporada.query.first().id
+        t_id = Season.query.first().id
 
     response = client.get(f'/api/temporadas/{t_id}/missoes')
     assert response.status_code == 200
@@ -61,7 +61,7 @@ def test_missoes_locked_status_authenticated(client, app):
     setup_content(app)
     # Recupera ID da temporada criada
     with app.app_context():
-        t_id = Temporada.query.first().id
+        t_id = Season.query.first().id
         
     # Registro e Login
     client.post('/api/auth/register', json={'email': 'user2@test.com', 'password': '123'})

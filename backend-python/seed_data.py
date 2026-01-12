@@ -1,16 +1,18 @@
 from app import create_app
 from extensions import db
-from models import Temporada, Missao
+from models import Season, Missao
 
 app = create_app()
 
 def seed():
     with app.app_context():
+        # Garante que as tabelas existam
+        db.create_all()
 
         print("🧹 Limpando dados antigos...")
         try:
             Missao.query.delete()
-            Temporada.query.delete()
+            Season.query.delete()
             db.session.commit()
         except Exception as e:
             db.session.rollback()
@@ -20,17 +22,18 @@ def seed():
         print("🌱 Criando temporadas e missões...")
 
         for t in range(1, 51):
-            temporada = Temporada(
+            season = Season(
                 numero=t,
                 titulo=f"Temporada {t}",
-                descricao=f"Aprendizados de IA – Temporada {t}"
+                descricao=f"Aprendizados de IA – Temporada {t}",
+                imagem=f"https://cdn.kidslabs.com/covers/t{t}.jpg"
             )
-            db.session.add(temporada)
-            db.session.flush()  # garante temporada.id
+            db.session.add(season)
+            db.session.flush()  # garante season.id
 
             for m in range(1, 11):
                 missao = Missao(
-                    temporada_id=temporada.id,
+                    season_id=season.id,
                     numero=m,
                     titulo=f"Missão {m}",
                     video_url=f"https://videos.kidslabs.com/t{t}m{m}",

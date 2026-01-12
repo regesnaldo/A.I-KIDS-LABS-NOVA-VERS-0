@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from extensions import db
-from models import Temporada, Missao
+from models import Season, Missao
 
 content_bp = Blueprint('content', __name__)
 
@@ -18,11 +18,11 @@ def get_home_content():
     except Exception:
         current_user_id = None
         
-    temporadas = Temporada.query.order_by(Temporada.numero).all()
+    seasons = Season.query.order_by(Season.numero).all()
     rows = []
     
-    for t in temporadas:
-        missoes = Missao.query.filter_by(temporada_id=t.id).order_by(Missao.numero).all()
+    for s in seasons:
+        missoes = Missao.query.filter_by(season_id=s.id).order_by(Missao.numero).all()
         cards = []
         for m in missoes:
             # Regra de Acesso:
@@ -37,16 +37,17 @@ def get_home_content():
                 "id": m.id,
                 "numero": m.numero,
                 "titulo": m.titulo,
-                "thumb": f"https://cdn.kidslabs.com/thumbs/t{t.numero}m{m.numero}.jpg",
-                "preview": f"https://cdn.kidslabs.com/previews/t{t.numero}m{m.numero}.mp4",
+                "thumb": f"https://cdn.kidslabs.com/thumbs/t{s.numero}m{m.numero}.jpg",
+                "preview": f"https://cdn.kidslabs.com/previews/t{s.numero}m{m.numero}.mp4",
                 "locked": locked
             })
             
         rows.append({
-            "id": t.id,
-            "numero": t.numero,
-            "titulo": t.titulo,
-            "descricao": t.descricao,
+            "id": s.id,
+            "numero": s.numero,
+            "titulo": s.titulo,
+            "descricao": s.descricao,
+            "imagem": s.imagem,
             "cards": cards
         })
         
@@ -57,9 +58,9 @@ def get_home_content():
 @jwt_required(optional=True)
 def get_seasons():
     # Tente fetch do DB Neon; fallback mock se vazio
-    temporadas = Temporada.query.order_by(Temporada.numero).all()
+    seasons = Season.query.order_by(Season.numero).all()
     
-    if not temporadas:
+    if not seasons:
         # Fallback mock data
         seasons_data = [{
             'id': i, 
@@ -72,40 +73,43 @@ def get_seasons():
 
     # Serialize DB objects
     return jsonify([{
-        "id": t.id,
-        "numero": t.numero,
-        "title": t.titulo,
-        "titulo": t.titulo,
-        "description": t.descricao,
-        "descricao": t.descricao,
-        "image": f"https://cdn.kidslabs.com/covers/t{t.numero}.jpg",
-        "imagem": f"https://cdn.kidslabs.com/covers/t{t.numero}.jpg"
-    } for t in temporadas]), 200
+        "id": s.id,
+        "numero": s.numero,
+        "title": s.titulo,
+        "titulo": s.titulo,
+        "description": s.descricao,
+        "descricao": s.descricao,
+        "image": s.imagem or f"https://cdn.kidslabs.com/covers/t{s.numero}.jpg",
+        "imagem": s.imagem or f"https://cdn.kidslabs.com/covers/t{s.numero}.jpg"
+    } for s in seasons]), 200
 
 @content_bp.route('/temporadas', methods=['POST'])
+@content_bp.route('/seasons', methods=['POST'])
 @jwt_required()
-def create_temporada():
+def create_season():
     data = request.get_json()
     
     # Validação simples
     if not data.get('numero') or not data.get('titulo'):
         return jsonify({"erro": "Número e Título são obrigatórios"}), 400
 
-    nova_temporada = Temporada(
+    new_season = Season(
         numero=data.get('numero'),
         titulo=data.get('titulo'),
-        descricao=data.get('descricao')
+        descricao=data.get('descricao'),
+        imagem=data.get('imagem')
     )
     
     try:
-        db.session.add(nova_temporada)
+        db.session.add(new_season)
         db.session.commit()
-        return jsonify({"mensagem": "Temporada criada com sucesso!", "id": nova_temporada.id}), 201
+        return jsonify({"mensagem": "Temporada criada com sucesso!", "id": new_season.id}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({"erro": "Erro ao criar temporada (verifique se o número já existe)"}), 400
 
 @content_bp.route('/temporadas/<int:id>/missoes', methods=['GET'])
+@content_bp.route('/seasons/<int:id>/missoes', methods=['GET'])
 @jwt_required(optional=True)
 def get_missoes_por_temporada(id):
     try:
@@ -113,12 +117,12 @@ def get_missoes_por_temporada(id):
     except Exception:
         current_user_id = None
 
-    temporada = Temporada.query.get(id)
+    season = Season.query.get(id)
     
-    if not temporada:
+    if not season:
         return jsonify({"erro": "Temporada não encontrada"}), 404
         
-    missoes = Missao.query.filter_by(temporada_id=id).order_by(Missao.numero).all()
+    missoes = Missao.query.filter_by(season_id=id).order_by(Missao.numero).all()
     
     return jsonify([{
         "id": m.id,
