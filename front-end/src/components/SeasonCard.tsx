@@ -4,9 +4,10 @@ interface SeasonCardProps {
     title: string;
     description: string;
     image?: string;
+    onClick?: () => void;
 }
 
-const SeasonCard: React.FC<SeasonCardProps> = ({ title, description, image }) => {
+const SeasonCard: React.FC<SeasonCardProps> = ({ title, description, image, onClick }) => {
     return (
         <div className="season-card" style={{
             position: 'relative',
@@ -18,6 +19,7 @@ const SeasonCard: React.FC<SeasonCardProps> = ({ title, description, image }) =>
             backgroundColor: '#1a1a1a',
             border: '1px solid #333'
         }}
+        onClick={onClick}
         onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
         onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >

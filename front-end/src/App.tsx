@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './neon-styles.css'
 import Navbar from './components/Navbar';
 import Recommendations from './components/Recommendations';
@@ -7,23 +7,45 @@ import ChatAssistant from './components/ChatAssistant';
 import VideoPlayer from './components/VideoPlayer';
 import Login from './components/Login';
 import SeasonCard from './components/SeasonCard';
+import SeasonDetailsPage from './components/SeasonDetailsPage';
 import HeroSection from './components/HeroSection';
 import api, { waitForBackend, onConnectionChange } from './services/api';
 import { MissionModule } from './types';
 
 // --- Page Components ---
 
-const LandingPage = () => (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const LandingPage = ({ seasons }: { seasons: any[] }) => {
+  const navigate = useNavigate();
+  return (
   <>
     <HeroSection />
     <div style={{ padding: '0 4%', marginBottom: '2rem' }}>
-      <Recommendations />
+      <h2 className="text-gradient" style={{ marginBottom: '1.5rem', fontSize: '2rem' }}>Todas as Temporadas</h2>
+      <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+          gap: '2rem',
+          padding: '1rem 0' 
+      }}>
+        {seasons.map((season) => (
+          <SeasonCard 
+            key={season.id}
+            title={season.title || season.titulo}
+            description={season.description || season.descricao}
+            image={season.image || season.imagem}
+            onClick={() => navigate(`/season/${season.id}`)}
+          />
+        ))}
+      </div>
     </div>
   </>
-);
+  );
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MissoesPage = ({ temporadasData }: { temporadasData: any[] }) => {
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -48,6 +70,7 @@ const MissoesPage = ({ temporadasData }: { temporadasData: any[] }) => {
             title={season.title || season.titulo}
             description={season.description || season.descricao}
             image={season.image}
+            onClick={() => navigate(`/season/${season.id}`)}
           />
         ))}
       </div>
@@ -136,16 +159,18 @@ const App = () => {
     }
   }, []);
 
-  // Fetch Data (Only if logged in)
+  // Fetch Data (Only if online)
   useEffect(() => {
     const fetchData = async () => {
-      if (!user) {
+      if (connectionStatus !== 'online') {
           return;
       }
       
       try {
         const response = await api.get('/seasons');
+        console.log("Seasons response:", response);
         if (response.data) {
+          console.log("Seasons count:", response.data.length);
           setTemporadasData(response.data);
         }
       } catch (error) {
@@ -156,7 +181,7 @@ const App = () => {
     };
 
     fetchData();
-  }, [user]);
+  }, [user, connectionStatus]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleLogin = (userData: any) => {
@@ -224,7 +249,7 @@ const App = () => {
         <ChatAssistant isOpen={isChatOpen} onToggle={setIsChatOpen} />
         
         <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage seasons={temporadasData} />} />
             <Route path="/about" element={<AboutPage />} />
             
             {/* Protected Routes */}
@@ -240,6 +265,8 @@ const App = () => {
                 path="/conquistas" 
                 element={user ? <ConquistasPage /> : <Login onLogin={handleLogin} />} 
             />
+
+            <Route path="/season/:id" element={<SeasonDetailsPage />} />
             
             {/* Fallback to Landing */}
             <Route path="*" element={<Navigate to="/" replace />} />
