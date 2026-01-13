@@ -1,4 +1,4 @@
-// Trigger deploy: Env vars fix for Vercel
+// Trigger deploy: Auto-tunnel config applied
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
