@@ -6,12 +6,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/', // Ensure absolute paths for Vercel
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    emptyOutDir: true,
-  }
-})  server: {
+  server: {
     port: 3000,
     proxy: {
       '/api': {
@@ -22,6 +17,9 @@ export default defineConfig({
     }
   },
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
     // Otimizações para evitar timeout no Vercel
     sourcemap: false, // Desliga mapas de código (reduz tempo/memória)
     chunkSizeWarningLimit: 1000, // Aumenta limite de aviso
