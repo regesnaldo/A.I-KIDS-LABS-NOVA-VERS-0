@@ -37,8 +37,8 @@ def get_home_content():
                 "id": m.id,
                 "numero": m.numero,
                 "titulo": m.titulo,
-                "thumb": f"https://cdn.kidslabs.com/thumbs/t{s.numero}m{m.numero}.jpg",
-                "preview": f"https://cdn.kidslabs.com/previews/t{s.numero}m{m.numero}.mp4",
+                "thumb": f"https://placehold.co/300x200/2a2a2a/FFF?text=T{s.numero}M{m.numero}",
+                "preview": f"https://placehold.co/video/t{s.numero}m{m.numero}.mp4", # Mock video
                 "locked": locked
             })
             
@@ -66,8 +66,8 @@ def get_seasons():
             'id': i, 
             'titulo': f'Temporada {i}', 
             'descricao': 'Missões lúdicas de IA para kids', 
-            'image': 'https://example.com/img.png', # Frontend compatibility
-            'imagem': 'https://example.com/img.png'
+            'image': f'https://placehold.co/600x400/1a1a1a/FFF?text=Temporada+{i}', 
+            'imagem': f'https://placehold.co/600x400/1a1a1a/FFF?text=Temporada+{i}'
         } for i in range(1, 51)]
         return jsonify(seasons_data), 200
 
@@ -79,9 +79,59 @@ def get_seasons():
         "titulo": s.titulo,
         "description": s.descricao,
         "descricao": s.descricao,
-        "image": s.imagem or f"https://cdn.kidslabs.com/covers/t{s.numero}.jpg",
-        "imagem": s.imagem or f"https://cdn.kidslabs.com/covers/t{s.numero}.jpg"
+        "image": s.imagem if s.imagem and "cdn.kidslabs.com" not in s.imagem else f"https://placehold.co/600x400/1a1a1a/FFF?text=Temporada+{s.numero}",
+        "imagem": s.imagem if s.imagem and "cdn.kidslabs.com" not in s.imagem else f"https://placehold.co/600x400/1a1a1a/FFF?text=Temporada+{s.numero}"
     } for s in seasons]), 200
+
+@content_bp.route('/seasons/<int:season_id>/missions', methods=['GET'])
+@jwt_required(optional=True)
+def get_season_missions(season_id):
+    try:
+        current_user_id = get_jwt_identity()
+    except Exception:
+        current_user_id = None
+
+    season = Season.query.get(season_id)
+    if not season:
+        print(f"Error: Season {season_id} not found")
+        return jsonify({"erro": "Temporada não encontrada"}), 404
+
+    try:
+        # Limit to 10 missions as requested
+        missions = Missao.query.filter_by(season_id=season_id).order_by(Missao.numero).limit(10).all()
+        print(f"Fetched {len(missions)} missions for season {season_id}")
+    except Exception as e:
+        print(f"Database Error fetching missions: {e}")
+        missions = []
+    
+    missions_data = []
+    for m in missions:
+        # Regra de Acesso:
+        # Sem login -> locked = True (Conteúdo bloqueado)
+        # Logado -> locked = False (Conteúdo liberado)
+        locked = True
+        if current_user_id:
+            locked = False
+
+        missions_data.append({
+            "id": m.id,
+            "numero": m.numero,
+            "titulo": m.titulo,
+            "description": m.conteudo_apoio or f"Missão {m.numero} da Temporada {season.numero}",
+            "thumb": f"https://placehold.co/300x200/2a2a2a/FFF?text=T{season.numero}M{m.numero}",
+            "video_url": m.video_url,
+            "locked": locked
+        })
+
+    return jsonify({
+        "season": {
+            "id": season.id,
+            "title": season.titulo,
+            "description": season.descricao,
+            "image": season.imagem if season.imagem and "cdn.kidslabs.com" not in season.imagem else f"https://placehold.co/600x400/1a1a1a/FFF?text=Temporada+{season.numero}"
+        },
+        "missions": missions_data
+    }), 200
 
 @content_bp.route('/temporadas', methods=['POST'])
 @content_bp.route('/seasons', methods=['POST'])
