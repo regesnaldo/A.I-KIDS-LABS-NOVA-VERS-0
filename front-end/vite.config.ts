@@ -1,4 +1,4 @@
-// Trigger deploy: Env vars updated
+// Trigger deploy: Env vars fix for Vercel
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
