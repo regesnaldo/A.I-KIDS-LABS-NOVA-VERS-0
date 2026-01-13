@@ -202,9 +202,35 @@ const App = () => {
 
   // --- CONNECTION SCREENS ---
 
+  const DebugOverlay = () => (
+    <div style={{
+      position: 'fixed',
+      bottom: '10px',
+      right: '10px',
+      background: 'rgba(0,0,0,0.8)',
+      color: '#0f0',
+      padding: '10px',
+      borderRadius: '5px',
+      fontSize: '10px',
+      fontFamily: 'monospace',
+      zIndex: 9999,
+      pointerEvents: 'none',
+      border: '1px solid #333'
+    }}>
+      <div>Status: {connectionStatus}</div>
+      <div>Loading: {loading ? 'true' : 'false'}</div>
+      <div>Seasons: {temporadasData.length}</div>
+      <hr style={{ borderColor: '#333', margin: '5px 0' }}/>
+      {debugLog.map((log, i) => (
+        <div key={i}>{log}</div>
+      ))}
+    </div>
+  );
+
   if (connectionStatus === 'offline') {
       return (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#050505', color: '#ff4444' }}>
+            <DebugOverlay />
             <h2 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '1rem' }}>SISTEMA OFFLINE</h2>
             <p style={{ color: '#aaa', marginBottom: '2rem' }}>Não foi possível conectar ao servidor neural.</p>
             <button 
