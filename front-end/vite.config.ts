@@ -1,10 +1,17 @@
-// Trigger deploy: Fix HeroSection mask and logging
+// Trigger deploy: Base path and ErrorBoundary added
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
+  base: '/', // Ensure absolute paths for Vercel
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+  }
+})  server: {
     port: 3000,
     proxy: {
       '/api': {
