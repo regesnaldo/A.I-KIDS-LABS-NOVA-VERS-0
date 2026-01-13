@@ -35,7 +35,7 @@ const HeroSection = () => {
           fontWeight: '900',
           textShadow: '0 4px 10px rgba(0,0,0,0.5)'
         }}>
-          A.I. KIDS LABS
+          {title}
         </h1>
         <p style={{ 
           fontSize: '1.4rem', 
@@ -44,7 +44,7 @@ const HeroSection = () => {
           maxWidth: '600px',
           textShadow: '0 2px 4px rgba(0,0,0,0.8)'
         }}>
-          Aprenda Inteligência Artificial e Programação se divertindo. Missões interativas para todas as idades.
+          {description}
         </p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <Link to="/missoes" style={{ textDecoration: 'none' }}>

@@ -9,19 +9,30 @@ import SeasonCard from './components/SeasonCard';
 import SeasonDetailsPage from './components/SeasonDetailsPage';
 import HeroSection from './components/HeroSection';
 import api, { waitForBackend, onConnectionChange } from './services/api';
-import { MissionModule } from './types';
+import { Season } from './types';
 
 // --- Page Components ---
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LandingPage = ({ seasons }: { seasons: any[] }) => {
+const LandingPage = ({ seasons }: { seasons: Season[] }) => {
   const navigate = useNavigate();
   console.log("Rendering LandingPage. Seasons:", seasons);
+
+  // Defensive Leverage: Ensure content exists
+  const hasContent = seasons && seasons.length > 0;
+  const featured = hasContent ? seasons[0] : undefined;
+
   return (
   <>
-    <HeroSection />
+    <HeroSection featuredSeason={featured} />
     <div style={{ padding: '0 4%', marginBottom: '2rem' }}>
       <h2 className="text-gradient" style={{ marginBottom: '1.5rem', fontSize: '2rem' }}>Todas as Temporadas</h2>
+      
+      {!hasContent && (
+        <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
+          <p>Carregando missões de inteligência...</p>
+        </div>
+      )}
+
       <div style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
