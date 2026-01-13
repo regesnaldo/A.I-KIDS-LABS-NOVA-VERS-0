@@ -1,24 +1,37 @@
 import { Link } from 'react-router-dom';
 
-const HeroSection = () => {
+const HeroSection = ({ featuredSeason }: HeroSectionProps) => {
+  // Debug Log for Leverage
+  console.log('Rendering HeroSection. Featured:', featuredSeason);
+
+  const bgImage = featuredSeason?.coverImage || featuredSeason?.image || '/assets/hero-bg.jpg';
+  const title = featuredSeason ? (featuredSeason.title || featuredSeason.titulo) : 'A.I. KIDS LABS';
+  const description = featuredSeason ? (featuredSeason.description || featuredSeason.descricao) : 'Aprenda Inteligência Artificial e Programação se divertindo. Missões interativas para todas as idades.';
+
   return (
     <div className="hero" style={{ 
       position: 'relative', 
       height: '80vh', 
       width: '100%', 
-      background: '#111', // Fallback color
-      backgroundImage: 'url(/assets/hero-bg.jpg)', 
+      // Leverage: Safe background stack (Color -> Gradient -> Image)
+      backgroundColor: '#111', 
+      background: 'linear-gradient(to bottom, #111 0%, #222 100%)',
+      backgroundImage: `url(${bgImage})`, 
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       display: 'flex',
       alignItems: 'flex-end',
       paddingBottom: '150px',
       boxSizing: 'border-box',
-      // maskImage removed for compatibility
+      // Leverage: Explicitly disable dangerous masks
+      maskImage: 'none',
+      WebkitMaskImage: 'none'
     }}>
+      {/* Leverage: Fallback gradient overlay for readability */}
       <div style={{ 
         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, 
-        background: 'linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' 
+        background: 'linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)',
+        zIndex: 1
       }}></div>
 
       <div className="hero-content animate-slide-up" style={{ 
