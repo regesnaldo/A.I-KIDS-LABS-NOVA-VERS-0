@@ -6,6 +6,7 @@ const HeroSection = () => {
       position: 'relative', 
       height: '80vh', 
       width: '100%', 
+      background: '#111', // Fallback color
       backgroundImage: 'url(/assets/hero-bg.jpg)', 
       backgroundSize: 'cover',
       backgroundPosition: 'center',
@@ -13,8 +14,7 @@ const HeroSection = () => {
       alignItems: 'flex-end',
       paddingBottom: '150px',
       boxSizing: 'border-box',
-      maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)',
-      WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)' // Cross-browser
+      // maskImage removed for compatibility
     }}>
       <div style={{ 
         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, 

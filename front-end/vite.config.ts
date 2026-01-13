@@ -1,4 +1,4 @@
-// Trigger deploy: Auto-tunnel config applied
+// Trigger deploy: Fix HeroSection mask and logging
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 

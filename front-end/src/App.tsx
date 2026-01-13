@@ -16,6 +16,7 @@ import { MissionModule } from './types';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LandingPage = ({ seasons }: { seasons: any[] }) => {
   const navigate = useNavigate();
+  console.log("Rendering LandingPage. Seasons:", seasons);
   return (
   <>
     <HeroSection />
