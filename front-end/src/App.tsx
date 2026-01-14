@@ -10,6 +10,10 @@ import SeasonDetailsPage from './components/SeasonDetailsPage';
 import HeroSection from './components/HeroSection';
 import api, { waitForBackend, onConnectionChange } from './services/api';
 import { Season } from './types';
+import type { Season, MissionModule } from './types';
+const debugLog = (...args: unknown[]) => {
+  if (import.meta.env.DEV) console.log(...args);
+};
 
 // --- Page Components ---
 
@@ -221,7 +225,7 @@ const App = () => {
       <div>Loading: {loading ? 'true' : 'false'}</div>
       <div>Seasons: {temporadasData.length}</div>
       <hr style={{ borderColor: '#333', margin: '5px 0' }}/>
-      {debugLog.map((log, i) => (
+      {debugLog.map((log: string, i: number) => (
         <div key={i}>{log}</div>
       ))}
     </div>
@@ -344,3 +348,4 @@ const App = () => {
 };
 
 export default App;
+
