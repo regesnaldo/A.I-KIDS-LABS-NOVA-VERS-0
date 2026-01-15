@@ -1,6 +1,6 @@
 const db = require('../config/db');
-const History = require('./history');
-const Video = require('./video');
+const History = require('./History');
+const Video = require('./Video'); 
 
 // Modelo de Recomendação (Mock / IA Placeholder)
 // Estrutura pronta para receber lógica real de ML/IA futuramente
