@@ -1,4 +1,9 @@
 import { Link } from 'react-router-dom';
+import { Season } from '../types';
+
+interface HeroSectionProps {
+  featuredSeason?: Season;
+}
 
 const HeroSection = ({ featuredSeason }: HeroSectionProps) => {
   // Debug Log for Leverage

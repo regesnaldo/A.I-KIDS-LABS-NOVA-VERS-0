@@ -7,10 +7,11 @@ export default defineConfig({
   plugins: [react()],
   base: '/', // Ensure absolute paths for Vercel
   server: {
+    host: true, // Listen on all addresses
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:5000',
+        target: process.env.VITE_API_URL || 'http://localhost:4000',
         changeOrigin: true,
         secure: false,
       }

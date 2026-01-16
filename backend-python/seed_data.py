@@ -26,7 +26,7 @@ def seed():
                 numero=t,
                 titulo=f"Temporada {t}",
                 descricao=f"Aprendizados de IA – Temporada {t}",
-                imagem=f"https://cdn.kidslabs.com/covers/t{t}.jpg"
+                imagem=f"https://placehold.co/600x400/1a1a1a/FFF?text=Temporada+{t}"
             )
             db.session.add(season)
             db.session.flush()  # garante season.id

@@ -15,11 +15,11 @@ const SeasonDetailsPage = () => {
     useEffect(() => {
         const fetchMissions = async () => {
             try {
-                console.log(`Fetching missions for season ${id}...`);
                 const response = await api.get(`/seasons/${id}/missions`);
-                console.log("Missions response:", response.data);
                 setSeason(response.data.season);
-                setMissions(response.data.missions);
+                const missionsData = response.data.missions;
+                // Fix: Ensure missions is always an array to prevent "map is not a function" error
+                setMissions(Array.isArray(missionsData) ? missionsData : []);
             } catch (error) {
                 console.error("Failed to fetch missions", error);
             } finally {

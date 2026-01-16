@@ -30,6 +30,12 @@ const SeasonMissions: React.FC<SeasonMissionsProps> = ({ missions, loading }) =>
         );
     }
 
+    // Fix: Ensure missions is an array before checking length or mapping
+    if (!Array.isArray(missions)) {
+        console.error("SeasonMissions received invalid data:", missions);
+        return null;
+    }
+
     if (missions.length === 0) {
         return (
             <div style={{ 

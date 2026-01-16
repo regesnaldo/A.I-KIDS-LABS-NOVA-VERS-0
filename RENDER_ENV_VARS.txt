@@ -1,0 +1,21 @@
+# RENDER ENVIRONMENT VARIABLES CONFIGURATION
+# COPIE O CONTEÚDO ABAIXO E COLE NO CAMPO "Environment Variables" DO RENDER
+# OU USE A OPÇÃO "Secret Files" E NOMEIE COMO .env
+
+# DATABASE_URL (Neon)
+# Se você já tem a URL do Neon, substitua abaixo.
+# Se não, vá ao console do Neon (neon.tech) > Dashboard > Connection Details
+DATABASE_URL=postgres://user:password@host/db?sslmode=require
+
+# JWT_SECRET (Gerado Automaticamente)
+JWT_SECRET=37f47dd09a25102e9e756145b888a0b07f8c9d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5
+
+# CORS_ORIGIN (Frontend URL)
+# Substitua pela URL real do seu frontend na Vercel
+CORS_ORIGIN=https://seu-projeto-vercel.app
+
+# NODE_ENV
+NODE_ENV=production
+
+# PORT (Render injeta isso automaticamente, mas bom ter como fallback)
+PORT=10000

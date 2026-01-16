@@ -1,75 +1,130 @@
+
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const dotenv = require('dotenv');
+const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Carrega variáveis de ambiente
 dotenv.config();
 
-// Inicializa configurações do banco
-const db = require('./config/db');
-const User = require('./models/user');
-const Video = require('./models/video');
-const History = require('./models/history');
-const Recommendation = require('./models/recommendation');
-
-// Importa Rotas
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const videoRoutes = require('./routes/videos');
-const historyRoutes = require('./routes/history');
-const recommendationRoutes = require('./routes/recommendations');
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const prisma = new PrismaClient();
+const PORT = process.env.PORT || 4000;
+const JWT_SECRET = process.env.JWT_SECRET || 'secret_dev_key';
 
 // Middleware
-app.use(cors()); // Habilita CORS para todas as origens (ajustar em produção)
-app.use(express.json({ extended: false })); // Parsing de JSON no body
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || '*', // Permitir configurar via env
+    credentials: true
+}));
+app.use(express.json());
 
-// Logging de requisições (Middleware simples)
+// Logging
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next();
 });
 
-// Rotas da API
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/videos', videoRoutes);
-app.use('/api/history', historyRoutes);
-app.use('/api/recommendations', recommendationRoutes);
+// --- Rotas ---
 
-// Endpoint de Status (Health Check)
-app.get(['/api/status', '/api/health'], (req, res) => {
-    res.json({ 
-        status: 'online', 
-        uptime: process.uptime(),
-        environment: process.env.NODE_ENV || 'development',
-        timestamp: new Date()
-    });
+// Health Check
+app.get(['/', '/health', '/api/health'], async (req, res) => {
+    try {
+        // Teste simples de banco
+        await prisma.$queryRaw`SELECT 1`;
+        res.json({ status: 'online', database: 'connected', version: '1.0.0' });
+    } catch (error) {
+        console.error('Database health check failed:', error);
+        res.status(500).json({ status: 'error', database: 'disconnected', error: error.message });
+    }
 });
 
-// Inicialização do Banco de Dados (Cria tabelas se não existirem)
-const initDB = async () => {
+// Auth Routes
+app.post('/api/auth/register', async (req, res) => {
+    const { email, password, name } = req.body;
     try {
-        await User.init();
-        await Video.init();
-        await History.init();
-        await Recommendation.init();
-        console.log('✅ Banco de dados inicializado com sucesso.');
-    } catch (err) {
-        console.error('❌ Erro ao inicializar banco de dados:', err);
-    }
-};
+        const existingUser = await prisma.user.findUnique({ where: { email } });
+        if (existingUser) return res.status(400).json({ error: 'User already exists' });
 
-// Inicia o Servidor
-app.listen(PORT, async () => {
-    await initDB();
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await prisma.user.create({
+            data: { email, password: hashedPassword, name }
+        });
+
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });
+        res.json({ token, user: { id: user.id, email: user.email, name: user.name } });
+    } catch (error) {
+        res.status(500).json({ error: 'Registration failed' });
+    }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) return res.status(400).json({ error: 'Invalid credentials' });
+
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });
+        res.json({ token, user: { id: user.id, email: user.email, name: user.name } });
+    } catch (error) {
+        res.status(500).json({ error: 'Login failed' });
+    }
+});
+
+// Content Routes
+app.get('/api/seasons', async (req, res) => {
+    try {
+        const seasons = await prisma.season.findMany({
+            orderBy: { createdAt: 'asc' } // Ajuste conforme seu modelo, use 'order' se tiver
+        });
+        res.json(seasons);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch seasons' });
+    }
+});
+
+app.get('/api/seasons/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const season = await prisma.season.findUnique({ where: { id } });
+        if (!season) return res.status(404).json({ error: 'Season not found' });
+        res.json(season);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch season' });
+    }
+});
+
+app.get('/api/seasons/:id/missions', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const season = await prisma.season.findUnique({ 
+            where: { id },
+            include: { missions: { orderBy: { order: 'asc' } } }
+        });
+        
+        if (!season) return res.status(404).json({ error: 'Season not found' });
+        
+        // Retorna formato esperado pelo frontend
+        res.json({
+            season: season,
+            missions: season.missions || []
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch missions' });
+    }
+});
+
+// Inicialização
+app.listen(PORT, () => {
     console.log(`
-    🚀 Servidor rodando na porta ${PORT}
-    🌐 Ambiente: ${process.env.NODE_ENV || 'development'}
-    📂 Banco de Dados: SQLite
-    👉 Health Check: http://localhost:${PORT}/api/status
+    🚀 Backend MVP rodando na porta ${PORT}
+    DATABASE_URL: ${process.env.DATABASE_URL ? 'Configurada' : 'Não configurada'}
     `);
 });

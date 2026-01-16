@@ -10,10 +10,7 @@ import SeasonDetailsPage from './components/SeasonDetailsPage';
 import HeroSection from './components/HeroSection';
 import api, { waitForBackend, onConnectionChange } from './services/api';
 import { Season } from './types';
-import type { Season, MissionModule } from './types';
-const debugLog = (...args: unknown[]) => {
-  if (import.meta.env.DEV) console.log(...args);
-};
+import type { MissionModule } from './types';
 
 // --- Page Components ---
 
@@ -46,8 +43,8 @@ const LandingPage = ({ seasons }: { seasons: Season[] }) => {
         {seasons.map((season) => (
           <SeasonCard 
             key={season.id}
-            title={season.title || season.titulo}
-            description={season.description || season.descricao}
+            title={season.title || season.titulo || 'Sem título'}
+            description={season.description || season.descricao || 'Sem descrição'}
             image={season.image || season.imagem}
             onClick={() => navigate(`/season/${season.id}`)}
           />
@@ -82,8 +79,8 @@ const MissoesPage = ({ temporadasData }: { temporadasData: any[] }) => {
         {temporadasData.map((season) => (
           <SeasonCard 
             key={season.id}
-            title={season.title || season.titulo}
-            description={season.description || season.descricao}
+            title={season.title || season.titulo || 'Sem título'}
+            description={season.description || season.descricao || 'Sem descrição'}
             image={season.image}
             onClick={() => navigate(`/season/${season.id}`)}
           />
@@ -183,10 +180,11 @@ const App = () => {
       
       try {
         const response = await api.get('/seasons');
-        console.log("Seasons response:", response);
         if (response.data) {
-          console.log("Seasons count:", response.data.length);
-          setTemporadasData(response.data);
+          const seasonsData = response.data;
+          // Fix: Ensure seasons data is an array
+          const validSeasons = Array.isArray(seasonsData) ? seasonsData : [];
+          setTemporadasData(validSeasons);
         }
       } catch (error) {
         console.error("Failed to fetch data", error);
@@ -225,9 +223,6 @@ const App = () => {
       <div>Loading: {loading ? 'true' : 'false'}</div>
       <div>Seasons: {temporadasData.length}</div>
       <hr style={{ borderColor: '#333', margin: '5px 0' }}/>
-      {debugLog.map((log: string, i: number) => (
-        <div key={i}>{log}</div>
-      ))}
     </div>
   );
 
@@ -329,9 +324,9 @@ const App = () => {
             </button>
             <div style={{ width: '90%', height: '90%', maxWidth: '1400px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <VideoPlayer 
-                    videoUrl={playingModule.videoUrl} 
-                    title={playingModule.title}
-                    thumbnailUrl={playingModule.thumbnailUrl}
+                    videoUrl={playingModule.video_url || playingModule.videoUrl || ''} 
+                    title={playingModule.title || playingModule.titulo}
+                    thumbnailUrl={playingModule.thumbnailUrl || playingModule.thumb}
                     onProgressUpdate={() => {}}
                     onVideoComplete={() => {}}
                 />

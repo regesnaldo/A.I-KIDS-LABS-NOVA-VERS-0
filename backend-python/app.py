@@ -31,7 +31,7 @@ def create_app():
     # Inicializa extensões
     db.init_app(app)
     jwt.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": ["https://seu-portal-neon.com", "http://localhost:3000"]}})
+    cors.init_app(app, resources={r"/api/*": {"origins": ["https://a-i-kids-labs-nova-vers-0.vercel.app", "https://a-i-kids-labs-nova-vers-o.vercel.app", "http://localhost:3000", "http://localhost:5173"]}})
 
     # Registra Blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')

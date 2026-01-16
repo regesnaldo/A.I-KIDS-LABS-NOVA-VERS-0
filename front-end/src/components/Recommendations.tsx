@@ -53,13 +53,15 @@ const Recommendations = () => {
             key={module.id} 
             module={{
               id: module.id,
+              titulo: module.title || module.titulo, // Ensure titulo is provided
               title: module.title,
               description: module.description || '',
               thumbnailUrl: module.thumbnailUrl,
               videoUrl: module.videoUrl,
-              duration: module.duration, // Use directly as it is a string
+              video_url: module.video_url || module.videoUrl, // Ensure video_url is provided
+              duration: module.duration, 
               difficulty: module.difficulty || 'easy',
-              state: 'locked', // Default state
+              state: 'locked', 
               seasonId: 'rec',
               category: module.category || 'ia'
             }} 
