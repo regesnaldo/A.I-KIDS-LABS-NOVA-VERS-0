@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface MissionData {
-    id: number;
+    id: string;
     numero: number;
     titulo: string;
     description: string;

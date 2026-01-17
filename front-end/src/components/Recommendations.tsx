@@ -10,16 +10,18 @@ const Recommendations = () => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const data = await recommendationsAPI.getRecommendations();
-        // Se a API retornar um objeto com 'data', usamos ele, senão usamos o array direto
-        const modules = data.data || data; 
-        
-        // Mapear para o formato MissionModule se necessário
-        // Aqui assumimos que o backend já retorna compatível ou fazemos adapter
-        setRecommendations(Array.isArray(modules) ? modules : []);
-      } catch (error) {
-        console.error("Erro ao carregar recomendações:", error);
-        // Fallback mock se falhar
+        const rows = await recommendationsAPI.getRecommendations();
+        setRecommendations(
+          rows.map((row) => ({
+            id: row.id,
+            titulo: row.titulo,
+            description: row.description,
+            thumb: row.thumb ?? undefined,
+            state: row.locked ? 'locked' : 'unlocked',
+            seasonId: row.season_id,
+          }))
+        );
+      } catch {
         setRecommendations([]);
       } finally {
         setLoading(false);
@@ -48,24 +50,23 @@ const Recommendations = () => {
         gap: '20px'
       }}>
         {recommendations.map((module: MissionModule) => (
-          // Adapter simples para garantir compatibilidade com LabCard
           <LabCard 
             key={module.id} 
             module={{
               id: module.id,
-              titulo: module.title || module.titulo, // Ensure titulo is provided
+              titulo: module.title || module.titulo,
               title: module.title,
               description: module.description || '',
               thumbnailUrl: module.thumbnailUrl,
               videoUrl: module.videoUrl,
-              video_url: module.video_url || module.videoUrl, // Ensure video_url is provided
+              video_url: module.video_url || module.videoUrl,
               duration: module.duration, 
               difficulty: module.difficulty || 'easy',
-              state: 'locked', 
-              seasonId: 'rec',
+              state: module.state || 'locked', 
+              seasonId: module.seasonId || 'rec',
               category: module.category || 'ia'
             }} 
-            onPlay={() => console.log('Play recomendação', module.id)}
+            onPlay={() => {}}
           />
         ))}
       </div>

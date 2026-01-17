@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { LogOut, User, Menu } from 'lucide-react';
+import { LogOut, User, Menu, Activity } from 'lucide-react';
 
 interface NavbarProps {
   onOpenChat?: () => void;
@@ -96,6 +96,11 @@ const Navbar: React.FC<NavbarProps> = ({ onOpenChat }) => {
             }}>
               <User size={20} color="white" />
             </div>
+            
+            <Link to="/status" title="Status do Sistema">
+              <Activity size={20} color="#00ff88" style={{ cursor: 'pointer', opacity: 0.8 }} />
+            </Link>
+
             <LogOut size={20} color="#ff4444" style={{ cursor: 'pointer', opacity: 0.8 }} onClick={() => {
               console.log('Logout clicked');
               localStorage.removeItem('user');

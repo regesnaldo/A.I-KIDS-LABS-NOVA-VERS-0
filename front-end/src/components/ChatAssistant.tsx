@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { chatAPI } from '../services/api';
+import { authAPI } from '../services/api';
 
 interface Message {
   id: string;
@@ -50,21 +51,8 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ isOpen, onToggle }) => {
     setIsTyping(true);
 
     try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const response = await chatAPI.sendMessage(userMsg.text, { moduleId: 'current-context' }); // Context logic can be improved
-        
-        if (response.success) {
-          const aiMsg: Message = {
-            id: Date.now().toString() + '_ai',
-            text: response.data.message,
-            sender: 'ai',
-            timestamp: new Date(response.data.timestamp)
-          };
-          setMessages(prev => [...prev, aiMsg]);
-        }
-      } else {
-        // Fallback for demo without login
+      const session = await authAPI.getSession();
+      if (!session) {
         setTimeout(() => {
           const aiMsg: Message = {
             id: Date.now().toString() + '_ai',
@@ -74,6 +62,26 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ isOpen, onToggle }) => {
           };
           setMessages(prev => [...prev, aiMsg]);
         }, 1000);
+        return;
+      }
+
+      const response = await chatAPI.sendMessage(userMsg.text, { moduleId: 'current-context' });
+      if (response.success) {
+        const aiMsg: Message = {
+          id: Date.now().toString() + '_ai',
+          text: response.data.message,
+          sender: 'ai',
+          timestamp: new Date(response.data.timestamp)
+        };
+        setMessages(prev => [...prev, aiMsg]);
+      } else {
+        const errorMsg: Message = {
+          id: Date.now().toString() + '_error',
+          text: response.error,
+          sender: 'ai',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMsg]);
       }
     } catch (error) {
       console.error("Chat error", error);

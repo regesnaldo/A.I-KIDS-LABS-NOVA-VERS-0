@@ -29,7 +29,7 @@ export type Season = {
   ageRange?: string;
   missions?: MissionModule[];
   order?: number;
-  phase?: number | any;
+  phase?: number | string;
   status?: string;
   coverImage?: string;
   featured?: boolean;

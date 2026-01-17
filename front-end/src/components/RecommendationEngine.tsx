@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { modulesAPI } from '../services/api';
+import { authAPI } from '../services/api';
 
 interface Recommendation {
   type: 'continue_watching' | 'next_up' | 'starter';
@@ -17,13 +18,12 @@ const RecommendationEngine: React.FC = () => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        // Check if user is logged in (has token)
-        const token = localStorage.getItem('token');
-        if (token) {
-          const response = await modulesAPI.getRecommendations();
-          if (response.success) {
-            setRecommendations(response.data);
-          }
+        const session = await authAPI.getSession();
+        if (!session) return;
+
+        const response = await modulesAPI.getRecommendations();
+        if (response.success) {
+          setRecommendations(response.data as Recommendation[]);
         }
       } catch (error) {
         console.error('Failed to fetch recommendations', error);

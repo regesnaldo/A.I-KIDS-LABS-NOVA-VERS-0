@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 .trae/
 
+# Env (não versionar)
+.env
+.env.*
+front-end/.env
+front-end/.env.*
+

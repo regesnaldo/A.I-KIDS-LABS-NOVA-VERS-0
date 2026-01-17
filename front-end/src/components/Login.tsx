@@ -2,8 +2,7 @@ import { useState, FormEvent } from 'react';
 import { authAPI } from '../services/api';
 
 interface LoginProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onLogin: (user: any) => void;
+  onLogin: () => void;
 }
 
 const Login = ({ onLogin }: LoginProps) => {
@@ -20,25 +19,21 @@ const Login = ({ onLogin }: LoginProps) => {
     setLoading(true);
     
     try {
-      let data;
-      if (isLogin) {
-        data = await authAPI.login({ email, password });
-      } else {
-        data = await authAPI.register({ name, email, password, age: 10 });
-      }
+      const data = isLogin
+        ? await authAPI.login({ email, password })
+        : await authAPI.register({ name, email, password });
 
-      if (data.success || data.token || data.access_token) {
-        localStorage.setItem('token', data.token || data.access_token);
-        if (data.user) {
-            localStorage.setItem('user', JSON.stringify(data.user));
-        }
-        onLogin(data.user || { name: 'User', email }); 
-      } else {
-        setError(data.msg || data.error || 'Erro na autenticação');
+      if (!data.success) {
+        setError(data.error);
+        return;
       }
+      if (!data.token) {
+        setError('Confirme seu email para concluir o acesso.');
+        return;
+      }
+      onLogin();
     } catch (err) {
-      console.error(err);
-      setError('Erro de conexão com o servidor.');
+      setError(err instanceof Error ? err.message : 'Erro inesperado.');
     } finally {
       setLoading(false);
     }

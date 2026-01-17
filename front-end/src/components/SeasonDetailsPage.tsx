@@ -1,27 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import { seasonsAPI } from '../services/api';
 import SeasonMissions, { MissionData } from './SeasonMissions';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SeasonData = {
+    id: string;
+    title: string;
+    description: string;
+    image: string | null;
+};
+
 const SeasonDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [season, setSeason] = useState<any>(null);
+    const [season, setSeason] = useState<SeasonData | null>(null);
     const [missions, setMissions] = useState<MissionData[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchMissions = async () => {
             try {
-                const response = await api.get(`/seasons/${id}/missions`);
-                setSeason(response.data.season);
-                const missionsData = response.data.missions;
-                // Fix: Ensure missions is always an array to prevent "map is not a function" error
-                setMissions(Array.isArray(missionsData) ? missionsData : []);
-            } catch (error) {
-                console.error("Failed to fetch missions", error);
+                if (!id) return;
+                const response = await seasonsAPI.getSeasonWithMissions(id);
+                setSeason(response.season);
+                setMissions(
+                    response.missions.map((m) => ({
+                        id: m.id,
+                        numero: m.numero,
+                        titulo: m.titulo,
+                        description: m.description,
+                        thumb: m.thumb ?? '',
+                        locked: m.locked,
+                    }))
+                );
+            } catch {
+                setSeason(null);
+                setMissions([]);
             } finally {
                 setLoading(false);
             }
@@ -65,7 +79,7 @@ const SeasonDetailsPage = () => {
                 <div style={{ position: 'relative' }}>
                     <div style={{ position: 'absolute', inset: -2, background: 'linear-gradient(45deg, #00ff88, #00ccff)', borderRadius: '10px', filter: 'blur(10px)', opacity: 0.5 }}></div>
                     <img 
-                        src={season.image} 
+                        src={season.image ?? ''} 
                         alt={season.title} 
                         style={{ position: 'relative', width: '300px', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)', zIndex: 1 }} 
                     />

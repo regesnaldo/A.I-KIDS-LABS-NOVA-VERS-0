@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react';
+import type { User } from '@supabase/supabase-js';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import './neon-styles.css'
+import './neon-styles.css';
 import Navbar from './components/Navbar';
 import ChatAssistant from './components/ChatAssistant';
 import VideoPlayer from './components/VideoPlayer';
 import Login from './components/Login';
 import SeasonCard from './components/SeasonCard';
 import SeasonDetailsPage from './components/SeasonDetailsPage';
+import SystemHealth from './components/SystemHealth';
 import HeroSection from './components/HeroSection';
-import api, { waitForBackend, onConnectionChange } from './services/api';
+import { supabase } from './lib/supabaseClient';
+import { seasonsAPI } from './services/api';
 import { Season } from './types';
 import type { MissionModule } from './types';
 
@@ -16,7 +19,6 @@ import type { MissionModule } from './types';
 
 const LandingPage = ({ seasons }: { seasons: Season[] }) => {
   const navigate = useNavigate();
-  console.log("Rendering LandingPage. Seasons:", seasons);
 
   // Defensive Leverage: Ensure content exists
   const hasContent = seasons && seasons.length > 0;
@@ -55,17 +57,8 @@ const LandingPage = ({ seasons }: { seasons: Season[] }) => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const MissoesPage = ({ temporadasData }: { temporadasData: any[] }) => {
+const MissoesPage = ({ temporadasData }: { temporadasData: Season[] }) => {
   const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.warn("Acesso não autorizado detectado em Missões.");
-    } else {
-      console.log("Credencial de acesso validada para Missões. Token presente.");
-    }
-  }, []);
 
   return (
     <section style={{ padding: '2rem 4%' }}>
@@ -126,157 +119,54 @@ const ConquistasPage = () => (
 );
 
 const App = () => {
-  const [user, setUser] = useState<unknown>(null);
-  const [playingModule, setPlayingModule] = React.useState<MissionModule | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [temporadasData, setTemporadasData] = useState<any[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [playingModule, setPlayingModule] = useState<MissionModule | null>(null);
+  const [temporadasData, setTemporadasData] = useState<Season[]>([]);
   const [loading, setLoading] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  
-  // Connection States: 'checking' (initial), 'online', 'reconnecting', 'offline'
-  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'online' | 'reconnecting' | 'offline'>('checking');
 
-  // Monitor Connection
   useEffect(() => {
-    const unsubscribe = onConnectionChange((status) => {
-      setConnectionStatus(status);
-      if (status === 'offline') {
-        waitForBackend().then(success => {
-            if (!success) setConnectionStatus('offline');
-        });
-      }
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+      setLoading(false);
     });
 
-    const checkServer = async () => {
-      const isReady = await waitForBackend(5, 1000);
-      if (isReady) {
-        setConnectionStatus('online');
-      } else {
-        setConnectionStatus('offline');
-      }
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      data.subscription.unsubscribe();
     };
-    checkServer();
-
-    return () => unsubscribe();
   }, []);
 
-  // Load User from LocalStorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-    } else {
-        setLoading(false); // Stop loading if no user, allowing Landing Page to show
-    }
-  }, []);
-
-  // Fetch Data (Only if online)
   useEffect(() => {
     const fetchData = async () => {
-      if (connectionStatus !== 'online') {
-          return;
-      }
-      
       try {
-        const response = await api.get('/seasons');
-        if (response.data) {
-          const seasonsData = response.data;
-          // Fix: Ensure seasons data is an array
-          const validSeasons = Array.isArray(seasonsData) ? seasonsData : [];
-          setTemporadasData(validSeasons);
-        }
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-      } finally {
-        setLoading(false);
+        const rows = await seasonsAPI.getAll();
+        setTemporadasData(
+          rows.map((row) => ({
+            id: row.id,
+            title: row.title,
+            description: row.description,
+            image: row.image ?? undefined,
+          }))
+        );
+      } catch {
+        setTemporadasData([]);
       }
     };
 
     fetchData();
-  }, [user, connectionStatus]);
+  }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleLogin = (userData: any) => {
-      setUser(userData);
-      setLoading(true); 
+  const handleLogin = () => {
+    setLoading(false);
   };
-
-  // --- CONNECTION SCREENS ---
-
-  const DebugOverlay = () => (
-    <div style={{
-      position: 'fixed',
-      bottom: '10px',
-      right: '10px',
-      background: 'rgba(0,0,0,0.8)',
-      color: '#0f0',
-      padding: '10px',
-      borderRadius: '5px',
-      fontSize: '10px',
-      fontFamily: 'monospace',
-      zIndex: 9999,
-      pointerEvents: 'none',
-      border: '1px solid #333'
-    }}>
-      <div>Status: {connectionStatus}</div>
-      <div>Loading: {loading ? 'true' : 'false'}</div>
-      <div>Seasons: {temporadasData.length}</div>
-      <hr style={{ borderColor: '#333', margin: '5px 0' }}/>
-    </div>
-  );
-
-  if (connectionStatus === 'offline') {
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#050505', color: '#ff4444' }}>
-            <DebugOverlay />
-            <h2 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '1rem' }}>SISTEMA OFFLINE</h2>
-            <p style={{ color: '#aaa', marginBottom: '2rem' }}>Não foi possível conectar ao servidor neural.</p>
-            <button 
-                onClick={() => {
-                    setConnectionStatus('reconnecting');
-                    waitForBackend();
-                }} 
-                style={{ 
-                    padding: '12px 30px', 
-                    background: 'var(--primary)', 
-                    color: '#000', 
-                    border: 'none', 
-                    borderRadius: '50px', 
-                    fontWeight: 'bold', 
-                    cursor: 'pointer',
-                    fontSize: '1rem'
-                }}
-            >
-                TENTAR NOVAMENTE
-            </button>
-        </div>
-      );
-  }
-
-  if (connectionStatus === 'checking' || connectionStatus === 'reconnecting') {
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#050505', color: '#0f0' }}>
-            <h2 className="text-gradient" style={{ animation: 'pulse 2s infinite' }}>
-                {connectionStatus === 'reconnecting' ? 'RECONECTANDO SISTEMA...' : 'INICIANDO PROTOCOLOS...'}
-            </h2>
-            <div className="loading-bar" style={{ width: '200px', height: '4px', background: '#333', marginTop: '20px', overflow: 'hidden', borderRadius: '2px' }}>
-                <div style={{ width: '50%', height: '100%', background: 'var(--primary)', animation: 'loading 1s infinite' }}></div>
-            </div>
-            {connectionStatus === 'reconnecting' && (
-                <p style={{ marginTop: '20px', color: '#666', fontSize: '0.9rem' }}>Aguardando servidor...</p>
-            )}
-        </div>
-      );
-  }
-
-  // Remove early return for !user to allow Landing Page
-  // if (!user) return <Login onLogin={handleLogin} />;
 
   if (loading && user && temporadasData.length === 0) {
       return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#000', color: '#0f0' }}>
-          <DebugOverlay />
           LOADING SYSTEM...
         </div>
       );
@@ -308,6 +198,7 @@ const App = () => {
             />
 
             <Route path="/season/:id" element={<SeasonDetailsPage />} />
+            <Route path="/status" element={<SystemHealth />} />
             
             {/* Fallback to Landing */}
             <Route path="*" element={<Navigate to="/" replace />} />
@@ -331,8 +222,8 @@ const App = () => {
                     onVideoComplete={() => {}}
                 />
                 <div style={{ marginTop: '20px', color: '#ccc', textAlign: 'left', maxWidth: '800px', margin: '20px auto' }}>
-                <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>{playingModule.title}</h2>
-                <p style={{ fontSize: '1.2rem', marginBottom: '10px' }}>{playingModule.description}</p>
+                <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>{playingModule.title || playingModule.titulo}</h2>
+                <p style={{ fontSize: '1.2rem', marginBottom: '10px' }}>{playingModule.description || playingModule.descricao}</p>
                 <span style={{ background: '#333', padding: '4px 12px', borderRadius: '4px', fontSize: '0.9rem', color: '#fff' }}>{playingModule.category}</span>
                 </div>
             </div>
@@ -343,4 +234,3 @@ const App = () => {
 };
 
 export default App;
-

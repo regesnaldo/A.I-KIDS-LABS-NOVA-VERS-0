@@ -1,135 +1,154 @@
-import axios from 'axios';
+import type { Session, User } from '@supabase/supabase-js';
+import { supabase } from '../lib/supabaseClient';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
-// console.log('API Configured URL:', API_URL);
+type AuthResponse =
+  | { success: true; token: string; user: { id: string; email: string; name?: string | null } }
+  | { success: false; error: string };
 
-const api = axios.create({
-    baseURL: API_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    }
-});
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+const toAuthUser = (user: User) => ({
+  id: user.id,
+  email: user.email ?? '',
+  name: (user.user_metadata?.name as string | undefined) ?? null,
 });
 
 export const authAPI = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    login: async (credentials: any) => {
-        const response = await api.post('/auth/login', credentials);
-        return response.data;
-    },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    register: async (userData: any) => {
-        const response = await api.post('/auth/register', userData);
-        return response.data;
+  login: async (credentials: { email: string; password: string }): Promise<AuthResponse> => {
+    const { data, error } = await supabase.auth.signInWithPassword(credentials);
+    if (error || !data.session || !data.user) {
+      return { success: false, error: error?.message ?? 'Falha no login' };
     }
+    return { success: true, token: data.session.access_token, user: toAuthUser(data.user) };
+  },
+  register: async (userData: { name?: string; email: string; password: string }): Promise<AuthResponse> => {
+    const { data, error } = await supabase.auth.signUp({
+      email: userData.email,
+      password: userData.password,
+      options: { data: { name: userData.name } },
+    });
+    if (error || !data.user) {
+      return { success: false, error: error?.message ?? 'Falha no cadastro' };
+    }
+    const token = data.session?.access_token ?? '';
+    return { success: true, token, user: toAuthUser(data.user) };
+  },
+  logout: async (): Promise<{ success: true } | { success: false; error: string }> => {
+    const { error } = await supabase.auth.signOut();
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  },
+  getSession: async (): Promise<Session | null> => {
+    const { data } = await supabase.auth.getSession();
+    return data.session ?? null;
+  },
 };
 
-export const modulesAPI = {
-    getAllModules: async () => {
-        const response = await api.get('/modules');
-        return response.data;
-    },
-    getModuleById: async (id: string) => {
-        const response = await api.get(`/modules/${id}`);
-        return response.data;
-    },
-    getRecommendations: async () => {
-        const response = await api.get('/recommendations');
-        return response.data;
-    }
+type SeasonRow = {
+  id: string;
+  title: string;
+  description: string;
+  image: string | null;
+};
+
+type MissionRow = {
+  id: string;
+  season_id: string;
+  numero: number;
+  titulo: string;
+  description: string;
+  thumb: string | null;
+  locked: boolean;
+};
+
+export const seasonsAPI = {
+  getAll: async (): Promise<SeasonRow[]> => {
+    const { data, error } = await supabase
+      .from('seasons')
+      .select('id,title,description,image')
+      .order('id', { ascending: true });
+    if (error) throw error;
+    return data ?? [];
+  },
+  getSeasonWithMissions: async (
+    seasonId: string
+  ): Promise<{ season: SeasonRow; missions: MissionRow[] }> => {
+    const { data: season, error: seasonError } = await supabase
+      .from('seasons')
+      .select('id,title,description,image')
+      .eq('id', seasonId)
+      .single();
+    if (seasonError || !season) throw seasonError ?? new Error('Temporada não encontrada');
+
+    const { data: missions, error: missionsError } = await supabase
+      .from('missions')
+      .select('id,season_id,numero,titulo,description,thumb,locked')
+      .eq('season_id', seasonId)
+      .order('numero', { ascending: true });
+    if (missionsError) throw missionsError;
+
+    return { season, missions: missions ?? [] };
+  },
 };
 
 export const recommendationsAPI = {
-    getRecommendations: async () => {
-        const response = await api.get('/recommendations');
-        return response.data;
+  getRecommendations: async (): Promise<MissionRow[]> => {
+    const { data, error } = await supabase
+      .from('missions')
+      .select('id,season_id,numero,titulo,description,thumb,locked')
+      .eq('locked', false)
+      .order('numero', { ascending: true })
+      .limit(12);
+    if (error) throw error;
+    return data ?? [];
+  },
+};
+
+export const modulesAPI = {
+  getAllModules: async (): Promise<MissionRow[]> => {
+    const { data, error } = await supabase
+      .from('missions')
+      .select('id,season_id,numero,titulo,description,thumb,locked')
+      .order('season_id', { ascending: true })
+      .order('numero', { ascending: true });
+    if (error) throw error;
+    return data ?? [];
+  },
+  getModuleById: async (id: string): Promise<MissionRow | null> => {
+    const { data, error } = await supabase
+      .from('missions')
+      .select('id,season_id,numero,titulo,description,thumb,locked')
+      .eq('id', id)
+      .maybeSingle();
+    if (error) throw error;
+    return data ?? null;
+  },
+  getRecommendations: async (): Promise<{ success: true; data: unknown[] } | { success: false; error: string }> => {
+    try {
+      const data = await recommendationsAPI.getRecommendations();
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: e instanceof Error ? e.message : 'Falha ao buscar recomendações' };
     }
+  },
 };
 
 export const chatAPI = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    sendMessage: async (message: string, context: any = {}) => {
-        // Assuming the backend has a /chat endpoint
-        const response = await api.post('/chat', { message, context });
-        return response.data;
-    }
-};
-
-// --- Connection Management ---
-
-type ConnectionStatus = 'online' | 'offline' | 'reconnecting';
-type ConnectionListener = (status: ConnectionStatus) => void;
-
-const listeners: ConnectionListener[] = [];
-let isReconnecting = false;
-
-export const onConnectionChange = (listener: ConnectionListener) => {
-    listeners.push(listener);
-    return () => {
-        const index = listeners.indexOf(listener);
-        if (index > -1) listeners.splice(index, 1);
+  sendMessage: async (
+    message: string,
+    context: Record<string, unknown> = {}
+  ): Promise<{ success: true; data: { message: string; timestamp: string } } | { success: false; error: string }> => {
+    const { data, error } = await supabase.functions.invoke('chat', {
+      body: { message, context },
+    });
+    if (error) return { success: false, error: error.message };
+    if (!data || typeof data !== 'object') return { success: false, error: 'Resposta inválida' };
+    const dataObj = data as { message?: unknown; timestamp?: unknown };
+    if (typeof dataObj.message !== 'string') return { success: false, error: 'Resposta inválida' };
+    return {
+      success: true,
+      data: {
+        message: dataObj.message,
+        timestamp: typeof dataObj.timestamp === 'string' ? dataObj.timestamp : new Date().toISOString(),
+      },
     };
+  },
 };
-
-const notifyListeners = (status: ConnectionStatus) => {
-    listeners.forEach(l => l(status));
-};
-
-// Response interceptor to detect disconnection
-api.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response && error.response.status === 401) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/login';
-            return Promise.reject(error);
-        }
-
-        if (!error.response || error.code === 'ERR_NETWORK' || error.response.status === 503) {
-            if (!isReconnecting) {
-                isReconnecting = true;
-                notifyListeners('offline');
-            }
-        }
-        return Promise.reject(error);
-    }
-);
-
-export const checkBackendHealth = async (): Promise<boolean> => {
-    try {
-        await api.get('/health'); // Tries /api/health
-        return true;
-    } catch (error) {
-        return false;
-    }
-};
-
-export const waitForBackend = async (maxRetries = 20, interval = 2000): Promise<boolean> => {
-    let retries = 0;
-    notifyListeners('reconnecting');
-    
-    while (retries < maxRetries) {
-        const isHealthy = await checkBackendHealth();
-        if (isHealthy) {
-            isReconnecting = false;
-            notifyListeners('online');
-            return true;
-        }
-        retries++;
-        await new Promise(resolve => setTimeout(resolve, interval));
-    }
-    
-    isReconnecting = false;
-    notifyListeners('offline');
-    return false;
-};
-
-export default api;
