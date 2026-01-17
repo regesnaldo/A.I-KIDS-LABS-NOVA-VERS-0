@@ -1,14 +1,21 @@
 
 const express = require('express');
+<<<<<<< HEAD
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+=======
+const User = require('./models/User');
+const Video = require('./models/Video');
+const History = require('./models/History');
+const Recommendation = require('./models/Recommendation');
+>>>>>>> cecd36757a7c9f69c60213d931fe8b271d8321aa
 
-// Carrega variáveis de ambiente
-dotenv.config();
+// Your existing code goes here
 
+<<<<<<< HEAD
 const app = express();
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 4000;
@@ -128,3 +135,6 @@ app.listen(PORT, () => {
     DATABASE_URL: ${process.env.DATABASE_URL ? 'Configurada' : 'Não configurada'}
     `);
 });
+=======
+module.exports = app;
+>>>>>>> cecd36757a7c9f69c60213d931fe8b271d8321aa
