@@ -110,7 +110,7 @@ export const modulesAPI = {
       .order('season_id', { ascending: true })
       .order('numero', { ascending: true });
     if (error) throw error;
-    return data ?? [];
+    return Array.isArray(data) ? data : [];
   },
   getModuleById: async (id: string): Promise<MissionRow | null> => {
     const { data, error } = await supabase

@@ -11,7 +11,7 @@ import SeasonDetailsPage from './components/SeasonDetailsPage';
 import SystemHealth from './components/SystemHealth';
 import HeroSection from './components/HeroSection';
 import { supabase } from './lib/supabaseClient';
-import { seasonsAPI } from './services/api';
+import { apiService } from './services/apiWrapper';
 import { Season } from './types';
 import type { MissionModule } from './types';
 
@@ -143,16 +143,14 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const rows = await seasonsAPI.getAll();
-        setTemporadasData(
-          rows.map((row) => ({
-            id: row.id,
-            title: row.title,
-            description: row.description,
-            image: row.image ?? undefined,
-          }))
-        );
-      } catch {
+        const seasons = await apiService.getAllSeasons();
+        // Defensive check to ensure we have an array
+        const validSeasons = Array.isArray(seasons) ? seasons : [];
+        setTemporadasData(validSeasons);
+        
+        console.log(`✅ Loaded ${validSeasons.length} seasons using ${apiService.getCurrentMode()} mode`);
+      } catch (error) {
+        console.error('❌ Failed to load seasons:', error);
         setTemporadasData([]);
       }
     };
