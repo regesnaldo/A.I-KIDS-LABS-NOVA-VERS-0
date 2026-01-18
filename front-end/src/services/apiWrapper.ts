@@ -157,10 +157,11 @@ class APIService {
       }
       
       const result = await recommendationsAPI.getRecommendations();
-      if (result.success) {
-        return result.data as MissionModule[];
+      // Type guard to check if result has success property
+      if (Array.isArray(result)) {
+        return result as MissionModule[];
       }
-      throw new Error(result.error);
+      throw new Error('Failed to fetch recommendations');
     } catch (error) {
       console.error('Failed to fetch recommendations, using local data:', error);
       const allModules = await this.getAllModules();
